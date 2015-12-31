@@ -11,9 +11,13 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = "com.subakstudio.mclauncher.McLauncher"
+//mainClassName = "com.subakstudio.mclauncher.McLauncher"
+mainClassName = "com.subakstudio.mclauncher.McLauncherWindow2"
 
 dependencies {
+    // Intellij Form
+    compile 'com.intellij:forms_rt:7.0.3'
+
     // Using sfl4j allows us to replace different loggers later, if desired
     compile 'org.slf4j:slf4j-api:1.7.13'
 

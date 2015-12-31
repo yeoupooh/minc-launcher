@@ -1,12 +1,20 @@
 package com.subakstudio.mclauncher.ui
 
 import com.subakstudio.mclauncher.Constants
+import com.subakstudio.mclauncher.util.MinecraftUtils
 import com.subakstudio.mclauncher.util.OkHttpClientHelper
-import com.subakstudio.mclauncher.util.TempRepository
+import com.subakstudio.mclauncher.util.PlatformUtils
 import groovy.swing.SwingBuilder
 import groovy.util.logging.Slf4j
+import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel
 
+import javax.swing.BorderFactory
 import javax.swing.JFrame
+import javax.swing.JOptionPane
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.BorderLayout as BL
+import java.awt.GridBagConstraints
 
 /**
  * Created by yeoupooh on 12/30/15.
@@ -21,48 +29,56 @@ class McLauncherWindow {
 //        lookAndFeel new SubstanceEmeraldDuskLookAndFeel()
 //        lookAndFeel new SubstanceBusinessLookAndFeel()
 //            lookAndFeel new SubstanceAutumnLookAndFeel()
+//            lookAndFeel new SubstanceGraphiteLookAndFeel()
         }
 
         swing.doLater {
-            TempRepository.init()
-
             setupUI()
         }
     }
 
     def setupUI() {
-        swing.frame(size: [400, 300], defaultCloseOperation: JFrame.EXIT_ON_CLOSE, show: true) {
-            vbox {
-                progressBar(id: 'progressBar')
-                button(text: 'Execute Minecraft', actionPerformed: {
-                    def output = "java -jar /home/yeoupooh/apps/minecraft/Minecraft.jar -Dmy.property=foo".execute().text
-                    log.debug("output=$output")
-                })
-                button(text: 'Download MinecraftForge', actionPerformed: {
-                    downloadMcForge()
-                })
-                button(text: 'Execute MinecraftForge', actionPerformed: {
-                    def output = ['java', '-jar', new File(Constants.MC_LAUNCHER_TEMP_PATH, Constants.MCFG_JAR_NAME).absolutePath].execute().text
-                    log.debug("output=$output")
-                })
-                button(text: 'Open File Explorer on Windows', actionPerformed: {
-                    def output = ['explorer', 'c:\\windows'].execute()
-//                    Runtime.getRuntime().exec("explorer.exe /select," + path);
-
-                    // http://stackoverflow.com/questions/7357969/how-to-use-java-code-to-open-windows-file-explorer-and-highlight-the-specified-f
-//                    File file = new File ("c:\<directory>");
-//                    Desktop desktop = Desktop.getDesktop();
-//                    desktop.open(file);
-
-                    log.debug("output=$output")
-                })
-                button(text: 'Open Files on Ubuntu', actionPerformed: {
-                    def path = System.getProperty('user.home') + '/.minecraft'
-                    def output = ['/usr/bin/xdg-open', path].execute().text
-//                    Runtime.getRuntime().exec("xdg-open " + path);
-                    log.debug("output=$output")
-                })
+        swing.frame(id: 'mainFrame', size: [400, 300], defaultCloseOperation: JFrame.EXIT_ON_CLOSE, show: true) {
+            borderLayout()
+//            progressBar(id: 'progressBar2', constraints: BL.NORTH)
+//            gridBagLayout()
+//            panel(constraints: BL.CENTER, layout: gridLayout(cols: 2, rows: 5)) {
+//                (0..<10).each {
+//                    println it
+//                    swing.label it.toString()
+//                }
+//            }
+//            panel(constraints: gbc(gridx: 0, gridy: 0, fill: GridBagConstraints.BOTH, gridwidth: GridBagConstraints.RELATIVE)) {
+            panel(constraints: BL.CENTER, border: BorderFactory.createEmptyBorder(10, 10, 10, 10)) {
+//                gridBagLayout()
+//                label(text: "Hello",
+//                        constraints: gbc(gridx: 0, gridy: 0, gridwidth: GridBagConstraints.REMAINDER, fill: GridBagConstraints.HORIZONTAL, insets: [10, 10, 10, 10]))
+                progressBar(id: 'progressBar', constraints: gbc(gridx: 0, gridy: 0, fill: GridBagConstraints.HORIZONTAL))
+//                button(text: "Click me",
+//                        constraints: gbc(gridx: 0, gridy: 1, fill: GridBagConstraints.HORIZONTAL))
+//                label(text: "Hello",
+//                        constraints: gbc(gridx: 0, gridy: 2))
             }
+//            panel(constraints: BL.CENTER, layout: gridLayout(cols: 1, rows: 4)) {
+//                button(text: 'Execute Minecraft', actionPerformed: {
+//                    def output = "java -jar /home/yeoupooh/apps/minecraft/Minecraft.jar".execute().text
+//                    log.debug("output=$output")
+//                })
+//                button(text: 'Download MinecraftForge', actionPerformed: {
+//                    downloadMcForge()
+//                })
+//                button(text: 'Execute MinecraftForge', actionPerformed: {
+//                    def output = ['java', '-jar', new File(Constants.MC_LAUNCHER_TEMP_PATH, Constants.MCFG_JAR_NAME).absolutePath].execute().text
+//                    log.debug("output=$output")
+//                })
+//                button(text: 'Open File Explorer with Minecraft root', actionPerformed: {
+//                    try {
+//                        PlatformUtils.openFileBrowser(MinecraftUtils.getMcRoot())
+//                    } catch (FileNotFoundException e) {
+//                        JOptionPane.showMessageDialog(mainFrame, MinecraftUtils.getMcRoot() + "not found.")
+//                    }
+//                })
+//            }
         }
     }
 
