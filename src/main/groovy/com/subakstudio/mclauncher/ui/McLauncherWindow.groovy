@@ -4,12 +4,14 @@ import com.subakstudio.mclauncher.Constants
 import com.subakstudio.mclauncher.util.OkHttpClientHelper
 import com.subakstudio.mclauncher.util.TempRepository
 import groovy.swing.SwingBuilder
+import groovy.util.logging.Slf4j
 
 import javax.swing.JFrame
 
 /**
  * Created by yeoupooh on 12/30/15.
  */
+@Slf4j
 class McLauncherWindow {
     def swing = new SwingBuilder()
 
