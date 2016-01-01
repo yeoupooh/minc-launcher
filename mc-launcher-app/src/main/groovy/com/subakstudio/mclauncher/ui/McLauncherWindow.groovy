@@ -1,18 +1,12 @@
 package com.subakstudio.mclauncher.ui
 
 import com.subakstudio.mclauncher.Constants
-import com.subakstudio.mclauncher.util.MinecraftUtils
 import com.subakstudio.mclauncher.util.OkHttpClientHelper
-import com.subakstudio.mclauncher.util.PlatformUtils
 import groovy.swing.SwingBuilder
 import groovy.util.logging.Slf4j
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel
 
 import javax.swing.BorderFactory
 import javax.swing.JFrame
-import javax.swing.JOptionPane
-import java.awt.BorderLayout
-import java.awt.Component
 import java.awt.BorderLayout as BL
 import java.awt.GridBagConstraints
 

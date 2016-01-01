@@ -1,7 +1,7 @@
 package com.subakstudio.mclauncher
 
 import ch.qos.logback.classic.Level
-import com.subakstudio.mclauncher.ui.McLauncherWindow
+import com.subakstudio.mclauncher.ui.McLauncherController
 import com.subakstudio.mclauncher.util.TempRepository
 import groovy.util.logging.Slf4j
 
@@ -15,6 +15,7 @@ public class McLauncher {
 
         TempRepository.init()
 
-        new McLauncherWindow()
+        new McLauncherController()
     }
 }
+
