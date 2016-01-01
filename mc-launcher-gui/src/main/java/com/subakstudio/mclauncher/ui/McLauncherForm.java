@@ -21,6 +21,7 @@ public class McLauncherForm extends JFrame implements ActionListener {
     private JList mcInfoList;
     private ModsPanelForm modsPanelForm1;
     private JProgressBar progressBar1;
+    private JLabel messageLabel;
     private ActionListener actionListener;
 
     public McLauncherForm() {
@@ -50,6 +51,10 @@ public class McLauncherForm extends JFrame implements ActionListener {
 
     public void updateProgress(int progress) {
         progressBar1.setValue(progress);
+    }
+
+    public void updateMessage(String msg) {
+        messageLabel.setText(msg);
     }
 
     /**
@@ -116,8 +121,14 @@ public class McLauncherForm extends JFrame implements ActionListener {
         final JLabel label6 = new JLabel();
         label6.setText("Mods:");
         contentPanel.add(label6, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.add(panel1, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         progressBar1 = new JProgressBar();
-        contentPanel.add(progressBar1, new GridConstraints(6, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(progressBar1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        messageLabel = new JLabel();
+        messageLabel.setText("Message");
+        panel1.add(messageLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
