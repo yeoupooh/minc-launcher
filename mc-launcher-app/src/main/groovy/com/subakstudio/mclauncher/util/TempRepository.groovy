@@ -16,7 +16,5 @@ class TempRepository {
         } else {
             log.info("temp folder[$tempFolder] is already created.")
         }
-
-
     }
 }

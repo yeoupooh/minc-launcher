@@ -1,8 +1,24 @@
+app.name=맥 런처
+
+step.1=1단계
+step.2=2단계
+step.3=3단계
+step.4=4단계
+step.5=5단계
+mods=모드
+
 download.forge=마인크래프트 포지 다운로드
 run.forge.installer=마인크래프트 포지 인스톨러 실행
 download.mods.pack=모드 팩 다운로드
 install.mods.pack=모드 팩 설치
-install.selected.mods=<< 선택한 모드(들) 설치
-uninstall.selected.mods=>> 선택한 모드(들) 삭제
+
+downloaded.mods=다운로드된 모드
+installed.mods=설치된 모드
+
+install.selected.mods=선택한 모드(들) 설치
+uninstall.selected.mods=선택한 모드(들) 삭제
 open.mods.folder=설치된 모드 폴더 열기...
 open.downloaded.mods.folder=다운로드한 모드 폴더 열기...
+refresh=새로 고침
+
+launch.minecraft=마인크래프트 실행
