@@ -1,7 +1,9 @@
 package com.subakstudio.mclauncher
 
 import ch.qos.logback.classic.Level
+import com.subakstudio.mclauncher.model.Settings
 import com.subakstudio.mclauncher.ui.McLauncherController
+import com.subakstudio.mclauncher.util.MinecraftUtils
 import com.subakstudio.mclauncher.util.TempRepository
 import groovy.util.logging.Slf4j
 
@@ -15,7 +17,14 @@ public class McLauncher {
 
         TempRepository.init()
 
-        new McLauncherController()
+        def configJsonFile = new File(Constants.MC_LAUNCHER_TEMP_PATH, "config.json")
+        def settings = new Settings(configJsonFile)
+        if (!settings.load()){
+            settings.mcRoot = MinecraftUtils.mcRoot
+            settings.save()
+        }
+
+        new McLauncherController(settings)
     }
 }
 

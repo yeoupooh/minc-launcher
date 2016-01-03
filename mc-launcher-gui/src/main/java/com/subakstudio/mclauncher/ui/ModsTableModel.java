@@ -3,6 +3,7 @@ package com.subakstudio.mclauncher.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.io.File;
@@ -86,6 +87,9 @@ public class ModsTableModel extends AbstractTableModel {
                 selected.add(mods.get(rowIndex));
             } else {
                 selected.remove(mods.get(rowIndex));
+            }
+            for (TableModelListener l : listeners) {
+                l.tableChanged(new TableModelEvent(this));
             }
         }
     }

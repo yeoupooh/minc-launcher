@@ -18,8 +18,11 @@ import javax.swing.JOptionPane
 class McLauncherController {
     def swing = new SwingBuilder()
     def form
+    def settings
 
-    def McLauncherController() {
+    def McLauncherController(settings) {
+        this.settings = settings
+
         swing.doLater {
             swing.edt {
                 lookAndFeel 'nimbus'
