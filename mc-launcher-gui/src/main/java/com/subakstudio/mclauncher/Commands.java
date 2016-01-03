@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher.ui;
+package com.subakstudio.mclauncher;
 
 /**
  * Created by yeoupooh on 1/1/16.
@@ -14,6 +14,7 @@ public class Commands {
     public static final String UNINSTALL_SELECTED_MODS = "uninstall.selected.mods";
     public static final String REFRESH_INSTALLED_MODS = "refresh.installed.mods";
     public static final String REFRESH_DOWNLOADED_MODS = "refresh.downloaded.mods";
+    public static final String REFRESH_MOD_LIST = "refresh.mod.list";
     public static final String LAUNCH_MINECRAFT = "launch.minecraft";
     public static final String CHANGE_MC_ROOT = "change.mc.root";
     public static final String CHANGE_MC_DATA_FOLDER = "change.mc.data.folder";

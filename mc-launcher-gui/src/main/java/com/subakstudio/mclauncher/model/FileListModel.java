@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher.ui;
+package com.subakstudio.mclauncher.model;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;

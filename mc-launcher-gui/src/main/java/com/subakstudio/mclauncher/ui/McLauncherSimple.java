@@ -3,14 +3,14 @@ package com.subakstudio.mclauncher.ui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.subakstudio.mclauncher.Commands;
+import com.subakstudio.mclauncher.model.ModsTableModel;
+import com.subakstudio.mclauncher.model.ModsTableRow;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ResourceBundle;
 
 /**
@@ -36,6 +36,8 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     private JLabel selectedLabel;
     private JButton selectAllButton;
     private JButton unselectAllButton;
+    private JLabel messageLabel;
+    private JButton downloadModsPackButton;
 
     @Override
     public JPanel getRootContentPane() {
@@ -65,6 +67,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
                 );
             }
         });
+        modsTableModel.addTableModelListener(this);
 
         changeMcDataFolderButton.setActionCommand(Commands.CHANGE_MC_DATA_FOLDER);
         changeMcDataFolderButton.addActionListener(this);
@@ -81,26 +84,28 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         runMinecraftForgeInstallerButton.setActionCommand(Commands.RUN_FORGE_INSTALLER);
         runMinecraftForgeInstallerButton.addActionListener(this);
 
+        downloadModsPackButton.setActionCommand(Commands.DOWNLOAD_MODS_PACK);
+        downloadModsPackButton.addActionListener(this);
+
         selectAllButton.setActionCommand(Commands.SELECT_ALL_MODS);
         selectAllButton.addActionListener(this);
 
         unselectAllButton.setActionCommand(Commands.UNSELECT_ALL_MODS);
         unselectAllButton.addActionListener(this);
+
+        refreshButton.setActionCommand(Commands.REFRESH_MOD_LIST);
+        refreshButton.addActionListener(this);
     }
 
-    public void updateModList(String path) {
-        mcDataFolderTextField.setText(path);
-        modsTableModel.setMcRoot(new File(path, "mods").getAbsolutePath());
+    @Override
+    public void updateModList(String mcDataFolder) {
+        mcDataFolderTextField.setText(mcDataFolder);
+        modsTableModel.setMcDataFolder(mcDataFolder);
         modsTable.updateUI();
     }
 
     public String getMcDataFolder() {
         return mcDataFolderTextField.getText();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 
     public void setMcDataFolder(String path) {
@@ -119,8 +124,17 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         progressBar1.setValue(progress);
     }
 
-    public java.util.List<ModsRow> getSelectedMods() {
+    public void updateMessage(String msg) {
+        messageLabel.setText(msg);
+    }
+
+    public java.util.List<ModsTableRow> getSelectedMods() {
         return modsTableModel.getSelected();
+    }
+
+    @Override
+    public ModsTableRow getModAt(int row) {
+        return modsTableModel.getRow(row);
     }
 
     {
@@ -171,7 +185,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel1.add(panel3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         launchMinecraftWithForgeButton = new JButton();
         this.$$$loadButtonText$$$(launchMinecraftWithForgeButton, ResourceBundle.getBundle("strings").getString("launch.minecraft"));
-        panel3.add(launchMinecraftWithForgeButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(launchMinecraftWithForgeButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
         refreshButton = new JButton();
         this.$$$loadButtonText$$$(refreshButton, ResourceBundle.getBundle("strings").getString("refresh"));
         panel3.add(refreshButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -187,7 +201,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel4.setLayout(new GridLayoutManager(3, 1, new Insets(10, 10, 10, 10), -1, -1));
         tabbedPane1.addTab(ResourceBundle.getBundle("strings").getString("tab.settings"), panel4);
         final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.setLayout(new GridLayoutManager(5, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel4.add(panel5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("strings").getString("mc.data.folder"));
@@ -211,6 +225,9 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         runMinecraftForgeInstallerButton = new JButton();
         this.$$$loadButtonText$$$(runMinecraftForgeInstallerButton, ResourceBundle.getBundle("strings").getString("run.forge.installer"));
         panel5.add(runMinecraftForgeInstallerButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        downloadModsPackButton = new JButton();
+        this.$$$loadButtonText$$$(downloadModsPackButton, ResourceBundle.getBundle("strings").getString("download.mods.pack"));
+        panel5.add(downloadModsPackButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
         panel4.add(spacer3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel6 = new JPanel();
@@ -218,9 +235,9 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel4.add(panel6, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         progressBar1 = new JProgressBar();
         panel6.add(progressBar1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        label3.setText("Message");
-        panel6.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        messageLabel = new JLabel();
+        messageLabel.setText("Message");
+        panel6.add(messageLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(installedRadioButton);

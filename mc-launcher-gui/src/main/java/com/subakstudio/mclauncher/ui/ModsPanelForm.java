@@ -3,6 +3,8 @@ package com.subakstudio.mclauncher.ui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import com.subakstudio.mclauncher.Commands;
+import com.subakstudio.mclauncher.model.FileListModel;
 
 import javax.swing.*;
 import java.awt.*;

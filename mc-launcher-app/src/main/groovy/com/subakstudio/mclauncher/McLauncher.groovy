@@ -20,7 +20,7 @@ public class McLauncher {
         def configJsonFile = new File(Constants.MC_LAUNCHER_TEMP_PATH, "config.json")
         def settings = new Settings(configJsonFile)
         if (!settings.load()){
-            settings.mcRoot = MinecraftUtils.mcRoot
+            settings.mcRoot = MinecraftUtils.mcDataFolder
             settings.save()
         }
 

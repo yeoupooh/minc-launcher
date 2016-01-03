@@ -1,5 +1,6 @@
-package com.subakstudio.mclauncher.ui;
+package com.subakstudio.mclauncher.model;
 
+import com.subakstudio.mclauncher.MinecraftDataFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -17,23 +19,67 @@ import java.util.ResourceBundle;
 public class ModsTableModel extends AbstractTableModel {
     private final Logger log;
     private List<TableModelListener> listeners = new ArrayList<TableModelListener>();
-    private List<ModsRow> mods = new ArrayList<ModsRow>();
-    private List<ModsRow> selected = new ArrayList<ModsRow>();
+    private List<ModsTableRow> mods = new ArrayList<ModsTableRow>();
+    private List<ModsTableRow> selected = new ArrayList<ModsTableRow>();
 
     public ModsTableModel() {
         log = LoggerFactory.getLogger(ModsTableModel.class);
     }
 
-    public void setMcRoot(String path) {
-        File[] files = new File(path).listFiles();
+    public void setMcDataFolder(String path) {
         mods.clear();
         selected.clear();
-        for (File file : files) {
-            ModsRow row = new ModsRow();
-            row.file = file;
-            row.checked = false;
-            mods.add(row);
+
+        File dataFolder = new File(path);
+
+        if (dataFolder.exists()) {
+            if (MinecraftDataFolder.getModsFolder(dataFolder).exists()) {
+                File[] modFiles = MinecraftDataFolder.getModsFolder(dataFolder).listFiles();
+                for (File file : modFiles) {
+                    ModsTableRow row = new ModsTableRow();
+                    row.file = file;
+                    row.checked = false;
+                    mods.add(row);
+                    selected.add(row);
+                }
+                log.info("mods files are loaded under mods folder.");
+            } else {
+                log.warn("No mods folder.");
+            }
+            if (MinecraftDataFolder.getDisabledModsFolder(dataFolder).exists()) {
+                File[] modFiles = MinecraftDataFolder.getDisabledModsFolder(dataFolder).listFiles();
+                for (File file : modFiles) {
+                    ModsTableRow row = new ModsTableRow();
+                    row.file = file;
+                    row.checked = false;
+                    mods.add(row);
+                }
+                log.info("mods files are loaded under disabled mods folder.");
+            } else {
+                log.warn("No disabled mods folder.");
+            }
         }
+
+        mods.sort(new Comparator<ModsTableRow>() {
+            @Override
+            public int compare(ModsTableRow o1, ModsTableRow o2) {
+                String str1 = o1.file.getName();
+                String str2 = o2.file.getName();
+                int res = String.CASE_INSENSITIVE_ORDER.compare(str1, str2);
+                if (res == 0) {
+                    res = str1.compareTo(str2);
+                }
+                return res;
+            }
+        });
+
+        for (TableModelListener l : listeners) {
+            l.tableChanged(new TableModelEvent(this));
+        }
+    }
+
+    public ModsTableRow getRow(int row) {
+        return mods.get(row);
     }
 
     @Override
@@ -64,7 +110,7 @@ public class ModsTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ModsRow row = mods.get(rowIndex);
+        ModsTableRow row = mods.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 return row.file.getName();
@@ -86,7 +132,7 @@ public class ModsTableModel extends AbstractTableModel {
                 selected.remove(mods.get(rowIndex));
             }
             for (TableModelListener l : listeners) {
-                l.tableChanged(new TableModelEvent(this));
+                l.tableChanged(new TableModelEvent(this, rowIndex));
             }
         }
     }
@@ -109,7 +155,7 @@ public class ModsTableModel extends AbstractTableModel {
         return super.getColumnClass(columnIndex);
     }
 
-    public java.util.List<ModsRow> getSelected() {
+    public java.util.List<ModsTableRow> getSelected() {
         return selected;
     }
 }

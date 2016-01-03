@@ -2,6 +2,7 @@ package com.subakstudio.mclauncher.ui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.subakstudio.mclauncher.Commands;
 
 import javax.swing.*;
 import java.awt.*;

@@ -17,7 +17,7 @@ class OkHttpClientHelper {
         log.info("request...$url to $file")
 
         // http://stackoverflow.com/questions/25893030/download-binary-file-from-okhttp
-        def DOWNLOAD_CHUNK_SIZE = 2048; //Same as Okio Segment.SIZE
+        def DOWNLOAD_CHUNK_SIZE = 2048 //Same as Okio Segment.SIZE
 
         publishProgress(0)
 
@@ -43,7 +43,7 @@ class OkHttpClientHelper {
             }
             totalBytesRead += bytesRead
             def progress = (int) ((totalBytesRead * 100) / contentLength)
-            log.debug("progress=$progress")
+//            log.debug("progress=$progress")
             publishProgress(progress)
         }
         sink.writeAll(source)

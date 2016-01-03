@@ -1,11 +1,11 @@
-package com.subakstudio.mclauncher.ui;
+package com.subakstudio.mclauncher.model;
 
 import java.io.File;
 
 /**
  * Created by Thomas on 1/3/2016.
  */
-public class ModsRow {
+public class ModsTableRow {
     File file;
     boolean checked;
 }

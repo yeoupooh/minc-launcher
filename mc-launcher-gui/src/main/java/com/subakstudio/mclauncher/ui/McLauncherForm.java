@@ -2,10 +2,13 @@ package com.subakstudio.mclauncher.ui;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.subakstudio.mclauncher.Commands;
+import com.subakstudio.mclauncher.model.ModsTableRow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by yeoupooh on 1/1/16.
@@ -44,6 +47,21 @@ public class McLauncherForm extends BaseMcLauncherFrame {
     @Override
     public Container getRootContentPane() {
         return contentPanel;
+    }
+
+    @Override
+    public void updateModList(String mcDataFolder) {
+
+    }
+
+    @Override
+    public List<ModsTableRow> getSelectedMods() {
+        return null;
+    }
+
+    @Override
+    public ModsTableRow getModAt(int rowIndex) {
+        return null;
     }
 
     public void updateProgress(int progress) {

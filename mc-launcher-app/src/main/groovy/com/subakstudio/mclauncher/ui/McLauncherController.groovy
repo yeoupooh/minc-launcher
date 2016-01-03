@@ -1,13 +1,17 @@
 package com.subakstudio.mclauncher.ui
 
-import com.subakstudio.mclauncher.Constants
+import com.subakstudio.mclauncher.Commands
+import com.subakstudio.mclauncher.cmd.DownloadForgeCommand
+import com.subakstudio.mclauncher.cmd.DownloadModsCommand
+import com.subakstudio.mclauncher.cmd.LaunchMinecraftCommand
+import com.subakstudio.mclauncher.cmd.RefreshModListCommand
+import com.subakstudio.mclauncher.cmd.RunForgeInstallerCommand
+import com.subakstudio.mclauncher.cmd.SwingFormCommandDispatcher
 import com.subakstudio.mclauncher.util.FileUtils
 import com.subakstudio.mclauncher.util.MinecraftUtils
-import com.subakstudio.mclauncher.util.OkHttpClientHelper
 import com.subakstudio.mclauncher.util.PlatformUtils
 import groovy.swing.SwingBuilder
 import groovy.util.logging.Slf4j
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel
 
 import javax.swing.JOptionPane
 
@@ -36,34 +40,23 @@ class McLauncherController {
         initFolders()
 
         swing.doLater {
+
 //            form = new McLauncherForm()
             form = new McLauncherSimple()
+
+            def cmdDispatcher = new SwingFormCommandDispatcher(swing, form)
+            cmdDispatcher.putCommand(Commands.DOWNLOAD_FORGE, new DownloadForgeCommand())
+            cmdDispatcher.putCommand(Commands.LAUNCH_MINECRAFT, new LaunchMinecraftCommand())
+            cmdDispatcher.putCommand(Commands.DOWNLOAD_MODS_PACK, new DownloadModsCommand())
+            cmdDispatcher.putCommand(Commands.REFRESH_MOD_LIST, new RefreshModListCommand())
+            cmdDispatcher.putCommand(Commands.RUN_FORGE_INSTALLER, new RunForgeInstallerCommand())
+            cmdDispatcher.putCommand(Commands.OPEN_INSTALLED_MODS_FOLDER, new OpenInstalledModsFolderCommand())
+
             form.actionListener = { event ->
 
                 log.debug("actionPerformed: $event.actionCommand")
 
                 switch (event.actionCommand) {
-
-                    case Commands.DOWNLOAD_FORGE:
-                        downloadForge()
-                        break
-
-                    case Commands.RUN_FORGE_INSTALLER:
-                        def output = ['java', '-jar', new File(Constants.MC_LAUNCHER_TEMP_PATH, Constants.MCFG_JAR_NAME).absolutePath].execute().text
-                        log.debug("output=$output")
-                        break
-
-                    case Commands.DOWNLOAD_MODS_PACK:
-                        downloadMods()
-                        break
-
-                    case Commands.OPEN_INSTALLED_MODS_FOLDER:
-                        try {
-                            PlatformUtils.openFileBrowser(MinecraftUtils.modsDir)
-                        } catch (FileNotFoundException e) {
-                            JOptionPane.showMessageDialog(form, MinecraftUtils.modsDir + "not found.")
-                        }
-                        break
 
                     case Commands.OPEN_UNINSTALLED_MODS_FOLDER:
                         try {
@@ -71,9 +64,6 @@ class McLauncherController {
                         } catch (FileNotFoundException e) {
                             JOptionPane.showMessageDialog(form, MinecraftUtils.downloadedModsDir + "not found.")
                         }
-                        break
-
-                    case Commands.INSTALL_MODS_PACK:
                         break
 
                     case Commands.INSTALL_SELECTED_MODS:
@@ -84,28 +74,21 @@ class McLauncherController {
                         uninstallSelected()
                         break
 
-                    case Commands.LAUNCH_MINECRAFT:
-                        launchMinecraft()
-                        break
-
                     default:
-                        log.warn("Unhandled action: $event.actionCommand")
+                        if (!cmdDispatcher.execute(event.actionCommand)) {
+                            log.warn("Unhandled action: $event.actionCommand")
+                        }
                 }
+            }
+
+            form.tableModelListener = { event ->
+                log.debug("tableChanged: firstRow=[$event.firstRow] lastRow=[$event.lastRow] column=[$event.column] type=[$event.type] src=[$event.source] event=[$event]")
+
             }
 
             initLists()
 
         } // doLater
-    }
-
-    def launchMinecraft() {
-        form.selectedMods.each { mod ->
-            log.debug("file=[$mod.file]")
-        }
-
-        if (form.mcExecutable.length() == 0) {
-            JOptionPane.showMessageDialog(form, "Minecraft Executable is not set.")
-        }
     }
 
     def uninstallSelected() {
@@ -139,7 +122,7 @@ class McLauncherController {
     def initLists() {
 //        form.modsPanel.updateInstalledModList(MinecraftUtils.modsDir)
 //        form.modsPanel.updateDownloadedModList(MinecraftUtils.downloadedModsDir)
-        form.updateModList(MinecraftUtils.mcRoot);
+        form.updateModList(MinecraftUtils.mcDataFolder);
     }
 
     def initFolders() {
@@ -147,46 +130,4 @@ class McLauncherController {
         FileUtils.mkdirs(MinecraftUtils.downloadedModsDir)
     }
 
-    def downloadForge() {
-        swing.doOutside {
-            swing.doLater {
-                form.updateMessage("Downloading forge...")
-            }
-            def http = new OkHttpClientHelper()
-            http.progressListener = { progress ->
-                swing.doLater {
-                    form.updateMessage("Downloading forge...$progress %")
-                    form.updateProgress(progress)
-                }
-            }
-            http.download(
-                    'http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-installer.jar',
-                    new File(Constants.MC_LAUNCHER_TEMP_PATH, Constants.MCFG_JAR_NAME))
-            swing.doLater {
-                form.updateMessage("Downloaded forge.")
-            }
-        }
-    }
-
-    def downloadMods() {
-        swing.doOutside {
-            swing.doLater {
-                form.updateMessage("Downloading mods...")
-            }
-            def http = new OkHttpClientHelper()
-            http.progressListener = { progress ->
-                swing.doLater {
-                    form.updateMessage("Downloading mods...$progress %")
-                    form.updateProgress(progress)
-                }
-            }
-            http.download(
-                    'http://download.nodecdn.net/containers/pixelmon/core/Pixelmon-1.7.10-3.5.1-universal.jar',
-                    new File(MinecraftUtils.downloadedModsDir, 'Pixelmon-1.7.10-3.5.1-universal.jar'))
-            swing.doLater {
-                form.updateMessage("Downloaded mods.")
-                form.modsPanel.updateInstalledModList(MinecraftUtils.downloadedModsDir)
-            }
-        }
-    }
 }
