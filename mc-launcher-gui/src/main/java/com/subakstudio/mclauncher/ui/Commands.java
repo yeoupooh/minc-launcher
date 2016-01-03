@@ -15,4 +15,5 @@ public class Commands {
     public static final String REFRESH_INSTALLED_MODS = "refresh.installed.mods";
     public static final String REFRESH_DOWNLOADED_MODS = "refresh.downloaded.mods";
     public static final String LAUNCH_MINECRAFT = "launch.minecraft";
+    public static final String CHANGE_MC_ROOT = "change.mc.root";
 }
