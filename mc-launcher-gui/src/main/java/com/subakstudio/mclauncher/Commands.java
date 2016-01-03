@@ -21,4 +21,5 @@ public class Commands {
     public static final String CHANGE_MC_EXECUTABLE = "change.mc.executable";
     public static final String SELECT_ALL_MODS = "select.all.mods";
     public static final String UNSELECT_ALL_MODS = "unselect.all.mods";
+    public static final String OPEN_DISABLED_MODS_FOLDER = "open.disabled.mods.folder";
 }

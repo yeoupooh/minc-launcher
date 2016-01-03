@@ -9,9 +9,8 @@ import groovy.util.logging.Slf4j
  */
 @Slf4j
 class Settings {
-    public String mcRoot
+    public String mcDataFolder
     public String mcExecutable
-    public def selectedMods = []
     def file
     def json
 
@@ -20,7 +19,7 @@ class Settings {
     }
 
     def save() {
-        json = [mcRoot: mcRoot, mcExecutable: mcExecutable, selectedMods: selectedMods]
+        json = [mcDataFolder: mcDataFolder, mcExecutable: mcExecutable]
         file.write(new JsonBuilder(json).toPrettyString())
         log.info("config file saved: [$json]")
     }
@@ -32,6 +31,15 @@ class Settings {
         }
 
         json = new JsonSlurper().parseText(file.text)
+
+        if (json.mcDataFolder == null) {
+            log.info("mc data folder does not exist.")
+            return false
+        }
+
+        mcDataFolder = json.mcDataFolder
+        mcExecutable = json.mcExecutable
+
         log.info("config file is loaded: [$json]")
 
         return true

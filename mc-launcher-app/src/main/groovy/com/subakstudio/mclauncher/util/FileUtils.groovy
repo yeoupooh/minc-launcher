@@ -9,9 +9,13 @@ import groovy.util.logging.Slf4j
 class FileUtils {
     static def mkdirs(String path) {
         def p = new File(path)
+        mkdirs(p)
+    }
+
+    static def mkdirs(File p) {
         if (!p.exists()) {
             p.mkdirs()
-            log.info("$path is created.")
+            log.info("$p is created.")
         }
     }
 
@@ -28,5 +32,10 @@ class FileUtils {
 
         input.close()
         output.close()
+    }
+
+    static def move(File srcFile, File destFolder) {
+        boolean moved = srcFile.renameTo(new File(destFolder, srcFile.getName()))
+        log.info("$srcFile is moved to $destFolder: $moved")
     }
 }

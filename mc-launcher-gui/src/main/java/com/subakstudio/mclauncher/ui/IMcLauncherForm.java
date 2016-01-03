@@ -22,7 +22,7 @@ public interface IMcLauncherForm extends ActionListener, TableModelListener {
 
     void updateModList(String mcDataFolder);
 
-    List<ModsTableRow> getSelectedMods();
+    List<ModsTableRow> getModifiedMods();
 
     ModsTableRow getModAt(int rowIndex);
 }

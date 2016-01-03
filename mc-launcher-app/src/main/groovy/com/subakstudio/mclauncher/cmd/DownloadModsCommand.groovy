@@ -24,10 +24,10 @@ class DownloadModsCommand extends SwingFormCommand {
             }
             http.download(
                     'http://download.nodecdn.net/containers/pixelmon/core/Pixelmon-1.7.10-3.5.1-universal.jar',
-                    new File(MinecraftDataFolder.getModsFolder(new File(MinecraftUtils.mcDataFolder)), 'Pixelmon-1.7.10-3.5.1-universal.jar'))
+                    new File(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder)), 'Pixelmon-1.7.10-3.5.1-universal.jar'))
             swing.doLater {
                 form.updateMessage("Downloaded mods.")
-                form.updateModList(MinecraftUtils.mcDataFolder)
+                form.updateModList(settings.mcDataFolder)
 //                form.modsPanel.updateInstalledModList(MinecraftUtils.downloadedModsDir)
             }
         }

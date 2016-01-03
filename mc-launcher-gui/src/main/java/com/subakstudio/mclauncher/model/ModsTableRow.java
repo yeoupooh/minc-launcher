@@ -8,4 +8,6 @@ import java.io.File;
 public class ModsTableRow {
     File file;
     boolean checked;
+    boolean originChecked;
+    boolean newChecked;
 }

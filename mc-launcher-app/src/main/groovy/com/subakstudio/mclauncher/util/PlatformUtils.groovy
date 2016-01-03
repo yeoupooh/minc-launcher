@@ -22,6 +22,10 @@ class PlatformUtils {
         return OS.Unknown
     }
 
+    static def openFileBrowser(File file) throws FileNotFoundException {
+        openFileBrowser(file.absolutePath)
+    }
+
     static def openFileBrowser(String path) throws FileNotFoundException {
         log.debug("open file browser at $path")
 
@@ -47,14 +51,8 @@ class PlatformUtils {
             default:
                 output = "Unknown os[$os]."
         }
-//        def osName = System.properties['os.name']
-//        if (osName.indexOf('Windows') > -1) {
-//            output = ['explorer', path].execute().text
-//        } else if (osName.indexOf('Linux') > -1) {
-//            output = ['/usr/bin/xdg-open', path].execute().text
-//        } else {
-//            output = "Unknown os[$osName]."
-//        }
+
         log.debug("output=$output")
     }
+
 }

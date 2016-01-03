@@ -55,7 +55,7 @@ public class McLauncherForm extends BaseMcLauncherFrame {
     }
 
     @Override
-    public List<ModsTableRow> getSelectedMods() {
+    public List<ModsTableRow> getModifiedMods() {
         return null;
     }
 

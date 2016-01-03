@@ -21,6 +21,7 @@ public class ModsTableModel extends AbstractTableModel {
     private List<TableModelListener> listeners = new ArrayList<TableModelListener>();
     private List<ModsTableRow> mods = new ArrayList<ModsTableRow>();
     private List<ModsTableRow> selected = new ArrayList<ModsTableRow>();
+    private List<ModsTableRow> modified = new ArrayList<ModsTableRow>();
 
     public ModsTableModel() {
         log = LoggerFactory.getLogger(ModsTableModel.class);
@@ -29,6 +30,7 @@ public class ModsTableModel extends AbstractTableModel {
     public void setMcDataFolder(String path) {
         mods.clear();
         selected.clear();
+        modified.clear();
 
         File dataFolder = new File(path);
 
@@ -38,7 +40,7 @@ public class ModsTableModel extends AbstractTableModel {
                 for (File file : modFiles) {
                     ModsTableRow row = new ModsTableRow();
                     row.file = file;
-                    row.checked = false;
+                    row.originChecked = row.newChecked = true;
                     mods.add(row);
                     selected.add(row);
                 }
@@ -51,7 +53,7 @@ public class ModsTableModel extends AbstractTableModel {
                 for (File file : modFiles) {
                     ModsTableRow row = new ModsTableRow();
                     row.file = file;
-                    row.checked = false;
+                    row.originChecked = row.newChecked = false;
                     mods.add(row);
                 }
                 log.info("mods files are loaded under disabled mods folder.");
@@ -125,12 +127,24 @@ public class ModsTableModel extends AbstractTableModel {
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex == 1) {
             log.debug("setValueAt: " + aValue);
-            boolean bValue = Boolean.valueOf((Boolean) aValue);
-            if (bValue) {
-                selected.add(mods.get(rowIndex));
+            ModsTableRow row = mods.get(rowIndex);
+            row.newChecked = Boolean.valueOf((Boolean) aValue);
+            if (row.newChecked) {
+                selected.add(row);
             } else {
-                selected.remove(mods.get(rowIndex));
+                selected.remove(row);
             }
+
+            if (row.originChecked != row.newChecked) {
+                if (!modified.contains(row)) {
+                    modified.add(row);
+                }
+            } else {
+                if (modified.contains(row)) {
+                    modified.remove(row);
+                }
+            }
+
             for (TableModelListener l : listeners) {
                 l.tableChanged(new TableModelEvent(this, rowIndex));
             }
@@ -157,5 +171,9 @@ public class ModsTableModel extends AbstractTableModel {
 
     public java.util.List<ModsTableRow> getSelected() {
         return selected;
+    }
+
+    public List<ModsTableRow> getModified() {
+        return modified;
     }
 }
