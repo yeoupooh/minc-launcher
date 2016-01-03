@@ -18,4 +18,6 @@ public class Commands {
     public static final String CHANGE_MC_ROOT = "change.mc.root";
     public static final String CHANGE_MC_DATA_FOLDER = "change.mc.data.folder";
     public static final String CHANGE_MC_EXECUTABLE = "change.mc.executable";
+    public static final String SELECT_ALL_MODS = "select.all.mods";
+    public static final String UNSELECT_ALL_MODS = "unselect.all.mods";
 }

@@ -7,5 +7,5 @@ import java.io.File;
  */
 public class ModsRow {
     File file;
-    boolean installed;
+    boolean checked;
 }

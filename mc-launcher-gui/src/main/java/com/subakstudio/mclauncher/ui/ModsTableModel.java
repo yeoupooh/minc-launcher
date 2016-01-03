@@ -31,7 +31,7 @@ public class ModsTableModel extends AbstractTableModel {
         for (File file : files) {
             ModsRow row = new ModsRow();
             row.file = file;
-            row.installed = false;
+            row.checked = false;
             mods.add(row);
         }
     }
@@ -70,7 +70,6 @@ public class ModsTableModel extends AbstractTableModel {
                 return row.file.getName();
             case 1:
                 return selected.contains(row);
-//            return row.installed;
         }
 
         return null;
@@ -80,8 +79,6 @@ public class ModsTableModel extends AbstractTableModel {
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex == 1) {
             log.debug("setValueAt: " + aValue);
-//            ModsRow row = mods.get(rowIndex);
-//            row.installed = Boolean.valueOf((Boolean) aValue);
             boolean bValue = Boolean.valueOf((Boolean) aValue);
             if (bValue) {
                 selected.add(mods.get(rowIndex));
@@ -113,14 +110,6 @@ public class ModsTableModel extends AbstractTableModel {
     }
 
     public java.util.List<ModsRow> getSelected() {
-//        List<ModsRow> selected = new ArrayList<ModsRow>();
-//
-//        for (ModsRow row : mods) {
-//            if (row.installed == true) {
-//                selected.add(row);
-//            }
-//        }
-//
         return selected;
     }
 }
