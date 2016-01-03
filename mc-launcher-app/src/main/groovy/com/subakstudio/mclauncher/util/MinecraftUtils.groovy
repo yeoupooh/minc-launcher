@@ -5,6 +5,11 @@ package com.subakstudio.mclauncher.util
  */
 class MinecraftUtils {
     static String getMcRoot() {
+        switch (PlatformUtils.os) {
+            case PlatformUtils.OS.Windows:
+                return new File(System.getenv('APPDATA'), '.minecraft').absolutePath
+        }
+
         return new File(System.getProperty('user.home'), '.minecraft').absolutePath
     }
 

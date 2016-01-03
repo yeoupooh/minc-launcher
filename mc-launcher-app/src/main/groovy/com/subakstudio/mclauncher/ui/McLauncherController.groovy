@@ -33,7 +33,8 @@ class McLauncherController {
         initFolders()
 
         swing.doLater {
-            form = new McLauncherForm()
+//            form = new McLauncherForm()
+            form = new McLauncherSimple()
             form.actionListener = { event ->
 
                 log.debug("actionPerformed: $event.actionCommand")
@@ -95,7 +96,13 @@ class McLauncherController {
     }
 
     def launchMinecraft() {
+        form.selectedMods.each { mod ->
+            log.debug("file=[$mod.file]")
+        }
 
+        if (form.mcExecutable.length() == 0) {
+            JOptionPane.showMessageDialog(form, "Minecraft Executable is not set.")
+        }
     }
 
     def uninstallSelected() {
@@ -127,8 +134,9 @@ class McLauncherController {
     }
 
     def initLists() {
-        form.modsPanel.updateInstalledModList(MinecraftUtils.modsDir)
-        form.modsPanel.updateDownloadedModList(MinecraftUtils.downloadedModsDir)
+//        form.modsPanel.updateInstalledModList(MinecraftUtils.modsDir)
+//        form.modsPanel.updateDownloadedModList(MinecraftUtils.downloadedModsDir)
+        form.updateModList(MinecraftUtils.mcRoot);
     }
 
     def initFolders() {

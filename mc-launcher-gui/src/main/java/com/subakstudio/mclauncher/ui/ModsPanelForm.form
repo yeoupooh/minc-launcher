@@ -48,7 +48,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text resource-bundle="strings" key="downloaded.mods"/>
+                  <text resource-bundle="strings_en" key="downloaded.mods"/>
                 </properties>
               </component>
               <component id="b3168" class="javax.swing.JLabel">
@@ -72,7 +72,7 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="strings" key="refresh"/>
+                      <text resource-bundle="strings_en" key="refresh"/>
                     </properties>
                   </component>
                   <component id="54f9d" class="javax.swing.JButton" binding="openUninstalledModsFolderButton">
@@ -82,7 +82,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <text resource-bundle="strings" key="open.downloaded.mods.folder"/>
+                      <text resource-bundle="strings_en" key="open.downloaded.mods.folder"/>
                     </properties>
                   </component>
                   <component id="160c3" class="javax.swing.JButton" binding="installSelectedButton" default-binding="true">
@@ -90,7 +90,7 @@
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="strings" key="install.selected.mods"/>
+                      <text resource-bundle="strings_en" key="install.selected.mods"/>
                     </properties>
                   </component>
                   <vspacer id="d626f">
@@ -115,7 +115,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="4" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="strings" key="installed.mods"/>
+                  <text resource-bundle="strings_en" key="installed.mods"/>
                 </properties>
               </component>
               <component id="3352d" class="javax.swing.JList" binding="installedModList">
@@ -145,7 +145,7 @@
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="strings" key="open.mods.folder"/>
+                      <text resource-bundle="strings_en" key="open.mods.folder"/>
                     </properties>
                   </component>
                   <component id="2be25" class="javax.swing.JButton" binding="refreshInstalledModsButton">
@@ -153,7 +153,7 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="strings" key="refresh"/>
+                      <text resource-bundle="strings_en" key="refresh"/>
                     </properties>
                   </component>
                   <component id="9b825" class="javax.swing.JButton" binding="uninstallSelectedButton" default-binding="true">
@@ -161,7 +161,7 @@
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text resource-bundle="strings" key="uninstall.selected.mods"/>
+                      <text resource-bundle="strings_en" key="uninstall.selected.mods"/>
                     </properties>
                   </component>
                   <grid id="e34d3" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

@@ -117,7 +117,7 @@ public class McLauncherForm extends BaseMcLauncherFrame {
         this.$$$loadLabelText$$$(label7, ResourceBundle.getBundle("strings").getString("step.5"));
         contentPanel.add(label7, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         launchMinecraftButton = new JButton();
-        this.$$$loadButtonText$$$(launchMinecraftButton, ResourceBundle.getBundle("strings").getString("launch.minecraft"));
+        this.$$$loadButtonText$$$(launchMinecraftButton, ResourceBundle.getBundle("strings_en").getString("launch.minecraft"));
         contentPanel.add(launchMinecraftButton, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 

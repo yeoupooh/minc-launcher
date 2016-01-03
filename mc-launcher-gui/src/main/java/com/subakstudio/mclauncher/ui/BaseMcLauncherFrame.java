@@ -19,6 +19,7 @@ public abstract class BaseMcLauncherFrame extends JFrame implements ActionListen
         setContentPane(getRootContentPane());
         setTitle(ResourceBundle.getBundle("strings").getString("app.name"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ResourceBundle.getBundle("mclauncher").getString("app.icon"))));
         setVisible(true);
         setSize(800, 600);
     }
