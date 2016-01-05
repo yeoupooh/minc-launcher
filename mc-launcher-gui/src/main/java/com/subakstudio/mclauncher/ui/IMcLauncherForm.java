@@ -1,5 +1,6 @@
 package com.subakstudio.mclauncher.ui;
 
+import com.subakstudio.mclauncher.model.IDownloadableRow;
 import com.subakstudio.mclauncher.model.ModsTableRow;
 
 import javax.swing.event.TableModelListener;
@@ -25,4 +26,8 @@ public interface IMcLauncherForm extends ActionListener, TableModelListener {
     List<ModsTableRow> getModifiedMods();
 
     ModsTableRow getModAt(int rowIndex);
+
+    void setDownloadableMods(List<IDownloadableRow> mods);
+
+    void setDownloadableForges(List<IDownloadableRow> forges);
 }

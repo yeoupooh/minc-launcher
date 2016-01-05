@@ -53,6 +53,15 @@ class OkHttpClientHelper {
         log.info("saved.")
     }
 
+    def downloadText(url) {
+        def client = new OkHttpClient()
+        def request = new Request.Builder()
+                .url(url)
+                .build()
+        def response = client.newCall(request).execute()
+        return response.body().string()
+    }
+
     def publishProgress(progress) {
         if (progressListener != null) {
             progressListener.call(progress)

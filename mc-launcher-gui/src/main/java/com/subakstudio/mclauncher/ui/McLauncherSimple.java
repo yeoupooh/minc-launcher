@@ -4,13 +4,13 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.subakstudio.mclauncher.Commands;
-import com.subakstudio.mclauncher.model.ModsTableModel;
-import com.subakstudio.mclauncher.model.ModsTableRow;
+import com.subakstudio.mclauncher.model.*;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import java.awt.*;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -39,6 +39,10 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     private JProgressBar progressBar2;
     private JLabel messageLabel2;
     private JButton openDisabledModsFolderButton;
+    private JTable downloadableModTable;
+    private JTable downloadableForgeTable;
+    private DownloadableTableModel downloadableForgeTableModel;
+    private DownloadableTableModel downloadableModTableModel;
 
     @Override
     public JPanel getRootContentPane() {
@@ -70,6 +74,8 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         });
         modsTableModel.addTableModelListener(this);
 
+        setupDownloadableTables();
+
         changeMcDataFolderButton.setActionCommand(Commands.CHANGE_MC_DATA_FOLDER);
         changeMcDataFolderButton.addActionListener(this);
 
@@ -99,6 +105,23 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
 
         refreshButton.setActionCommand(Commands.REFRESH_MOD_LIST);
         refreshButton.addActionListener(this);
+    }
+
+    private void setupDownloadableTables() {
+        downloadableForgeTableModel = new DownloadableTableModel(new String[]{"Version", "Url"});
+        downloadableForgeTable.setModel(downloadableForgeTableModel);
+        downloadableModTableModel = new DownloadableTableModel(new String[]{"Name", "Version", "Required Forge Version", "Url"});
+        downloadableModTable.setModel(downloadableModTableModel);
+    }
+
+    @Override
+    public void setDownloadableForges(List<IDownloadableRow> forges) {
+        downloadableForgeTableModel.setData(forges);
+    }
+
+    @Override
+    public void setDownloadableMods(List<IDownloadableRow> mods) {
+        downloadableModTableModel.setData(mods);
     }
 
     @Override
@@ -132,7 +155,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         messageLabel2.setText(msg);
     }
 
-    public java.util.List<ModsTableRow> getModifiedMods() {
+    public List<ModsTableRow> getModifiedMods() {
         return modsTableModel.getModified();
     }
 
@@ -208,7 +231,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel4.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
         tabbedPane1.addTab(ResourceBundle.getBundle("strings").getString("tab.settings"), panel4);
         final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridLayoutManager(5, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.setLayout(new GridLayoutManager(7, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel4.add(panel5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("strings").getString("mc.data.folder"));
@@ -228,13 +251,21 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel5.add(changeMcExecButton, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         downloadMinecraftForgeInstallerButton = new JButton();
         this.$$$loadButtonText$$$(downloadMinecraftForgeInstallerButton, ResourceBundle.getBundle("strings").getString("download.forge"));
-        panel5.add(downloadMinecraftForgeInstallerButton, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(downloadMinecraftForgeInstallerButton, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         runMinecraftForgeInstallerButton = new JButton();
         this.$$$loadButtonText$$$(runMinecraftForgeInstallerButton, ResourceBundle.getBundle("strings").getString("run.forge.installer"));
-        panel5.add(runMinecraftForgeInstallerButton, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(runMinecraftForgeInstallerButton, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         downloadModsPackButton = new JButton();
         this.$$$loadButtonText$$$(downloadModsPackButton, ResourceBundle.getBundle("strings").getString("download.mods.pack"));
-        panel5.add(downloadModsPackButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(downloadModsPackButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JScrollPane scrollPane2 = new JScrollPane();
+        panel5.add(scrollPane2, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        downloadableModTable = new JTable();
+        scrollPane2.setViewportView(downloadableModTable);
+        final JScrollPane scrollPane3 = new JScrollPane();
+        panel5.add(scrollPane3, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        downloadableForgeTable = new JTable();
+        scrollPane3.setViewportView(downloadableForgeTable);
         final Spacer spacer3 = new Spacer();
         panel4.add(spacer3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel6 = new JPanel();

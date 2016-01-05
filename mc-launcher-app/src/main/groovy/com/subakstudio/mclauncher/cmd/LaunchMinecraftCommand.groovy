@@ -19,7 +19,7 @@ class LaunchMinecraftCommand extends SwingFormCommand {
         }
 
         if (settings.mcExecutable == null) {
-            JOptionPane.showMessageDialog(form, "Minecraft Executable is not set.")
+            JOptionPane.showMessageDialog(form, "Minecraft Executable is not set.", "Error", JOptionPane.ERROR_MESSAGE)
             return false
         }
 
@@ -27,8 +27,14 @@ class LaunchMinecraftCommand extends SwingFormCommand {
             swing.doLater {
                 form.updateMessage("Minecraft is launched.")
             }
-            def output = [settings.mcExecutable].execute().text
-            log.debug("output=$output")
+            try {
+                def output = [settings.mcExecutable].execute().text
+                log.debug("output=$output")
+            } catch (IOException e) {
+                swing.doLater {
+                    JOptionPane.showMessageDialog(form, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE)
+                }
+            }
         }
 
         return true

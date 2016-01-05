@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
  */
 public class ModsTableModel extends AbstractTableModel {
     private final Logger log;
-    private List<TableModelListener> listeners = new ArrayList<TableModelListener>();
     private List<ModsTableRow> mods = new ArrayList<ModsTableRow>();
     private List<ModsTableRow> selected = new ArrayList<ModsTableRow>();
     private List<ModsTableRow> modified = new ArrayList<ModsTableRow>();
@@ -75,9 +74,7 @@ public class ModsTableModel extends AbstractTableModel {
             }
         });
 
-        for (TableModelListener l : listeners) {
-            l.tableChanged(new TableModelEvent(this));
-        }
+        fireTableDataChanged();
     }
 
     public ModsTableRow getRow(int row) {
@@ -145,20 +142,8 @@ public class ModsTableModel extends AbstractTableModel {
                 }
             }
 
-            for (TableModelListener l : listeners) {
-                l.tableChanged(new TableModelEvent(this, rowIndex));
-            }
+            fireTableRowsUpdated(rowIndex, rowIndex);
         }
-    }
-
-    @Override
-    public void addTableModelListener(TableModelListener l) {
-        listeners.add(l);
-    }
-
-    @Override
-    public void removeTableModelListener(TableModelListener l) {
-        listeners.remove(l);
     }
 
     @Override
