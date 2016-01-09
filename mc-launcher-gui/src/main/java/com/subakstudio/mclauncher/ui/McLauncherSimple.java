@@ -5,6 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.subakstudio.mclauncher.Commands;
 import com.subakstudio.mclauncher.model.*;
+import com.subakstudio.mclauncher.util.ResStrings;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -21,8 +22,6 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     private final ModsTableModel modsTableModel;
     private JTabbedPane tabbedPane1;
     private JPanel contentPane;
-    private JRadioButton installedRadioButton;
-    private JRadioButton availableRadioButton;
     private JTable modsTable;
     private JButton launchMinecraftWithForgeButton;
     private JButton refreshButton;
@@ -42,6 +41,9 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     private JButton openDisabledModsFolderButton;
     private JTable downloadableModTable;
     private JTable downloadableForgeTable;
+    private JButton deleteSelectedButton;
+    private JButton installAllButton;
+    private JButton uninstallAllButton;
     private DownloadableTableModel downloadableForgeTableModel;
     private DownloadableTableModel downloadableModTableModel;
 
@@ -52,22 +54,16 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
 
     public McLauncherSimple() {
         setupUI();
-        refreshButton.setActionCommand(Commands.REFRESH_DOWNLOADED_MODS);
-        refreshButton.addActionListener(this);
-        launchMinecraftWithForgeButton.setActionCommand(Commands.LAUNCH_MINECRAFT);
-        launchMinecraftWithForgeButton.addActionListener(this);
 
         modsTableModel = new ModsTableModel();
         modsTable.setModel(modsTableModel);
-//        modsTable.setCellEditor(new ModsTableCellEditor(new JTextField()));
-//        modsTable.setDefaultEditor(Boolean.class, new CheckBoxCellEditor());
         modsTable.setDefaultRenderer(Boolean.class, new CheckBoxCellRenderer(false));
         modsTableModel.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
                 selectedLabel.setText(
                         String.format("%s: %s",
-                                ResourceBundle.getBundle("strings").getString("table.selected"),
+                                ResStrings.get("label.enabled.mods"),
                                 modsTableModel.getSelected().size()
                         )
                 );
@@ -77,41 +73,45 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
 
         setupDownloadableTables();
 
-        changeMcDataFolderButton.setActionCommand(Commands.CHANGE_MC_DATA_FOLDER);
-        changeMcDataFolderButton.addActionListener(this);
+        // Launcher tab
+        mapAction(refreshButton, Commands.REFRESH_MOD_LIST);
+        mapAction(selectAllButton, Commands.SELECT_ALL_MODS);
+        mapAction(unselectAllButton, Commands.UNSELECT_ALL_MODS);
+        mapAction(deleteSelectedButton, Commands.DELETE_SELECTED_MODS);
 
-        changeMcExecButton.setActionCommand(Commands.CHANGE_MC_EXECUTABLE);
-        changeMcExecButton.addActionListener(this);
+        mapAction(installAllButton, Commands.INSTALL_ALL_MODS);
+        mapAction(uninstallAllButton, Commands.UNINSTALL_ALL_MODS);
 
-        openModsFolderButton.setActionCommand(Commands.OPEN_INSTALLED_MODS_FOLDER);
-        openModsFolderButton.addActionListener(this);
+        mapAction(openModsFolderButton, Commands.OPEN_INSTALLED_MODS_FOLDER);
+        mapAction(openDisabledModsFolderButton, Commands.OPEN_DISABLED_MODS_FOLDER);
 
-        openDisabledModsFolderButton.setActionCommand(Commands.OPEN_DISABLED_MODS_FOLDER);
-        openDisabledModsFolderButton.addActionListener(this);
+        // Settings tab
+        mapAction(changeMcDataFolderButton, Commands.CHANGE_MC_DATA_FOLDER);
+        mapAction(changeMcExecButton, Commands.CHANGE_MC_EXECUTABLE);
+        mapAction(launchMinecraftWithForgeButton, Commands.LAUNCH_MINECRAFT);
+        mapAction(downloadMinecraftForgeInstallerButton, Commands.DOWNLOAD_FORGE);
+        mapAction(runMinecraftForgeInstallerButton, Commands.RUN_FORGE_INSTALLER);
+        mapAction(downloadModsPackButton, Commands.DOWNLOAD_MODS_PACK);
+    }
 
-        downloadMinecraftForgeInstallerButton.setActionCommand(Commands.DOWNLOAD_FORGE);
-        downloadMinecraftForgeInstallerButton.addActionListener(this);
-
-        runMinecraftForgeInstallerButton.setActionCommand(Commands.RUN_FORGE_INSTALLER);
-        runMinecraftForgeInstallerButton.addActionListener(this);
-
-        downloadModsPackButton.setActionCommand(Commands.DOWNLOAD_MODS_PACK);
-        downloadModsPackButton.addActionListener(this);
-
-        selectAllButton.setActionCommand(Commands.SELECT_ALL_MODS);
-        selectAllButton.addActionListener(this);
-
-        unselectAllButton.setActionCommand(Commands.UNSELECT_ALL_MODS);
-        unselectAllButton.addActionListener(this);
-
-        refreshButton.setActionCommand(Commands.REFRESH_MOD_LIST);
-        refreshButton.addActionListener(this);
+    private void mapAction(JButton button, String command) {
+        button.setActionCommand(command);
+        button.addActionListener(this);
     }
 
     private void setupDownloadableTables() {
-        downloadableForgeTableModel = new DownloadableTableModel(new String[]{"Version", "Url"});
+        ResourceBundle bundle = ResourceBundle.getBundle("strings");
+        downloadableForgeTableModel = new DownloadableTableModel(new String[]{
+                bundle.getString("col.version"),
+                bundle.getString("col.filename"),
+                bundle.getString("col.url")});
         downloadableForgeTable.setModel(downloadableForgeTableModel);
-        downloadableModTableModel = new DownloadableTableModel(new String[]{"Name", "Version", "Required Forge Version", "Url"});
+        downloadableModTableModel = new DownloadableTableModel(new String[]{
+                bundle.getString("col.name"),
+                bundle.getString("col.version"),
+                bundle.getString("col.forge.version"),
+                bundle.getString("col.filename"),
+                bundle.getString("col.url")});
         downloadableModTable.setModel(downloadableModTableModel);
     }
 
@@ -152,6 +152,16 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         modsTable.updateUI();
     }
 
+    @Override
+    public List<ModsTableRow> getSelectedMods() {
+        List<ModsTableRow> list = new ArrayList<ModsTableRow>();
+        int[] rows = modsTable.getSelectedRows();
+        for (int i = 0; i < rows.length; i++) {
+            list.add(getModAt(rows[i]));
+        }
+        return list;
+    }
+
     public String getMcDataFolder() {
         return mcDataFolderTextField.getText();
     }
@@ -178,6 +188,44 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
 
     public List<ModsTableRow> getModifiedMods() {
         return modsTableModel.getModified();
+    }
+
+    @Override
+    public void selectAllMods() {
+        modsTable.selectAll();
+    }
+
+    @Override
+    public void unselectAllMods() {
+        modsTable.clearSelection();
+    }
+
+    @Override
+    public void checkAllMods() {
+        for (int i = 0; i < modsTableModel.getRowCount(); i++) {
+            modsTableModel.setValueAt(true, i, 1);
+        }
+    }
+
+    @Override
+    public void uncheckAllMods() {
+        for (int i = 0; i < modsTableModel.getRowCount(); i++) {
+            modsTableModel.setValueAt(false, i, 1);
+        }
+    }
+
+    @Override
+    public void removeMod(ModsTableRow row) {
+    }
+
+    @Override
+    public void deleteSelectedMods() {
+        modsTableModel.removeMods(modsTable.getSelectedRows());
+    }
+
+    @Override
+    public void removeModAt(int rowIndex) {
+        modsTable.remove(rowIndex);
     }
 
     @Override
@@ -208,46 +256,51 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel1.setLayout(new GridLayoutManager(3, 1, new Insets(10, 10, 10, 10), -1, -1));
         tabbedPane1.addTab(ResourceBundle.getBundle("strings").getString("tab.launcher"), panel1);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(1, 8, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        installedRadioButton = new JRadioButton();
-        installedRadioButton.setText("Installed");
-        panel2.add(installedRadioButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        availableRadioButton = new JRadioButton();
-        availableRadioButton.setText("Available");
-        panel2.add(availableRadioButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        panel2.add(spacer1, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        installAllButton = new JButton();
+        this.$$$loadButtonText$$$(installAllButton, ResourceBundle.getBundle("strings").getString("button.install.all"));
+        panel2.add(installAllButton, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        uninstallAllButton = new JButton();
+        this.$$$loadButtonText$$$(uninstallAllButton, ResourceBundle.getBundle("strings").getString("button.uninstall.all"));
+        panel2.add(uninstallAllButton, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         selectAllButton = new JButton();
         this.$$$loadButtonText$$$(selectAllButton, ResourceBundle.getBundle("strings").getString("table.select.all"));
         panel2.add(selectAllButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         unselectAllButton = new JButton();
         this.$$$loadButtonText$$$(unselectAllButton, ResourceBundle.getBundle("strings").getString("table.unselect.all"));
         panel2.add(unselectAllButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer1 = new Spacer();
-        panel2.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        deleteSelectedButton = new JButton();
+        this.$$$loadButtonText$$$(deleteSelectedButton, ResourceBundle.getBundle("strings").getString("button.delete.selected"));
+        panel2.add(deleteSelectedButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        refreshButton = new JButton();
+        this.$$$loadButtonText$$$(refreshButton, ResourceBundle.getBundle("strings").getString("button.refresh"));
+        panel2.add(refreshButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel2.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
         panel1.add(scrollPane1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         modsTable = new JTable();
         scrollPane1.setViewportView(modsTable);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 6, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         launchMinecraftWithForgeButton = new JButton();
         this.$$$loadButtonText$$$(launchMinecraftWithForgeButton, ResourceBundle.getBundle("strings").getString("launch.minecraft"));
-        panel3.add(launchMinecraftWithForgeButton, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
-        refreshButton = new JButton();
-        this.$$$loadButtonText$$$(refreshButton, ResourceBundle.getBundle("strings").getString("refresh"));
-        panel3.add(refreshButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        panel3.add(spacer2, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel3.add(launchMinecraftWithForgeButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel3.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         openModsFolderButton = new JButton();
-        this.$$$loadButtonText$$$(openModsFolderButton, ResourceBundle.getBundle("strings").getString("open.mods.folder"));
-        panel3.add(openModsFolderButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        this.$$$loadButtonText$$$(openModsFolderButton, ResourceBundle.getBundle("strings").getString("button.open.enabled.mods.folder"));
+        panel3.add(openModsFolderButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         selectedLabel = new JLabel();
-        selectedLabel.setText("Selected: 0");
-        panel3.add(selectedLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        this.$$$loadLabelText$$$(selectedLabel, ResourceBundle.getBundle("strings").getString("label.enabled.mods"));
+        panel3.add(selectedLabel, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         openDisabledModsFolderButton = new JButton();
-        this.$$$loadButtonText$$$(openDisabledModsFolderButton, ResourceBundle.getBundle("strings").getString("open.disabled.mod.folder"));
-        panel3.add(openDisabledModsFolderButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        this.$$$loadButtonText$$$(openDisabledModsFolderButton, ResourceBundle.getBundle("strings").getString("button.open.disabled.mods.folder"));
+        panel3.add(openDisabledModsFolderButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
         tabbedPane1.addTab(ResourceBundle.getBundle("strings").getString("tab.settings"), panel4);
@@ -274,7 +327,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         this.$$$loadButtonText$$$(downloadMinecraftForgeInstallerButton, ResourceBundle.getBundle("strings").getString("download.forge"));
         panel5.add(downloadMinecraftForgeInstallerButton, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         downloadModsPackButton = new JButton();
-        this.$$$loadButtonText$$$(downloadModsPackButton, ResourceBundle.getBundle("strings").getString("download.mods.pack"));
+        this.$$$loadButtonText$$$(downloadModsPackButton, ResourceBundle.getBundle("strings").getString("button.download.selected.mods"));
         panel5.add(downloadModsPackButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JScrollPane scrollPane2 = new JScrollPane();
         panel5.add(scrollPane2, new GridConstraints(5, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -287,8 +340,8 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         runMinecraftForgeInstallerButton = new JButton();
         this.$$$loadButtonText$$$(runMinecraftForgeInstallerButton, ResourceBundle.getBundle("strings").getString("run.forge.installer"));
         panel5.add(runMinecraftForgeInstallerButton, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer3 = new Spacer();
-        panel4.add(spacer3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panel4.add(spacer4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel6 = new JPanel();
         panel6.setLayout(new GridLayoutManager(1, 2, new Insets(10, 10, 10, 10), -1, -1));
         contentPane.add(panel6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -297,10 +350,6 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel6.add(messageLabel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         progressBar2 = new JProgressBar();
         panel6.add(progressBar2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        ButtonGroup buttonGroup;
-        buttonGroup = new ButtonGroup();
-        buttonGroup.add(installedRadioButton);
-        buttonGroup.add(availableRadioButton);
     }
 
     /**

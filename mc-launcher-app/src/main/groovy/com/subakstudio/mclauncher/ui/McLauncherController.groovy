@@ -8,6 +8,7 @@ import com.subakstudio.mclauncher.model.DownloadableModRow
 import com.subakstudio.mclauncher.model.Settings
 import com.subakstudio.mclauncher.util.FileUtils
 import com.subakstudio.mclauncher.util.OkHttpClientHelper
+import com.subakstudio.mclauncher.util.ResStrings
 import groovy.json.JsonSlurper
 import groovy.swing.SwingBuilder
 import groovy.util.logging.Slf4j
@@ -41,15 +42,22 @@ class McLauncherController {
             form = new McLauncherSimple()
 
             def cmdDispatcher = new SwingFormCommandDispatcher(settings, swing, form)
-            cmdDispatcher.putCommand(Commands.DOWNLOAD_FORGE, new DownloadForgeCommand())
-            cmdDispatcher.putCommand(Commands.LAUNCH_MINECRAFT, [new RefreshModListCommand(), new LaunchMinecraftCommand()])
-            cmdDispatcher.putCommand(Commands.DOWNLOAD_MODS_PACK, new DownloadModsCommand())
+            // Launcher tab
             cmdDispatcher.putCommand(Commands.REFRESH_MOD_LIST, new RefreshModListCommand())
-            cmdDispatcher.putCommand(Commands.RUN_FORGE_INSTALLER, new RunForgeInstallerCommand())
             cmdDispatcher.putCommand(Commands.OPEN_INSTALLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder))))
             cmdDispatcher.putCommand(Commands.OPEN_DISABLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getDisabledModsFolder(new File(settings.mcDataFolder))))
+            cmdDispatcher.putCommand(Commands.LAUNCH_MINECRAFT, [new RefreshModListCommand(), new LaunchMinecraftCommand()])
+            cmdDispatcher.putCommand(Commands.SELECT_ALL_MODS, new SelectAllModsCommand())
+            cmdDispatcher.putCommand(Commands.UNSELECT_ALL_MODS, new UnselectAllModsCommand())
+            cmdDispatcher.putCommand(Commands.DELETE_SELECTED_MODS, new DeleteSelectedModsCommand())
+            cmdDispatcher.putCommand(Commands.INSTALL_ALL_MODS, new InstallAllModsCommand())
+            cmdDispatcher.putCommand(Commands.UNINSTALL_ALL_MODS, new UninstallAllModsCommand())
+            // Settings tab
             cmdDispatcher.putCommand(Commands.CHANGE_MC_DATA_FOLDER, new ChangeMcDataFolderCommand())
             cmdDispatcher.putCommand(Commands.CHANGE_MC_EXECUTABLE, new ChangeMcExecutableCommand())
+            cmdDispatcher.putCommand(Commands.DOWNLOAD_FORGE, new DownloadForgeCommand())
+            cmdDispatcher.putCommand(Commands.RUN_FORGE_INSTALLER, new RunForgeInstallerCommand())
+            cmdDispatcher.putCommand(Commands.DOWNLOAD_MODS_PACK, new DownloadModsCommand())
 
             form.actionListener = { event ->
                 log.debug("actionPerformed: $event.actionCommand")
@@ -65,7 +73,7 @@ class McLauncherController {
             form.setMcExecutable(settings.mcExecutable)
             form.updateModList(settings.mcDataFolder)
 
-            form.updateMessage("Ready.")
+            form.updateMessage(ResStrings.get("msg.welcome"))
 
         } // doLater
 
@@ -82,6 +90,7 @@ class McLauncherController {
         json.forges.each { forge ->
             def item = new DownloadableForgeRow()
             item.version = forge.version
+            item.fileName = forge.fileName
             item.url = forge.url
             list.add(item)
         }

@@ -1,23 +1,25 @@
 group 'subakstudio'
-version '1.0'
+version '1.1'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'application'
-apply plugin: 'edu.sc.seis.launch4j'
 
 sourceCompatibility = 1.6
 
+// Launch4j plugin
+// https://plugins.gradle.org/plugin/edu.sc.seis.launch4j
 buildscript {
     repositories {
         maven {
-            url 'https://plugins.gradle.org/m2/'
+            url 'https://plugins.gradle.org/m2'
         }
     }
     dependencies {
         classpath 'gradle.plugin.edu.sc.seis.gradle:launch4j:1.6.1'
     }
 }
+apply plugin: 'edu.sc.seis.launch4j'
 
 repositories {
     mavenCentral()
@@ -64,3 +66,12 @@ launch4j {
     // http://www.rw-designer.com/icon-detail/5548
     icon = '../resources/main/TNT.ico'
 }
+
+task distWin64WithJRE(dependsOn: ['distZip', 'launch4j']) {
+
+}
+
+task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j']) {
+
+}
+

@@ -6,6 +6,7 @@ package com.subakstudio.mclauncher.model;
 public class DownloadableForgeRow implements IDownloadableRow {
     public String version;
     public String url;
+    public String fileName;
 
     @Override
     public Object getValueAt(int columnIndex) {
@@ -13,6 +14,8 @@ public class DownloadableForgeRow implements IDownloadableRow {
             case 0:
                 return version;
             case 1:
+                return fileName;
+            case 2:
                 return url;
             default:
                 return null;

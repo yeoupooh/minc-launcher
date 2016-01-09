@@ -1,5 +1,7 @@
 package com.subakstudio.mclauncher.ui;
 
+import com.subakstudio.mclauncher.util.McProps;
+import com.subakstudio.mclauncher.util.ResStrings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +29,11 @@ public abstract class BaseMcLauncherFrame extends JFrame implements IMcLauncherF
     public void setupUI() {
         log = LoggerFactory.getLogger(BaseMcLauncherFrame.class);
         setContentPane(getRootContentPane());
-        setTitle(ResourceBundle.getBundle("strings").getString("app.name"));
+        setTitle(String.format("%s %s",
+                ResStrings.get("app.name"),
+                McProps.get("app.version")));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(ResourceBundle.getBundle("mclauncher").getString("app.icon"))));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(McProps.get("app.icon"))));
         setVisible(true);
         setSize(800, 600);
     }

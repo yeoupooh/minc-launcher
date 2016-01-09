@@ -1,23 +1,33 @@
 package com.subakstudio.mclauncher.model;
 
 import com.subakstudio.mclauncher.MinecraftDataFolder;
+import com.subakstudio.mclauncher.util.ResStrings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.table.AbstractTableModel;
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Created by Thomas on 1/3/2016.
  */
 public class ModsTableModel extends AbstractTableModel {
     private final Logger log;
+    /**
+     * Holds all rows.
+     */
     private List<ModsTableRow> mods = new ArrayList<ModsTableRow>();
+    /**
+     * Holds initial selected rows only. It is not changed after initially loaded.
+     */
     private List<ModsTableRow> selected = new ArrayList<ModsTableRow>();
+    /**
+     * Holds modified rows only from selected rows.
+     */
     private List<ModsTableRow> modified = new ArrayList<ModsTableRow>();
 
     public ModsTableModel() {
@@ -31,9 +41,16 @@ public class ModsTableModel extends AbstractTableModel {
 
         File dataFolder = new File(path);
 
+        FileFilter dirFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isFile();
+            }
+        };
+
         if (dataFolder.exists()) {
             if (MinecraftDataFolder.getModsFolder(dataFolder).exists()) {
-                File[] modFiles = MinecraftDataFolder.getModsFolder(dataFolder).listFiles();
+                File[] modFiles = MinecraftDataFolder.getModsFolder(dataFolder).listFiles(dirFilter);
                 for (File file : modFiles) {
                     ModsTableRow row = new ModsTableRow();
                     row.file = file;
@@ -46,7 +63,7 @@ public class ModsTableModel extends AbstractTableModel {
                 log.warn("No mods folder.");
             }
             if (MinecraftDataFolder.getDisabledModsFolder(dataFolder).exists()) {
-                File[] modFiles = MinecraftDataFolder.getDisabledModsFolder(dataFolder).listFiles();
+                File[] modFiles = MinecraftDataFolder.getDisabledModsFolder(dataFolder).listFiles(dirFilter);
                 for (File file : modFiles) {
                     ModsTableRow row = new ModsTableRow();
                     row.file = file;
@@ -93,9 +110,9 @@ public class ModsTableModel extends AbstractTableModel {
     public String getColumnName(int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return ResourceBundle.getBundle("strings").getString("col.name");
+                return ResStrings.get("col.name");
             case 1:
-                return ResourceBundle.getBundle("strings").getString("col.install");
+                return ResStrings.get("col.is.enabled");
         }
         return null;
     }
@@ -118,6 +135,11 @@ public class ModsTableModel extends AbstractTableModel {
         return null;
     }
 
+    /**
+     * @param aValue
+     * @param rowIndex
+     * @param columnIndex
+     */
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex == 1) {
@@ -158,5 +180,20 @@ public class ModsTableModel extends AbstractTableModel {
 
     public List<ModsTableRow> getModified() {
         return modified;
+    }
+
+    public void removeMods(int[] rowIndexes) {
+        List<ModsTableRow> rows = new ArrayList<ModsTableRow>();
+        for (int i = 0; i < rowIndexes.length; i++) {
+            rows.add(mods.get(rowIndexes[i]));
+        }
+
+        for (ModsTableRow row : rows) {
+            mods.remove(row);
+            selected.remove(row);
+            modified.remove(row);
+        }
+
+        fireTableDataChanged();
     }
 }
