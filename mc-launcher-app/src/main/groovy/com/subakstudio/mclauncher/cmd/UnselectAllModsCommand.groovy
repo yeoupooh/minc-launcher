@@ -6,7 +6,7 @@ package com.subakstudio.mclauncher.cmd
 class UnselectAllModsCommand extends SwingFormCommand {
     @Override
     boolean execute() {
-        form.unselectAllMods()
+        form.unselectleAllMods()
         return true
     }
 }

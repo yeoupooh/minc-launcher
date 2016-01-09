@@ -4,7 +4,10 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.subakstudio.mclauncher.Commands;
-import com.subakstudio.mclauncher.model.*;
+import com.subakstudio.mclauncher.model.DownloadableTableModel;
+import com.subakstudio.mclauncher.model.IDownloadableRow;
+import com.subakstudio.mclauncher.model.ModsTableModel;
+import com.subakstudio.mclauncher.model.ModsTableRow;
 import com.subakstudio.mclauncher.util.ResStrings;
 
 import javax.swing.*;
@@ -44,6 +47,8 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     private JButton deleteSelectedButton;
     private JButton installAllButton;
     private JButton uninstallAllButton;
+    private JButton enableSelectedButton;
+    private JButton disableSelectedButton;
     private DownloadableTableModel downloadableForgeTableModel;
     private DownloadableTableModel downloadableModTableModel;
 
@@ -79,8 +84,11 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         mapAction(unselectAllButton, Commands.UNSELECT_ALL_MODS);
         mapAction(deleteSelectedButton, Commands.DELETE_SELECTED_MODS);
 
-        mapAction(installAllButton, Commands.INSTALL_ALL_MODS);
-        mapAction(uninstallAllButton, Commands.UNINSTALL_ALL_MODS);
+        mapAction(enableSelectedButton, Commands.ENABLE_SELECTED_MODS);
+        mapAction(disableSelectedButton, Commands.DISABLE_SELECTED_MODS);
+
+        mapAction(installAllButton, Commands.ENABLE_ALL_MODS);
+        mapAction(uninstallAllButton, Commands.DISABLE_ALL_MODS);
 
         mapAction(openModsFolderButton, Commands.OPEN_INSTALLED_MODS_FOLDER);
         mapAction(openDisabledModsFolderButton, Commands.OPEN_DISABLED_MODS_FOLDER);
@@ -196,26 +204,23 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     }
 
     @Override
-    public void unselectAllMods() {
+    public void unselectleAllMods() {
         modsTable.clearSelection();
     }
 
     @Override
-    public void checkAllMods() {
-        for (int i = 0; i < modsTableModel.getRowCount(); i++) {
-            modsTableModel.setValueAt(true, i, 1);
+    public void setEnabledAllMods(boolean enabled) {
+        for (int i = 0; i < modsTable.getRowCount(); i++) {
+            modsTableModel.setValueAt(enabled, i, 1);
         }
     }
 
     @Override
-    public void uncheckAllMods() {
-        for (int i = 0; i < modsTableModel.getRowCount(); i++) {
-            modsTableModel.setValueAt(false, i, 1);
+    public void setEnabledSelectedMods(boolean enabled) {
+        int[] selected = modsTable.getSelectedRows();
+        for (int i = 0; i < selected.length; i++) {
+            modsTableModel.setValueAt(enabled, selected[i], 1);
         }
-    }
-
-    @Override
-    public void removeMod(ModsTableRow row) {
     }
 
     @Override
@@ -256,51 +261,59 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         panel1.setLayout(new GridLayoutManager(3, 1, new Insets(10, 10, 10, 10), -1, -1));
         tabbedPane1.addTab(ResourceBundle.getBundle("strings").getString("tab.launcher"), panel1);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 8, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(1, 9, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel2.add(spacer1, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel2.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         installAllButton = new JButton();
         this.$$$loadButtonText$$$(installAllButton, ResourceBundle.getBundle("strings").getString("button.install.all"));
-        panel2.add(installAllButton, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(installAllButton, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         uninstallAllButton = new JButton();
         this.$$$loadButtonText$$$(uninstallAllButton, ResourceBundle.getBundle("strings").getString("button.uninstall.all"));
-        panel2.add(uninstallAllButton, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(uninstallAllButton, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         selectAllButton = new JButton();
         this.$$$loadButtonText$$$(selectAllButton, ResourceBundle.getBundle("strings").getString("table.select.all"));
-        panel2.add(selectAllButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(selectAllButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         unselectAllButton = new JButton();
         this.$$$loadButtonText$$$(unselectAllButton, ResourceBundle.getBundle("strings").getString("table.unselect.all"));
-        panel2.add(unselectAllButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(unselectAllButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         deleteSelectedButton = new JButton();
         this.$$$loadButtonText$$$(deleteSelectedButton, ResourceBundle.getBundle("strings").getString("button.delete.selected"));
-        panel2.add(deleteSelectedButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        refreshButton = new JButton();
-        this.$$$loadButtonText$$$(refreshButton, ResourceBundle.getBundle("strings").getString("button.refresh"));
-        panel2.add(refreshButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(deleteSelectedButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        enableSelectedButton = new JButton();
+        this.$$$loadButtonText$$$(enableSelectedButton, ResourceBundle.getBundle("strings").getString("button.enable.selected"));
+        panel2.add(enableSelectedButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        disableSelectedButton = new JButton();
+        this.$$$loadButtonText$$$(disableSelectedButton, ResourceBundle.getBundle("strings").getString("button.disable.selected"));
+        panel2.add(disableSelectedButton, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
-        panel2.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel2.add(spacer2, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JScrollPane scrollPane1 = new JScrollPane();
         panel1.add(scrollPane1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         modsTable = new JTable();
         scrollPane1.setViewportView(modsTable);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new GridLayoutManager(1, 7, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         launchMinecraftWithForgeButton = new JButton();
         this.$$$loadButtonText$$$(launchMinecraftWithForgeButton, ResourceBundle.getBundle("strings").getString("launch.minecraft"));
-        panel3.add(launchMinecraftWithForgeButton, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
+        panel3.add(launchMinecraftWithForgeButton, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(-1, 50), null, null, 0, false));
         final Spacer spacer3 = new Spacer();
-        panel3.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel3.add(spacer3, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         openModsFolderButton = new JButton();
         this.$$$loadButtonText$$$(openModsFolderButton, ResourceBundle.getBundle("strings").getString("button.open.enabled.mods.folder"));
-        panel3.add(openModsFolderButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(openModsFolderButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         selectedLabel = new JLabel();
         this.$$$loadLabelText$$$(selectedLabel, ResourceBundle.getBundle("strings").getString("label.enabled.mods"));
-        panel3.add(selectedLabel, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(selectedLabel, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         openDisabledModsFolderButton = new JButton();
         this.$$$loadButtonText$$$(openDisabledModsFolderButton, ResourceBundle.getBundle("strings").getString("button.open.disabled.mods.folder"));
-        panel3.add(openDisabledModsFolderButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(openDisabledModsFolderButton, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        refreshButton = new JButton();
+        this.$$$loadButtonText$$$(refreshButton, ResourceBundle.getBundle("strings").getString("button.refresh"));
+        panel3.add(refreshButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panel3.add(spacer4, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
         tabbedPane1.addTab(ResourceBundle.getBundle("strings").getString("tab.settings"), panel4);
@@ -340,8 +353,8 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         runMinecraftForgeInstallerButton = new JButton();
         this.$$$loadButtonText$$$(runMinecraftForgeInstallerButton, ResourceBundle.getBundle("strings").getString("run.forge.installer"));
         panel5.add(runMinecraftForgeInstallerButton, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        panel4.add(spacer4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        panel4.add(spacer5, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel6 = new JPanel();
         panel6.setLayout(new GridLayoutManager(1, 2, new Insets(10, 10, 10, 10), -1, -1));
         contentPane.add(panel6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));

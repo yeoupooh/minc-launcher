@@ -32,7 +32,7 @@ public abstract class BaseMcLauncherFrame extends JFrame implements IMcLauncherF
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(McProps.get("app.icon"))));
         setVisible(true);
-        setSize(800, 600);
+        setSize(McProps.getInt("win.width"),McProps.getInt("win.height"));
     }
 
     public void setActionListener(ActionListener actionListener) {

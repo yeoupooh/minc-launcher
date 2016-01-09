@@ -5,12 +5,16 @@ package com.subakstudio.mclauncher;
  */
 public class Commands {
     // Launcher tab
-    public static final String REFRESH_MOD_LIST = "refresh.mod.list";
     public static final String SELECT_ALL_MODS = "select.all.mods";
     public static final String UNSELECT_ALL_MODS = "unselect.all.mods";
     public static final String DELETE_SELECTED_MODS = "delete.selected.mods";
-    public static final String INSTALL_ALL_MODS = "install.all.mods";
-    public static final String UNINSTALL_ALL_MODS = "uninstall.all.mods";
+
+    public static final String ENABLE_SELECTED_MODS = "enable.selected.mods";
+    public static final String DISABLE_SELECTED_MODS = "disable.selected.mods";
+    public static final String ENABLE_ALL_MODS = "enable.all.mods";
+    public static final String DISABLE_ALL_MODS = "disable.all.mods";
+
+    public static final String REFRESH_MOD_LIST = "refresh.mod.list";
     public static final String OPEN_INSTALLED_MODS_FOLDER = "open.installed.mods.folder";
     public static final String OPEN_DISABLED_MODS_FOLDER = "open.disabled.mods.folder";
     public static final String LAUNCH_MINECRAFT = "launch.minecraft";

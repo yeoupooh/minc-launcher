@@ -17,7 +17,11 @@ class PlatformUtils {
             return OS.Windows
         } else if (osName.indexOf('Linux') > -1) {
             return OS.Linux
+        } else if (osName.indexOf('Mac') > -1) {
+            return OS.Mac
         }
+
+        log.warn("Unknown OS: $osName")
 
         return OS.Unknown
     }
@@ -46,6 +50,10 @@ class PlatformUtils {
 
             case OS.Linux:
                 output = ['/usr/bin/xdg-open', path].execute().text
+                break
+
+            case OS.Mac:
+                output = ['open', path].execute().text
                 break
 
             default:

@@ -1,6 +1,7 @@
 package com.subakstudio.mclauncher.util
 
 import groovy.util.logging.Slf4j
+import org.apache.commons.io.FilenameUtils
 
 /**
  * Created by yeoupooh on 1/1/16.
@@ -37,5 +38,24 @@ class FileUtils {
     static def move(File srcFile, File destFolder) {
         boolean moved = srcFile.renameTo(new File(destFolder, srcFile.getName()))
         log.info("$srcFile is moved to $destFolder: $moved")
+    }
+
+    /**
+     * Return file name from url if file name doesn't exist. Otherwise return given filename.
+     *
+     * @param fileName
+     * @param url
+     * @return
+     */
+    static def getFileNameFromUrl(String fileName, String url) {
+        if (fileName != null && fileName.length() > 0) {
+            return fileName
+        }
+
+        if (url != null) {
+            return URLDecoder.decode(FilenameUtils.getName(url), "utf-8")
+        }
+
+        return null
     }
 }

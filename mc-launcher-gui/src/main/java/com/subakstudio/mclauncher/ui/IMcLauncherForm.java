@@ -29,13 +29,11 @@ public interface IMcLauncherForm extends ActionListener, TableModelListener {
 
     void selectAllMods();
 
-    void unselectAllMods();
+    void unselectleAllMods();
 
-    void checkAllMods();
+    void setEnabledAllMods(boolean enabled);
 
-    void uncheckAllMods();
-
-    void removeMod(ModsTableRow row);
+    void setEnabledSelectedMods(boolean enabled);
 
     void deleteSelectedMods();
 

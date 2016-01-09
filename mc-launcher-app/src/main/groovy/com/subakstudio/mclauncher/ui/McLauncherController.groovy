@@ -7,6 +7,7 @@ import com.subakstudio.mclauncher.model.DownloadableForgeRow
 import com.subakstudio.mclauncher.model.DownloadableModRow
 import com.subakstudio.mclauncher.model.Settings
 import com.subakstudio.mclauncher.util.FileUtils
+import com.subakstudio.mclauncher.util.McProps
 import com.subakstudio.mclauncher.util.OkHttpClientHelper
 import com.subakstudio.mclauncher.util.ResStrings
 import groovy.json.JsonSlurper
@@ -43,15 +44,20 @@ class McLauncherController {
 
             def cmdDispatcher = new SwingFormCommandDispatcher(settings, swing, form)
             // Launcher tab
+            cmdDispatcher.putCommand(Commands.DELETE_SELECTED_MODS, new DeleteSelectedModsCommand())
+            cmdDispatcher.putCommand(Commands.SELECT_ALL_MODS, new SelectAllModsCommand())
+            cmdDispatcher.putCommand(Commands.UNSELECT_ALL_MODS, new UnselectAllModsCommand())
+
+            cmdDispatcher.putCommand(Commands.ENABLE_SELECTED_MODS, new SetEnabledSelectedModsCommand(true))
+            cmdDispatcher.putCommand(Commands.DISABLE_SELECTED_MODS, new SetEnabledSelectedModsCommand(false))
+            cmdDispatcher.putCommand(Commands.ENABLE_ALL_MODS, new SetEnabledAllModsCommand(true))
+            cmdDispatcher.putCommand(Commands.DISABLE_ALL_MODS, new SetEnabledAllModsCommand(false))
+
             cmdDispatcher.putCommand(Commands.REFRESH_MOD_LIST, new RefreshModListCommand())
             cmdDispatcher.putCommand(Commands.OPEN_INSTALLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder))))
             cmdDispatcher.putCommand(Commands.OPEN_DISABLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getDisabledModsFolder(new File(settings.mcDataFolder))))
             cmdDispatcher.putCommand(Commands.LAUNCH_MINECRAFT, [new RefreshModListCommand(), new LaunchMinecraftCommand()])
-            cmdDispatcher.putCommand(Commands.SELECT_ALL_MODS, new SelectAllModsCommand())
-            cmdDispatcher.putCommand(Commands.UNSELECT_ALL_MODS, new UnselectAllModsCommand())
-            cmdDispatcher.putCommand(Commands.DELETE_SELECTED_MODS, new DeleteSelectedModsCommand())
-            cmdDispatcher.putCommand(Commands.INSTALL_ALL_MODS, new InstallAllModsCommand())
-            cmdDispatcher.putCommand(Commands.UNINSTALL_ALL_MODS, new UninstallAllModsCommand())
+
             // Settings tab
             cmdDispatcher.putCommand(Commands.CHANGE_MC_DATA_FOLDER, new ChangeMcDataFolderCommand())
             cmdDispatcher.putCommand(Commands.CHANGE_MC_EXECUTABLE, new ChangeMcExecutableCommand())
@@ -85,12 +91,12 @@ class McLauncherController {
 
     def updateDownloadableForges() {
         def http = new OkHttpClientHelper()
-        def json = new JsonSlurper().parseText(http.downloadText('http://jsonblob.com/api/jsonBlob/568beb97e4b01190df470db4'))
+        def json = new JsonSlurper().parseText(http.downloadText(McProps.get("url.json.forges")))
         def list = new ArrayList<DownloadableForgeRow>()
         json.forges.each { forge ->
             def item = new DownloadableForgeRow()
             item.version = forge.version
-            item.fileName = forge.fileName
+            item.fileName = FileUtils.getFileNameFromUrl(forge.fileName as String, forge.url as String)
             item.url = forge.url
             list.add(item)
         }
@@ -101,7 +107,7 @@ class McLauncherController {
 
     def updateDownloadableMods() {
         def http = new OkHttpClientHelper()
-        def json = new JsonSlurper().parseText(http.downloadText('http://jsonblob.com/api/jsonBlob/568bea5fe4b01190df470b79'))
+        def json = new JsonSlurper().parseText(http.downloadText(McProps.get("url.json.mods")))
         def list = new ArrayList<DownloadableModRow>()
         json.mods.each { mod ->
             def item = new DownloadableModRow()
@@ -109,7 +115,7 @@ class McLauncherController {
             item.requiredVersion = mod.requiredVersion
             item.url = mod.url
             item.version = mod.version
-            item.fileName = mod.fileName
+            item.fileName = FileUtils.getFileNameFromUrl(mod.fileName as String, mod.url as String)
             list.add(item)
         }
         swing.doLater {

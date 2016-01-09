@@ -9,4 +9,8 @@ public class McProps {
     public static String get(String key) {
         return ResourceBundle.getBundle("mclauncher").getString(key);
     }
+
+    public static int getInt(String key) {
+        return Integer.parseInt(get(key));
+    }
 }
