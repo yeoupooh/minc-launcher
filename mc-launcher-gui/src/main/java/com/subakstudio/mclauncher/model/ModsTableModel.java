@@ -4,8 +4,6 @@ import com.subakstudio.mclauncher.MinecraftDataFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.io.File;
 import java.util.ArrayList;

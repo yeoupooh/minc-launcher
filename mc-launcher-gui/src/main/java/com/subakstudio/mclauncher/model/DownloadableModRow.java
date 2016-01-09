@@ -7,6 +7,7 @@ public class DownloadableModRow implements IDownloadableRow {
     public String name;
     public String url;
     public String version;
+    public String fileName;
     public String requiredVersion;
 
     @Override
@@ -19,6 +20,8 @@ public class DownloadableModRow implements IDownloadableRow {
             case 2:
                 return requiredVersion;
             case 3:
+                return fileName;
+            case 4:
                 return url;
         }
         return null;

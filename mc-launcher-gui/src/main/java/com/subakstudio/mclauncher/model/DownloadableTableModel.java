@@ -65,4 +65,8 @@ public class DownloadableTableModel extends AbstractTableModel {
         this.data.addAll(data);
         fireTableDataChanged();
     }
+
+    public IDownloadableRow getRowAt(int index) {
+        return data.get(index);
+    }
 }

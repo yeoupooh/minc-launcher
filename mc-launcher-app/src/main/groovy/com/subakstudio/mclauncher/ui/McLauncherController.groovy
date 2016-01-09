@@ -100,6 +100,7 @@ class McLauncherController {
             item.requiredVersion = mod.requiredVersion
             item.url = mod.url
             item.version = mod.version
+            item.fileName = mod.fileName
             list.add(item)
         }
         swing.doLater {

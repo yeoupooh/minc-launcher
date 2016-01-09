@@ -1,12 +1,13 @@
 package com.subakstudio.mclauncher.cmd
 
 import com.subakstudio.mclauncher.MinecraftDataFolder
-import com.subakstudio.mclauncher.util.MinecraftUtils
 import com.subakstudio.mclauncher.util.OkHttpClientHelper
+import groovy.util.logging.Slf4j
 
 /**
  * Created by Thomas on 1/3/2016.
  */
+@Slf4j
 class DownloadModsCommand extends SwingFormCommand {
 
     @Override
@@ -22,13 +23,19 @@ class DownloadModsCommand extends SwingFormCommand {
                     form.updateProgress(progress)
                 }
             }
-            http.download(
-                    'http://download.nodecdn.net/containers/pixelmon/core/Pixelmon-1.7.10-3.5.1-universal.jar',
-                    new File(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder)), 'Pixelmon-1.7.10-3.5.1-universal.jar'))
-            swing.doLater {
-                form.updateMessage("Downloaded mods.")
-                form.updateModList(settings.mcDataFolder)
-//                form.modsPanel.updateInstalledModList(MinecraftUtils.downloadedModsDir)
+
+            def list = form.getSelectedDownloadableMods()
+            list.each {
+                def fileName = it.getValueAt(3) as String
+                def url = it.getValueAt(4) as String
+                log.debug("selected: $fileName: $url")
+                http.download(
+                        url,
+                        new File(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder)), fileName))
+                swing.doLater {
+                    form.updateMessage("Downloaded mods.")
+                    form.updateModList(settings.mcDataFolder)
+                }
             }
         }
 

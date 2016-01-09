@@ -29,5 +29,9 @@ public interface IMcLauncherForm extends ActionListener, TableModelListener {
 
     void setDownloadableMods(List<IDownloadableRow> mods);
 
+    List<IDownloadableRow> getSelectedDownloadableMods();
+
     void setDownloadableForges(List<IDownloadableRow> forges);
+
+    List<IDownloadableRow> getSelectedDownloadableForges();
 }
