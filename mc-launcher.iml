@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id="mc-launcher" external.linked.project.path="/mnt/ypdisk/git/public/github/mc-launcher" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="subakstudio" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="false">
-    <output url="file:///mnt/ypdisk/git/public/github/mc-launcher/build" />
-    <output-test url="file:///mnt/ypdisk/git/public/github/mc-launcher/build" />
+    <output url="file://$MODULE_DIR$/build" />
+    <output-test url="file://$MODULE_DIR$/build" />
     <exclude-output />
-    <content url="file:///mnt/ypdisk/git/public/github/mc-launcher">
-      <excludeFolder url="file:///mnt/ypdisk/git/public/github/mc-launcher/.gradle" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
