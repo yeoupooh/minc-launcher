@@ -11,7 +11,6 @@ import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 /**
  * Created by yeoupooh on 1/3/16.
@@ -23,8 +22,6 @@ public abstract class BaseMcLauncherFrame extends JFrame implements IMcLauncherF
     private Logger log;
 
     public abstract Container getRootContentPane();
-
-    public abstract void updateModList(String mcDataFolder);
 
     public void setupUI() {
         log = LoggerFactory.getLogger(BaseMcLauncherFrame.class);
