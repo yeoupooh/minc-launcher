@@ -4,4 +4,5 @@ jdk:
   - oraclejdk8
 
 script:
- - ./gradlew check distTar distZip launch4j
+ - ./gradlew check distTar distZip
+
