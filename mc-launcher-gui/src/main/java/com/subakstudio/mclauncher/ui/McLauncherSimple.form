@@ -178,7 +178,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="1b78" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="1b78" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title-resource-bundle="strings" title-key="tab.mod.downloder"/>
@@ -221,11 +221,6 @@
                   </component>
                 </children>
               </grid>
-              <vspacer id="98225">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
               <scrollpane id="88cce">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -239,17 +234,17 @@
                   </component>
                 </children>
               </scrollpane>
-              <component id="1f5f9" class="javax.swing.JButton" binding="runMinecraftForgeInstallerButton" default-binding="true">
+              <component id="2e704" class="javax.swing.JButton" binding="downloadModsPackButton" default-binding="true">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="strings" key="run.forge.installer"/>
+                  <text resource-bundle="strings" key="button.download.selected.mods"/>
                 </properties>
               </component>
             </children>
           </grid>
-          <grid id="c8b14" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="c8b14" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <tabbedpane title-resource-bundle="strings" title-key="tab.settings"/>
@@ -321,14 +316,6 @@
                       <text resource-bundle="strings" key="download.forge"/>
                     </properties>
                   </component>
-                  <component id="2e704" class="javax.swing.JButton" binding="downloadModsPackButton" default-binding="true">
-                    <constraints>
-                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text resource-bundle="strings" key="button.download.selected.mods"/>
-                    </properties>
-                  </component>
                   <scrollpane id="92bc7">
                     <constraints>
                       <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -342,13 +329,16 @@
                       </component>
                     </children>
                   </scrollpane>
+                  <component id="1f5f9" class="javax.swing.JButton" binding="runMinecraftForgeInstallerButton" default-binding="true">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text resource-bundle="strings" key="run.forge.installer"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
-              <vspacer id="3a96d">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
             </children>
           </grid>
         </children>
