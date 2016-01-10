@@ -5,6 +5,5 @@ package com.subakstudio.mclauncher
  */
 class Constants {
     static String USER_HOME = System.getProperty('user.home')
-    static String MCFG_JAR_NAME = 'forge.jar'
     static File MC_LAUNCHER_TEMP_PATH = new File(USER_HOME, '.mclauncher')
 }

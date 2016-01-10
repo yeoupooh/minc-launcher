@@ -12,12 +12,4 @@ class MinecraftUtils {
 
         return new File(System.getProperty('user.home'), '.minecraft').absolutePath
     }
-//
-//    static String getModsDir() {
-//        return new File(new File(getMcDataFolder()), 'mods')
-//    }
-//
-//    static String getDownloadedModsDir() {
-//        return new File(new File(getMcDataFolder()), 'mods-downloaded')
-//    }
 }

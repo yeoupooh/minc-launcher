@@ -38,10 +38,6 @@ class PlatformUtils {
         }
 
         def output
-//        def sysProps = System.properties
-//        sysProps.each { key, value ->
-//            log.debug("$key=$value")
-//        }
 
         switch (getOs()) {
             case OS.Windows:

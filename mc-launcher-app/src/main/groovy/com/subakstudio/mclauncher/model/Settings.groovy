@@ -1,5 +1,6 @@
 package com.subakstudio.mclauncher.model
 
+import com.subakstudio.mclauncher.util.McProps
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
@@ -11,6 +12,7 @@ import groovy.util.logging.Slf4j
 class Settings {
     public String mcDataFolder
     public String mcExecutable
+    public String modsUrl
     def file
     def json
 
@@ -19,7 +21,7 @@ class Settings {
     }
 
     def save() {
-        json = [mcDataFolder: mcDataFolder, mcExecutable: mcExecutable]
+        json = [mcDataFolder: mcDataFolder, mcExecutable: mcExecutable, modsUrl: modsUrl]
         file.write(new JsonBuilder(json).toPrettyString())
         log.info("config file saved: [$json]")
     }
@@ -39,6 +41,11 @@ class Settings {
 
         mcDataFolder = json.mcDataFolder
         mcExecutable = json.mcExecutable
+        modsUrl = json.modsUrl
+
+        if (modsUrl == null) {
+            modsUrl = McProps.get("url.json.mods")
+        }
 
         log.info("config file is loaded: [$json]")
 

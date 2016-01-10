@@ -27,7 +27,6 @@ class OkHttpClientHelper {
                 .build()
         def response = client.newCall(request).execute()
 
-//        def file = new File('forge.jar')
         def sink = Okio.buffer(Okio.sink(file))
         def body = response.body()
         def contentLength = body.contentLength()
@@ -43,7 +42,6 @@ class OkHttpClientHelper {
             }
             totalBytesRead += bytesRead
             def progress = (int) ((totalBytesRead * 100) / contentLength)
-//            log.debug("progress=$progress")
             publishProgress(progress)
         }
         sink.writeAll(source)

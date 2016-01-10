@@ -17,9 +17,6 @@ public class McLauncherFormJavaRunner {
             System.out.println("set log level");
         }
         log.info("starting...");
-
-//        McModsManagerForm form = new McModsManagerForm();
         McLauncherSimple form = new McLauncherSimple();
-//        McLauncherForm form = new McLauncherForm();
     }
 }

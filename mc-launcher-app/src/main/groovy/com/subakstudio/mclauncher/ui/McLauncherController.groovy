@@ -13,6 +13,9 @@ import com.subakstudio.mclauncher.util.ResStrings
 import groovy.json.JsonSlurper
 import groovy.swing.SwingBuilder
 import groovy.util.logging.Slf4j
+import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel
+
+import javax.swing.JOptionPane
 
 /**
  * Created by yeoupooh on 1/1/16.
@@ -21,6 +24,7 @@ import groovy.util.logging.Slf4j
 class McLauncherController {
     def swing = new SwingBuilder()
     def form
+    def cmdDispatcher
     Settings settings
 
     def McLauncherController(Settings settings) {
@@ -29,6 +33,7 @@ class McLauncherController {
         swing.doLater {
             swing.edt {
                 lookAndFeel 'nimbus'
+                // FIXME Substance has issue with checkbox rendering
 //        lookAndFeel new SubstanceEmeraldDuskLookAndFeel()
 //        lookAndFeel new SubstanceBusinessLookAndFeel()
 //            lookAndFeel new SubstanceAutumnLookAndFeel()
@@ -42,84 +47,66 @@ class McLauncherController {
 
             form = new McLauncherSimple()
 
-            def cmdDispatcher = new SwingFormCommandDispatcher(settings, swing, form)
-            // Launcher tab
-            cmdDispatcher.putCommand(Commands.DELETE_SELECTED_MODS, new DeleteSelectedModsCommand())
-            cmdDispatcher.putCommand(Commands.SELECT_ALL_MODS, new SelectAllModsCommand())
-            cmdDispatcher.putCommand(Commands.UNSELECT_ALL_MODS, new UnselectAllModsCommand())
+            setupCommandDispatcher()
 
-            cmdDispatcher.putCommand(Commands.ENABLE_SELECTED_MODS, new SetEnabledSelectedModsCommand(true))
-            cmdDispatcher.putCommand(Commands.DISABLE_SELECTED_MODS, new SetEnabledSelectedModsCommand(false))
-            cmdDispatcher.putCommand(Commands.ENABLE_ALL_MODS, new SetEnabledAllModsCommand(true))
-            cmdDispatcher.putCommand(Commands.DISABLE_ALL_MODS, new SetEnabledAllModsCommand(false))
-
-            cmdDispatcher.putCommand(Commands.REFRESH_MOD_LIST, new RefreshModListCommand())
-            cmdDispatcher.putCommand(Commands.OPEN_INSTALLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder))))
-            cmdDispatcher.putCommand(Commands.OPEN_DISABLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getDisabledModsFolder(new File(settings.mcDataFolder))))
-            cmdDispatcher.putCommand(Commands.LAUNCH_MINECRAFT, [new RefreshModListCommand(), new LaunchMinecraftCommand()])
-
-            // Settings tab
-            cmdDispatcher.putCommand(Commands.CHANGE_MC_DATA_FOLDER, new ChangeMcDataFolderCommand())
-            cmdDispatcher.putCommand(Commands.CHANGE_MC_EXECUTABLE, new ChangeMcExecutableCommand())
-            cmdDispatcher.putCommand(Commands.DOWNLOAD_FORGE, new DownloadForgeCommand())
-            cmdDispatcher.putCommand(Commands.RUN_FORGE_INSTALLER, new RunForgeInstallerCommand())
-            cmdDispatcher.putCommand(Commands.DOWNLOAD_MODS_PACK, new DownloadModsCommand())
-
-            form.actionListener = { event ->
-                log.debug("actionPerformed: $event.actionCommand")
-                if (!cmdDispatcher.execute(event.actionCommand)) {
-                    log.warn("Unhandled action: $event.actionCommand")
-                }
-            }
-
-            form.tableModelListener = { event ->
-                log.debug("tableChanged: firstRow=[$event.firstRow] lastRow=[$event.lastRow] column=[$event.column] type=[$event.type] src=[$event.source] event=[$event]")
-            }
-
+            form.setModsUrl(settings.modsUrl)
             form.setMcExecutable(settings.mcExecutable)
             form.updateModList(settings.mcDataFolder)
 
             form.updateMessage(ResStrings.get("msg.welcome"))
 
+            swing.doOutside {
+                executeCommand(Commands.REFRESH_DOWNLOADABLE_MODS)
+                executeCommand(Commands.REFRESH_DOWNLOADABLE_FORGES)
+            }
+
         } // doLater
+    }
 
-        swing.doOutside {
-            updateDownloadableMods()
-            updateDownloadableForges()
+    def setupCommandDispatcher() {
+        cmdDispatcher = new SwingFormCommandDispatcher(settings, swing, form)
+
+        // Launcher tab
+        cmdDispatcher.putCommand(Commands.DELETE_SELECTED_MODS, new DeleteSelectedModsCommand())
+        cmdDispatcher.putCommand(Commands.SELECT_ALL_MODS, new SelectAllModsCommand())
+        cmdDispatcher.putCommand(Commands.UNSELECT_ALL_MODS, new UnselectAllModsCommand())
+
+        cmdDispatcher.putCommand(Commands.ENABLE_SELECTED_MODS, new SetEnabledSelectedModsCommand(true))
+        cmdDispatcher.putCommand(Commands.DISABLE_SELECTED_MODS, new SetEnabledSelectedModsCommand(false))
+        cmdDispatcher.putCommand(Commands.ENABLE_ALL_MODS, new SetEnabledAllModsCommand(true))
+        cmdDispatcher.putCommand(Commands.DISABLE_ALL_MODS, new SetEnabledAllModsCommand(false))
+
+        cmdDispatcher.putCommand(Commands.REFRESH_MOD_LIST, new RefreshModListCommand())
+        cmdDispatcher.putCommand(Commands.OPEN_INSTALLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getModsFolder(new File(settings.mcDataFolder))))
+        cmdDispatcher.putCommand(Commands.OPEN_DISABLED_MODS_FOLDER, new OpenFileBrowserCommand(MinecraftDataFolder.getDisabledModsFolder(new File(settings.mcDataFolder))))
+        cmdDispatcher.putCommand(Commands.LAUNCH_MINECRAFT, [new RefreshModListCommand(), new LaunchMinecraftCommand()])
+
+        // Mods Downloader tab
+        cmdDispatcher.putCommand(Commands.UPDATE_MODS_URL, [new UpdateModsUrlCommand(), new RefreshDownloadableModsCommand()])
+        cmdDispatcher.putCommand(Commands.REFRESH_DOWNLOADABLE_MODS, new RefreshDownloadableModsCommand())
+        cmdDispatcher.putCommand(Commands.DOWNLOAD_SELECTED_MODS, new DownloadModsCommand())
+
+        // Settings tab
+        cmdDispatcher.putCommand(Commands.CHANGE_MC_DATA_FOLDER, new ChangeMcDataFolderCommand())
+        cmdDispatcher.putCommand(Commands.CHANGE_MC_EXECUTABLE, new ChangeMcExecutableCommand())
+        cmdDispatcher.putCommand(Commands.REFRESH_DOWNLOADABLE_FORGES, new RefreshDownloadableForgesCommand())
+        cmdDispatcher.putCommand(Commands.DOWNLOAD_FORGE, new DownloadForgeCommand())
+        cmdDispatcher.putCommand(Commands.RUN_FORGE_INSTALLER, new RunForgeInstallerCommand())
+
+        form.actionListener = { event ->
+            log.debug("actionPerformed: $event.actionCommand")
+            executeCommand(event.actionCommand)
+        }
+
+        form.tableModelListener = { event ->
+            log.debug("tableChanged: firstRow=[$event.firstRow] lastRow=[$event.lastRow] column=[$event.column] type=[$event.type] src=[$event.source] event=[$event]")
         }
     }
 
-    def updateDownloadableForges() {
-        def http = new OkHttpClientHelper()
-        def json = new JsonSlurper().parseText(http.downloadText(McProps.get("url.json.forges")))
-        def list = new ArrayList<DownloadableForgeRow>()
-        json.forges.each { forge ->
-            def item = new DownloadableForgeRow()
-            item.version = forge.version
-            item.fileName = FileUtils.getFileNameFromUrl(forge.fileName as String, forge.url as String)
-            item.url = forge.url
-            list.add(item)
-        }
-        swing.doLater {
-            form.setDownloadableForges(list)
-        }
-    }
-
-    def updateDownloadableMods() {
-        def http = new OkHttpClientHelper()
-        def json = new JsonSlurper().parseText(http.downloadText(McProps.get("url.json.mods")))
-        def list = new ArrayList<DownloadableModRow>()
-        json.mods.each { mod ->
-            def item = new DownloadableModRow()
-            item.name = mod.name
-            item.requiredVersion = mod.requiredVersion
-            item.url = mod.url
-            item.version = mod.version
-            item.fileName = FileUtils.getFileNameFromUrl(mod.fileName as String, mod.url as String)
-            list.add(item)
-        }
-        swing.doLater {
-            form.setDownloadableMods(list)
+    def executeCommand(cmd) {
+        if (!cmdDispatcher.execute(cmd)) {
+            log.warn("Unhandled action: $cmd")
+            JOptionPane.showMessageDialog(form, ResStrings.get("msg.not.supported"))
         }
     }
 

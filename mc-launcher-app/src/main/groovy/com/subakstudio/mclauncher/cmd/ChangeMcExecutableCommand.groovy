@@ -41,6 +41,7 @@ class ChangeMcExecutableCommand extends SwingFormCommand {
             settings.save()
             form.setMcExecutable(settings.mcExecutable)
         }
-        return false
+
+        return true
     }
 }

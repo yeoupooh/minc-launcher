@@ -19,10 +19,15 @@ public class Commands {
     public static final String OPEN_DISABLED_MODS_FOLDER = "open.disabled.mods.folder";
     public static final String LAUNCH_MINECRAFT = "launch.minecraft";
 
+    // Mods Downloader tab
+    public static final String UPDATE_MODS_URL = "update.mods.url";
+    public static final String REFRESH_DOWNLOADABLE_MODS = "refresh.downloadable.mods";
+    public static final String DOWNLOAD_SELECTED_MODS = "download.selected.mods";
+
     // Settings tab
     public static final String CHANGE_MC_DATA_FOLDER = "change.mc.data.folder";
     public static final String CHANGE_MC_EXECUTABLE = "change.mc.executable";
+    public static final String REFRESH_DOWNLOADABLE_FORGES = "refresh.downloadable.forges";
     public static final String DOWNLOAD_FORGE = "download.forge";
     public static final String RUN_FORGE_INSTALLER = "run.forge.installer";
-    public static final String DOWNLOAD_MODS_PACK = "download.mods.pack";
 }

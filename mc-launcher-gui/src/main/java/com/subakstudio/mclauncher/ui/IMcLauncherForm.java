@@ -37,8 +37,6 @@ public interface IMcLauncherForm extends ActionListener, TableModelListener {
 
     void deleteSelectedMods();
 
-    void removeModAt(int rowIndex);
-
     ModsTableRow getModAt(int rowIndex);
 
     void setDownloadableMods(List<IDownloadableRow> mods);
@@ -48,4 +46,8 @@ public interface IMcLauncherForm extends ActionListener, TableModelListener {
     void setDownloadableForges(List<IDownloadableRow> forges);
 
     List<IDownloadableRow> getSelectedDownloadableForges();
+
+    String getModsUrl();
+
+    void setModsUrl(String url);
 }
