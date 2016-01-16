@@ -1,6 +1,7 @@
 package com.subakstudio.mclauncher.model
 
 import com.subakstudio.mclauncher.util.McProps
+import com.subakstudio.mclauncher.util.MinecraftUtils
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import groovy.util.logging.Slf4j
@@ -26,29 +27,47 @@ class Settings {
         log.info("config file saved: [$json]")
     }
 
+    /**
+     * Load settings from json file.
+     *
+     * @return true if it needs to be saved
+     */
     def load() {
+        boolean toBeSaved = false
+
         if (!file.exists()) {
             log.info("config file does not exist.")
-            return false
+            toBeSaved = true
+        } else {
+            json = new JsonSlurper().parseText(file.text)
+            mcDataFolder = json.mcDataFolder
+            mcExecutable = json.mcExecutable
+            modsUrl = json.modsUrl
+            log.info("config file is loaded: [$json]")
         }
 
-        json = new JsonSlurper().parseText(file.text)
-
-        if (json.mcDataFolder == null) {
+        if (mcDataFolder == null) {
             log.info("mc data folder does not exist.")
-            return false
+            mcDataFolder = MinecraftUtils.findMcDataFolder()
+            if (mcDataFolder != null) {
+                toBeSaved = true
+            }
         }
 
-        mcDataFolder = json.mcDataFolder
-        mcExecutable = json.mcExecutable
-        modsUrl = json.modsUrl
+        if (mcExecutable == null) {
+            log.info("mc executable does not exist.")
+            mcExecutable = MinecraftUtils.findMcExecutable()
+            if (mcExecutable != null) {
+                toBeSaved = true
+            }
+        }
 
         if (modsUrl == null) {
+            log.info("mods url not found.")
             modsUrl = McProps.get("url.json.mods")
+            toBeSaved = true
         }
 
-        log.info("config file is loaded: [$json]")
-
-        return true
+        return toBeSaved
     }
 }

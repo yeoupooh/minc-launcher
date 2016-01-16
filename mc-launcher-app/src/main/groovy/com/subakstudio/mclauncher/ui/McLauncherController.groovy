@@ -3,19 +3,11 @@ package com.subakstudio.mclauncher.ui
 import com.subakstudio.mclauncher.Commands
 import com.subakstudio.mclauncher.MinecraftDataFolder
 import com.subakstudio.mclauncher.cmd.*
-import com.subakstudio.mclauncher.model.DownloadableForgeRow
-import com.subakstudio.mclauncher.model.DownloadableModRow
 import com.subakstudio.mclauncher.model.Settings
 import com.subakstudio.mclauncher.util.FileUtils
-import com.subakstudio.mclauncher.util.McProps
-import com.subakstudio.mclauncher.util.OkHttpClientHelper
 import com.subakstudio.mclauncher.util.ResStrings
-import groovy.json.JsonSlurper
 import groovy.swing.SwingBuilder
 import groovy.util.logging.Slf4j
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel
-
-import javax.swing.JOptionPane
 
 /**
  * Created by yeoupooh on 1/1/16.
@@ -106,7 +98,7 @@ class McLauncherController {
     def executeCommand(cmd) {
         if (!cmdDispatcher.execute(cmd)) {
             log.warn("Unhandled action: $cmd")
-            JOptionPane.showMessageDialog(form, ResStrings.get("msg.not.supported"))
+            new DialogBuilder(swing, form).buildErrorWithResId("msg.not.supported").show()
         }
     }
 

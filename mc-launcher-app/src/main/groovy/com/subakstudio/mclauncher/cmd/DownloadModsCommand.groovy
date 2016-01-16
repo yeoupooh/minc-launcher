@@ -5,10 +5,6 @@ import com.subakstudio.mclauncher.util.OkHttpClientHelper
 import com.subakstudio.mclauncher.util.ResStrings
 import groovy.util.logging.Slf4j
 
-import javax.swing.JComponent
-import javax.swing.JOptionPane
-import java.awt.Component
-
 /**
  * Created by Thomas on 1/3/2016.
  */
@@ -55,9 +51,7 @@ class DownloadModsCommand extends SwingFormCommand {
                     form.updateMessage(ResStrings.get("msg.downloaded.mod"))
                 }
             } else {
-                swing.doLater {
-                    JOptionPane.showMessageDialog(form as Component, ResStrings.get("msg.select.mod.to.download"))
-                }
+                dialogBuilder.buildErrorWithResId("msg.select.mod.to.download").show()
             }
         }
 

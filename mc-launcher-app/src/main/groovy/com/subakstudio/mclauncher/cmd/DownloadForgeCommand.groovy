@@ -5,9 +5,6 @@ import com.subakstudio.mclauncher.util.OkHttpClientHelper
 import com.subakstudio.mclauncher.util.ResStrings
 import groovy.util.logging.Slf4j
 
-import javax.swing.*
-import java.awt.*
-
 /**
  * Created by Thomas on 1/3/2016.
  */
@@ -36,13 +33,13 @@ class DownloadForgeCommand extends SwingFormCommand {
                     log.debug("selected: $fileName: $url")
                     http.download(
                             url,
-                            new File(Constants.MC_LAUNCHER_TEMP_PATH, fileName))
+                            new File(Constants.MC_LAUNCHER_REPO_FORGES_FOLDER, fileName))
                     swing.doLater {
                         form.updateMessage(ResStrings.get("msg.downloaded.forge"))
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(form as Component, ResStrings.get("msg.select.forge.to.download"))
+                dialogBuilder.buildErrorWithResId("msg.select.forge.to.download").show()
             }
         }
 

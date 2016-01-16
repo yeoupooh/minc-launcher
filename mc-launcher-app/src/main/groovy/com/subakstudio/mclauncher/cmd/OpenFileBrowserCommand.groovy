@@ -1,6 +1,7 @@
 package com.subakstudio.mclauncher.cmd
 
 import com.subakstudio.mclauncher.util.PlatformUtils
+import com.subakstudio.mclauncher.util.ResStrings
 
 import javax.swing.*
 
@@ -18,10 +19,9 @@ class OpenFileBrowserCommand extends SwingFormCommand {
     boolean execute() {
         try {
             PlatformUtils.openFileBrowser(path)
-            return true
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(form, path.absolutePath + " not found.")
-            return false
+            dialogBuilder.buildError(String.format("%s: %s", ResStrings.get("msg.folder.not.found", path.absolutePath))).show()
         }
+        return true
     }
 }

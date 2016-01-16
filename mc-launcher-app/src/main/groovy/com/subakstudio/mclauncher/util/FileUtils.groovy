@@ -17,6 +17,8 @@ class FileUtils {
         if (!p.exists()) {
             p.mkdirs()
             log.info("$p is created.")
+        } else {
+            log.info("$p is already created.")
         }
     }
 

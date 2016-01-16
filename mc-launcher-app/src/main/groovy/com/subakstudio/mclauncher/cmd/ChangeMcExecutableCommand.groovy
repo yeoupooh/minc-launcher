@@ -27,11 +27,14 @@ class ChangeMcExecutableCommand extends SwingFormCommand {
 
         log.debug("filter=[$fileFilter]")
 
+        def currDir = settings.mcExecutable != null && new File(settings.mcExecutable).exists() ? new File(settings.mcExecutable) : null
+
         def fileChooser = swing.fileChooser(
                 dialogTitle: "Choose Minecraft executable file",
                 fileSelectionMode: JFileChooser.FILES_ONLY,
                 //the file filter must show also directories, in order to be able to look into them
-                fileFilter: fileFilter
+                fileFilter: fileFilter,
+                currentDirectory: currDir
         )
 
         def ret = fileChooser.showOpenDialog()

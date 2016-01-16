@@ -1,29 +1,38 @@
-group 'subakstudio'
-version '1.3'
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
 
-apply plugin: 'groovy'
-apply plugin: 'java'
-apply plugin: 'application'
+plugins {
+    id "java"
+    id "groovy"
+    id "application"
+
+    // MacAppBundle
+    // https://plugins.gradle.org/plugin/com.github.cr0.macappbundle
+    id "com.github.cr0.macappbundle" version "3.1.0"
+
+    // Mac Bundle Plugin (OLD)
+    // https://plugins.gradle.org/plugin/edu.sc.seis.macAppBundle
+//    id "edu.sc.seis.macAppBundle" version "2.1.5"
+
+    // Jre Bundle
+    // https://plugins.gradle.org/plugin/net.alchim31.getdown
+
+    // Launch4j plugin
+    // https://plugins.gradle.org/plugin/edu.sc.seis.launch4j
+    id "edu.sc.seis.launch4j" version "1.6.1"
+}
+
+group 'subakstudio'
+version '1.4'
 
 sourceCompatibility = 1.7
 
-// Launch4j plugin
-// https://plugins.gradle.org/plugin/edu.sc.seis.launch4j
-buildscript {
-    repositories {
-        maven {
-            url 'https://plugins.gradle.org/m2'
-        }
-    }
-    dependencies {
-        classpath 'gradle.plugin.edu.sc.seis.gradle:launch4j:1.6.1'
-    }
-}
-apply plugin: 'edu.sc.seis.launch4j'
-
-repositories {
-    mavenCentral()
-}
+def appDisplayName = 'McLauncher'
+def appPackageName = 'com.subakstudio.mclauncher'
 
 mainClassName = "com.subakstudio.mclauncher.McLauncher"
 
@@ -48,6 +57,7 @@ dependencies {
 
     compile 'org.codehaus.groovy:groovy-all:2.3.11'
 
+    // OkHttp for Http Client
     compile 'com.squareup.okhttp:okhttp:2.7.0'
 
     // Filename util
@@ -76,3 +86,30 @@ task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j']) {
 
 }
 
+macAppBundle {
+    appName = appDisplayName
+//    appCategory = "public.app-category.utilities"
+    // Converted from https://iconverticons.com/online/
+    icon = "../resources/5548-256x256x8.icns"
+//    agent = true
+
+//    version = "0.1.3-alpha+SNAPSHOT.123456789"
+//    shortVersion = "0.1.3a (nightly)"
+
+    mainClassName = project.mainClassName
+
+//    bundleJRE = false
+    bundleExecutable = appDisplayName
+    bundleIdentifier = appPackageName
+    bundleCopyright = "Copyright 2015 Subak Studio"
+
+//    bundleExtras.put("NSHighResolutionCapable", "true")
+
+//    javaProperties.put("file.encoding", "utf-8")
+//    javaXProperties.add("mx2048M")
+//    javaXProperties.add("startOnFirstThread")
+
+//    javaClassPath.add("/Users/\$CURRENT_USER/.config/fooapp/plugins/*")
+
+//    archiveName = "Foo App ${pluginVersion}"
+}

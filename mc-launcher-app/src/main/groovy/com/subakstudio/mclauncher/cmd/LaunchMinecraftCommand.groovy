@@ -1,9 +1,6 @@
 package com.subakstudio.mclauncher.cmd
 
-import com.subakstudio.mclauncher.Constants
 import groovy.util.logging.Slf4j
-
-import javax.swing.JOptionPane
 
 /**
  * Created by Thomas on 1/3/2016.
@@ -19,8 +16,8 @@ class LaunchMinecraftCommand extends SwingFormCommand {
         }
 
         if (settings.mcExecutable == null) {
-            JOptionPane.showMessageDialog(form, "Minecraft Executable is not set.", "Error", JOptionPane.ERROR_MESSAGE)
-            return false
+            dialogBuilder.buildErrorWithResId("msg.minecraft.executable.not.set").show()
+            return true
         }
 
         swing.doOutside {
@@ -31,9 +28,7 @@ class LaunchMinecraftCommand extends SwingFormCommand {
                 def output = [settings.mcExecutable].execute().text
                 log.debug("output=$output")
             } catch (IOException e) {
-                swing.doLater {
-                    JOptionPane.showMessageDialog(form, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE)
-                }
+                dialogBuilder.buildError(e.getMessage()).show()
             }
         }
 
