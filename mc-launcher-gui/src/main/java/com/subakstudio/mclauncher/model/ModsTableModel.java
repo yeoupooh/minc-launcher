@@ -9,6 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class ModsTableModel extends AbstractTableModel {
             }
         }
 
-        mods.sort(new Comparator<ModsTableRow>() {
+        Collections.sort(mods, new Comparator<ModsTableRow>() {
             @Override
             public int compare(ModsTableRow o1, ModsTableRow o2) {
                 String str1 = o1.file.getName();
