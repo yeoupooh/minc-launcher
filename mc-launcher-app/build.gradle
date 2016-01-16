@@ -14,12 +14,9 @@ plugins {
     // https://plugins.gradle.org/plugin/com.github.cr0.macappbundle
     id "com.github.cr0.macappbundle" version "3.1.0"
 
-    // Mac Bundle Plugin (OLD)
-    // https://plugins.gradle.org/plugin/edu.sc.seis.macAppBundle
-//    id "edu.sc.seis.macAppBundle" version "2.1.5"
-
     // Jre Bundle
     // https://plugins.gradle.org/plugin/net.alchim31.getdown
+//    id "net.alchim31.getdown" version "0.4.1"
 
     // Launch4j plugin
     // https://plugins.gradle.org/plugin/edu.sc.seis.launch4j
@@ -75,15 +72,50 @@ launch4j {
     bundledJre64Bit = true
     jreRuntimeBits = '64'
     // NOTE: Icon from http://www.rw-designer.com/icon-detail/5548
-    icon = '../resources/main/TNT.ico'
+    icon = '../../../resources/TNT.ico'
 }
 
-task distWin64WithJRE(dependsOn: ['distZip', 'launch4j']) {
+Properties properties = new Properties()
+properties.load(project.file("local.properties").newDataInputStream())
+def jreZipFile = properties.getProperty('jre.zip.file')
 
+task unzipJre(type: Copy) {
+    destinationDir = file(project.buildDir)
+    from(zipTree(jreZipFile)) {
+        include "**/**"
+    }
 }
 
-task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j']) {
+task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'unzipJre'], type: Zip) {
+    destinationDir file("$buildDir/distributions")
+    archiveName "$project.name-$project.version-win64-jre.zip"
 
+    into("jre") {
+        from("$buildDir/jre")
+    }
+    into("lib") {
+        from("$buildDir/launch4j/lib")
+    }
+    into("bin") {
+        from("$buildDir/scripts")
+    }
+    into("") {
+        from("$buildDir/launch4j/$project.name" + ".exe")
+    }
+}
+
+task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
+    destinationDir file("$buildDir/distributions")
+    archiveName "$project.name-$project.version-win64.zip"
+    into("lib") {
+        from("$buildDir/launch4j/lib")
+    }
+    into("bin") {
+        from("$buildDir/scripts")
+    }
+    into("") {
+        from("$buildDir/launch4j/$project.name" + ".exe")
+    }
 }
 
 macAppBundle {
@@ -113,3 +145,11 @@ macAppBundle {
 
 //    archiveName = "Foo App ${pluginVersion}"
 }
+
+//getdown {
+////    urlbase = "http://mysite.com/myapp/"
+//    mainClassName = mainClassName
+////    tmplGetdownTxt = tmplGetdownTxt + '\nallow_offline = true'
+////    platforms = [Platform.LINUX_I586, Platform.LINUX_X64, Platform.WINDOWS_I586]
+//    platforms = [Platform.WINDOWS_I586]
+//}
