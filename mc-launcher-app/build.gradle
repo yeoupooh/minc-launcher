@@ -76,7 +76,12 @@ launch4j {
 }
 
 Properties properties = new Properties()
-properties.load(project.file("local.properties").newDataInputStream())
+
+if (project.file("local.properties").exists()) {
+    properties.load(project.file("local.properties").newDataInputStream())
+} else {
+    println("local.properties file is required.")
+}
 
 def releasesDir = properties.getProperty('releases.dir')
 def thisReleaseDir = "$releasesDir/$project.version"
@@ -86,8 +91,10 @@ def distsDir = "$buildDir/distributions"
 task unzipJre(type: Copy) {
     destinationDir = file(project.buildDir)
     def jreZipFile = properties.getProperty('jre.zip.file')
-    from(zipTree(jreZipFile)) {
-        include "**/**"
+    if (jreZipFile != null) {
+        from(zipTree(jreZipFile)) {
+            include "**/**"
+        }
     }
 }
 
