@@ -1,4 +1,3 @@
-
 apply plugin: 'java'
 
 sourceCompatibility = 1.7
@@ -8,12 +7,13 @@ repositories {
 }
 
 dependencies {
+    // FIXME Substance has issue with checkbox rendering
     // Substance Look and Feel
-    compile 'com.github.insubstantial:substance-swingx:7.3'
-    compile 'com.github.insubstantial:trident:7.3'
-    compile 'com.github.insubstantial:laf-widget:7.3'
-    compile 'com.github.insubstantial:laf-plugin:7.3'
-    compile 'com.github.insubstantial:substance:7.3'
+//    compile 'com.github.insubstantial:substance-swingx:7.3'
+//    compile 'com.github.insubstantial:trident:7.3'
+//    compile 'com.github.insubstantial:laf-widget:7.3'
+//    compile 'com.github.insubstantial:laf-plugin:7.3'
+//    compile 'com.github.insubstantial:substance:7.3'
 
     // Intellij Form
     compile 'com.intellij:forms_rt:7.0.3'

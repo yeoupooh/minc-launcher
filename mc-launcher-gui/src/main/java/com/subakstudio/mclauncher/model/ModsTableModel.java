@@ -17,6 +17,8 @@ import java.util.List;
  * Created by Thomas on 1/3/2016.
  */
 public class ModsTableModel extends AbstractTableModel {
+    public static final int COL_IS_ENABLED = 0;
+    public static final int COL_NAME = 1;
     private final Logger log;
     /**
      * Holds all rows.
@@ -110,9 +112,9 @@ public class ModsTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int columnIndex) {
         switch (columnIndex) {
-            case 0:
+            case COL_NAME:
                 return ResStrings.get("col.name");
-            case 1:
+            case COL_IS_ENABLED:
                 return ResStrings.get("col.is.enabled");
             default:
                 log.warn("Unknown columnIndex:" + columnIndex);
@@ -122,16 +124,16 @@ public class ModsTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex == 1 ? true : false;
+        return columnIndex == COL_IS_ENABLED ? true : false;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         ModsTableRow row = mods.get(rowIndex);
         switch (columnIndex) {
-            case 0:
+            case COL_NAME:
                 return row.file.getName();
-            case 1:
+            case COL_IS_ENABLED:
                 return selected.contains(row);
         }
 
@@ -145,7 +147,7 @@ public class ModsTableModel extends AbstractTableModel {
      */
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        if (columnIndex == 1) {
+        if (columnIndex == COL_IS_ENABLED) {
             log.debug("setValueAt: " + aValue);
             ModsTableRow row = mods.get(rowIndex);
             row.newChecked = Boolean.valueOf((Boolean) aValue);
@@ -171,7 +173,7 @@ public class ModsTableModel extends AbstractTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        if (columnIndex == 1) {
+        if (columnIndex == COL_IS_ENABLED) {
             return Boolean.class;
         }
         return super.getColumnClass(columnIndex);

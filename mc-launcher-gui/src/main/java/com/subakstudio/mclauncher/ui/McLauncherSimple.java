@@ -112,7 +112,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
             }
         });
         modsTableModel.addTableModelListener(this);
-        modsTable.getColumnModel().getColumn(1).setMaxWidth(150);
+        modsTable.getColumnModel().getColumn(ModsTableModel.COL_IS_ENABLED).setMaxWidth(150);
     }
 
     private void mapAction(JButton button, String command) {
@@ -152,7 +152,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
         List<IDownloadableRow> list = new ArrayList<IDownloadableRow>();
         int[] rows = downloadableForgeTable.getSelectedRows();
         for (int i = 0; i < rows.length; i++) {
-            list.add(downloadableForgeTableModel.getRowAt(i));
+            list.add(downloadableForgeTableModel.getRowAt(rows[i]));
         }
         return list;
     }
