@@ -114,6 +114,8 @@ public class ModsTableModel extends AbstractTableModel {
                 return ResStrings.get("col.name");
             case 1:
                 return ResStrings.get("col.is.enabled");
+            default:
+                log.warn("Unknown columnIndex:" + columnIndex);
         }
         return null;
     }
@@ -175,7 +177,7 @@ public class ModsTableModel extends AbstractTableModel {
         return super.getColumnClass(columnIndex);
     }
 
-    public java.util.List<ModsTableRow> getSelected() {
+    public List<ModsTableRow> getSelected() {
         return selected;
     }
 
