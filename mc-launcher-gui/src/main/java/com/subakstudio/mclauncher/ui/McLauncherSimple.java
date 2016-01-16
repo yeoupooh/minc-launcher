@@ -240,7 +240,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     @Override
     public void setEnabledAllMods(boolean enabled) {
         for (int i = 0; i < modsTable.getRowCount(); i++) {
-            modsTableModel.setValueAt(enabled, i, 1);
+            modsTableModel.setValueAt(enabled, i, ModsTableModel.COL_IS_ENABLED);
         }
     }
 
@@ -248,7 +248,7 @@ public class McLauncherSimple extends BaseMcLauncherFrame {
     public void setEnabledSelectedMods(boolean enabled) {
         int[] selected = modsTable.getSelectedRows();
         for (int i = 0; i < selected.length; i++) {
-            modsTableModel.setValueAt(enabled, selected[i], 1);
+            modsTableModel.setValueAt(enabled, selected[i], ModsTableModel.COL_IS_ENABLED);
         }
     }
 

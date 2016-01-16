@@ -35,7 +35,11 @@ class MinecraftUtils {
 
         switch (PlatformUtils.os) {
             case PlatformUtils.OS.Windows:
-                mcExecutable = new File(File(System.getenv('ProgramFiles'), 'Minecraft'), 'Minecraft.exe')
+                def mcFolder = new File(System.getenv('ProgramFiles(X86)'), 'Minecraft')
+                mcExecutable = new File(mcFolder, 'Minecraft.exe')
+                if (!mcExecutable.exists()) {
+                    mcExecutable = new File(mcFolder, 'MinecraftLauncher.exe')
+                }
                 break
 
             case PlatformUtils.OS.Mac:

@@ -77,18 +77,23 @@ launch4j {
 
 Properties properties = new Properties()
 properties.load(project.file("local.properties").newDataInputStream())
-def jreZipFile = properties.getProperty('jre.zip.file')
+
+def releasesDir = properties.getProperty('releases.dir')
+def thisReleaseDir = "$releasesDir/$project.version"
+def thisReleaseName = project.name + "-" + project.version
+def distsDir = "$buildDir/distributions"
 
 task unzipJre(type: Copy) {
     destinationDir = file(project.buildDir)
+    def jreZipFile = properties.getProperty('jre.zip.file')
     from(zipTree(jreZipFile)) {
         include "**/**"
     }
 }
 
 task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'unzipJre'], type: Zip) {
-    destinationDir file("$buildDir/distributions")
-    archiveName "$project.name-$project.version-win64-jre.zip"
+    destinationDir file(distsDir)
+    archiveName "$thisReleaseName-win64-jre.zip"
 
     into("jre") {
         from("$buildDir/jre")
@@ -105,8 +110,8 @@ task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'unzipJre'], type: Zip)
 }
 
 task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
-    destinationDir file("$buildDir/distributions")
-    archiveName "$project.name-$project.version-win64.zip"
+    destinationDir file(distsDir)
+    archiveName "$thisReleaseName-win64.zip"
     into("lib") {
         from("$buildDir/launch4j/lib")
     }
@@ -116,6 +121,13 @@ task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
     into("") {
         from("$buildDir/launch4j/$project.name" + ".exe")
     }
+}
+
+task copyWin64DistsToReleasesDir(type: Copy) {
+    destinationDir file(thisReleaseDir)
+    from distsDir
+    include "*-win64*.zip"
+    duplicatesStrategy 'exclude'
 }
 
 macAppBundle {
@@ -153,3 +165,11 @@ macAppBundle {
 ////    platforms = [Platform.LINUX_I586, Platform.LINUX_X64, Platform.WINDOWS_I586]
 //    platforms = [Platform.WINDOWS_I586]
 //}
+
+task copyMacosxDistsToReleasesDir(type: Copy) {
+    destinationDir file(thisReleaseDir)
+    from distsDir
+    include "*.dmg"
+    duplicatesStrategy 'exclude'
+}
+
