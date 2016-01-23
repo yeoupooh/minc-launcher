@@ -10,3 +10,53 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 # Icons
 * http://www.rw-designer.com/icon-detail/5548
 * ICNS file converted from https://iconverticons.com/online/
+
+# Mod List JSON format
+* Sample: http://bit.ly/1K25zrG
+```json
+{
+  "format": "1.1",
+  "version": "1",
+  "updated": "2016-01-06 02:45:00",
+  "mods": [
+    {
+      "name": "Mekanism: Main",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/Mekanism-1.7.10-8.1.8.259.jar"
+    },
+    {
+      "name": "Mekanism: Mekanism Generators",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/MekanismGenerators-1.7.10-8.1.8.259.jar"
+    }
+  ]
+}
+```
+
+# Forge List JSON format
+* Sample: http://bit.ly/1NqXEPv
+```
+{
+  "forges": [
+    {
+      "version": "1.7.10-10.13.4.1558",
+      "fileName": "forge-1.7.10-10.13.4.1558-1.7.10-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-installer.jar"
+    },
+    {
+      "version": "1.8-11.14.4.1563",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8-11.14.4.1563/forge-1.8-11.14.4.1563-installer.jar"
+    },
+    {
+      "version": "1.8.9-11.15.0.1692",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.0.1692/forge-1.8.9-11.15.0.1692-installer.jar"
+    }
+  ]
+}
+```
