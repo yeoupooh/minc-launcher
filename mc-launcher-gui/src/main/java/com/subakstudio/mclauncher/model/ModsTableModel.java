@@ -56,8 +56,9 @@ public class ModsTableModel extends AbstractTableModel {
                 File[] modFiles = MinecraftDataFolder.getModsFolder(dataFolder).listFiles(dirFilter);
                 for (File file : modFiles) {
                     ModsTableRow row = new ModsTableRow();
-                    row.file = file;
-                    row.originChecked = row.newChecked = true;
+                    row.setFile(file);
+                    row.setOriginChecked(true);
+                    row.setNewChecked(true);
                     mods.add(row);
                     selected.add(row);
                 }
@@ -69,8 +70,9 @@ public class ModsTableModel extends AbstractTableModel {
                 File[] modFiles = MinecraftDataFolder.getDisabledModsFolder(dataFolder).listFiles(dirFilter);
                 for (File file : modFiles) {
                     ModsTableRow row = new ModsTableRow();
-                    row.file = file;
-                    row.originChecked = row.newChecked = false;
+                    row.setFile(file);
+                    row.setOriginChecked(false);
+                    row.setNewChecked(false);
                     mods.add(row);
                 }
                 log.info("mods files are loaded under disabled mods folder.");
@@ -82,8 +84,8 @@ public class ModsTableModel extends AbstractTableModel {
         Collections.sort(mods, new Comparator<ModsTableRow>() {
             @Override
             public int compare(ModsTableRow o1, ModsTableRow o2) {
-                String str1 = o1.file.getName();
-                String str2 = o2.file.getName();
+                String str1 = o1.getFile().getName();
+                String str2 = o2.getFile().getName();
                 int res = String.CASE_INSENSITIVE_ORDER.compare(str1, str2);
                 if (res == 0) {
                     res = str1.compareTo(str2);
@@ -118,6 +120,7 @@ public class ModsTableModel extends AbstractTableModel {
                 return ResStrings.get("col.is.enabled");
             default:
                 log.warn("Unknown columnIndex:" + columnIndex);
+                break;
         }
         return null;
     }
@@ -132,9 +135,11 @@ public class ModsTableModel extends AbstractTableModel {
         ModsTableRow row = mods.get(rowIndex);
         switch (columnIndex) {
             case COL_NAME:
-                return row.file.getName();
+                return row.getFile().getName();
             case COL_IS_ENABLED:
                 return selected.contains(row);
+            default:
+                break;
         }
 
         return null;
@@ -150,14 +155,14 @@ public class ModsTableModel extends AbstractTableModel {
         if (columnIndex == COL_IS_ENABLED) {
             log.debug("setValueAt: " + aValue);
             ModsTableRow row = mods.get(rowIndex);
-            row.newChecked = Boolean.valueOf((Boolean) aValue);
-            if (row.newChecked) {
+            row.setNewChecked(Boolean.valueOf((Boolean) aValue));
+            if (row.getNewChecked()) {
                 selected.add(row);
             } else {
                 selected.remove(row);
             }
 
-            if (row.originChecked != row.newChecked) {
+            if (row.getOriginChecked() != row.getNewChecked()) {
                 if (!modified.contains(row)) {
                     modified.add(row);
                 }

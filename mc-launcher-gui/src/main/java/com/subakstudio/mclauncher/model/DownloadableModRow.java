@@ -25,6 +25,7 @@ public class DownloadableModRow implements IDownloadableRow {
                 return url;
             default:
                 System.out.println("Unknown columnIndex: " + columnIndex);
+                break;
         }
         return null;
     }

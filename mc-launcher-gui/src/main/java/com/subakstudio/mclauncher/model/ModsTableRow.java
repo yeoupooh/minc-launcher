@@ -6,6 +6,11 @@ import java.io.File;
  * Created by Thomas on 1/3/2016.
  */
 public class ModsTableRow {
+    private File file;
+    private boolean checked;
+    private boolean originChecked;
+    private boolean newChecked;
+
     public File getFile() {
         return file;
     }
@@ -38,8 +43,11 @@ public class ModsTableRow {
         this.newChecked = newChecked;
     }
 
-    File file;
-    boolean checked;
-    boolean originChecked;
-    boolean newChecked;
+    public boolean getNewChecked() {
+        return newChecked;
+    }
+
+    public boolean getOriginChecked() {
+        return originChecked;
+    }
 }
