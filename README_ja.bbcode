@@ -1,0 +1,137 @@
+McLauncher 1.4 - 簡単なモッズ/フォージインストーラとMinecraftのランチャー
+----
+(注意：この文書は、機械で翻訳されています。だから、あなたが読むこと、これが不快な可能性がありますのでご了承下さい。あなたが英語を読むことができる場合は、[url]https://github.com/yeoupooh/mc-launcher/blob/master/README.md[/url] で元の文書をお読みください。)
+
+[url=https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge][img]https://badges.gitter.im/yeoupooh/mc-launcher.svg[/img][/url] [url=https://travis-ci.org/yeoupooh/mc-launcher][img]https://travis-ci.org/yeoupooh/mc-launcher.svg[/img][/url] [url=https://travis-ci.org/yeoupooh/mc-launcher][img]https://img.shields.io/badge/license-GPLv2-blue.svg[/img][/url] [url=http://www.groovy-lang.org/][img]https://img.shields.io/badge/client-groovy-blue.svg[/img][/url] [url=https://www.codacy.com/app/thomas-min-v1/mc-launcher][img]https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8[/img][/url] [url=https://codeship.com/projects/127717][img]https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master[/img][/url]
+
+[size=200]McLauncher[/size]
+
+これは、あなたが簡単にMinecraftのフォージや改造をダウンロードしたり、管理することができます。 これは、ビューのためのIntelliJでロジックとJavaのスイングフォームのGroovyで書かれています。
+
+[size=200]スクリーンショット[/size]
+
+[spoiler][size=150]ランチャータブ[/size]
+[img]https://github.com/yeoupooh/mc-launcher/raw/master/docs/images/screenshot-mc-launcher-launcher-tab.png[/img]
+
+[size=150]モッズのダウンローダタブ[/size]
+[img]https://github.com/yeoupooh/mc-launcher/raw/master/docs/images/screenshot-mc-launcher-mods-downloader-tab.png[/img]
+
+[size=150]設定タブ[/size]
+[img]https://github.com/yeoupooh/mc-launcher/raw/master/docs/images/screenshot-mc-launcher-settings-tab.png[/img][/spoiler]
+
+[size=200]ダウンロード[/size]
+
+[list]
+[*][url=http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre]64ビット版のJREとWindows用のMcLauncher 1.4[/url][/*]
+[*] [url=http://adf.ly/1VRbiC]JREな ​​しのWindows用McLauncher 1.4[/url][/*]
+[*] [url=http://adf.ly/1VRbsy]JREな ​​しMacOSXのためのMcLauncher 1.4[/url][/*]
+[/list]
+
+[size=200] インストール[/size]
+
+[size=150]Windowsの場合[/size]
+1. Windows版をダウンロード
+2. 解凍し、mc-launcher-*.zip ファイル。
+2. ファイル名を指定して実行 mc-launcher-app.exeの
+
+[size=150]MacOSXの上[/size]
+1. MacOSXのバージョンをダウンロードしてください
+2. ダブルクリックして mc-launcher-*.dmg ファイル。
+3. アプリケーションフォルダにMcLauncherのアイコンをドラッグします
+4. 今、ランチパッドからMc​​Launcherを実行します
+
+[size=200]どのように...[/size]
+
+[size=150]ダウンロードモッズ[/size]
+1. 「モッズダウンローダー」タブをクリックします
+2. あなたが望む改造をクリックしてください（複数選択するには、Ctrlキーを押しながらクリック）
+3. 「選択した改造をダウンロード」ボタンをクリックしてください
+4. ダウンロードするために、選択された改造まで待ちます。
+
+[size=150]鍛造をダウンロードしてインストールします。[/size]
+1. 「設定」タブをクリックします
+2. 鍛造リストから「フォージ」をクリックしてください
+3. 「選択フォルジュのダウンロード」ボタンをクリックしてください
+4. ダウンロードするために、選択された鍛冶屋まで待ちます。
+5. インストールするには、鍛造リストから1鍛造をクリックしてください
+6. 「ファイル名を指定して実行マインクラフトフォージインストーラ」ボタンをクリックしてください
+7. Minecraftのフォージのインストーラで「OK」ボタンをクリックしてください。
+
+[size=150]有効（または無効）のmod[/size]
+1. 「ランチャー」タブをクリックします
+2. リストから選択します改造。 複数、CTRL +改造やドラッグを選択します。
+3. あなたはMinecraftのを起動したときに有効/無効にするボタンを「有効/無効を選択」をクリックします
+4. あなたが有効/チェックボックスをトグルすることによって一つ一つを無効にすることができます。
+5. 注：「リフレッシュ」または「起動マインクラフト」をクリックすると、無効/有効改造が適用されます
+
+[size=150]Minecraftのを起動します。[/size]
+1. 打ち上げ前の設定]タブでチェックアウトMinecraftの実行可能ファイルのパス
+2. ランチャータブで起動Minecraftのボタンをクリックします
+
+[size=150]改造のリストをカスタマイズします[/size]
+1. 訪問 [url]https://jsonblob.com/[/url] を
+2. コピー元のJSON [url]https://jsonblob.com/api/jsonBlob/56a362f7e4b01190df4b0076[/url] サンプルJSONとして。
+3. 保存して、今、あなたはあなたの改造リストURLを取得します
+4. コピーJSONのURL https://jsonblob.com/api/jsonBlob/に「ダウンロードモッズURL "
+5. 更新」ボタンをクリックしてください
+
+[size=150]翻訳への貢献[/size]
+[list]
+[*] 現在は韓国語、英語のみサポートされています[/*]
+[*] あなたの翻訳を貢献したい場合は、手順の下に従ってください[/*]
+[/list]
+1. フォークgitリポジトリ。
+2. mc-launcher/mc-launcher-gui/src/main/resources/の下にstrings_.propertiesを追加します。
+3. あなたをコミットし、リポジトリにプッシュ。
+4. プル要求を送信します。
+5. マージと次のリリースを待ちます。
+
+[size=200]あなたのフィードバックを歓迎します[/size]
+フォーラムでくださいコメントや  [url=https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge][img]https://badges.gitter.im/yeoupooh/mc-launcher.svg[/img][/url].
+
+[size=200]ハックス[/size]
+
+[size=150] Modの一覧JSON形式[/size]
+[list][*] サンプル： [url]http://bit.ly/1K25zrG[/url][/*][/list]
+[spoiler][code]
+{
+  "format": "1.1",
+  "version": "1",
+  "updated": "2016-01-06 02:45:00",
+  "mods": [
+    {
+      "name": "Mekanism: Main",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/Mekanism-1.7.10-8.1.8.259.jar"
+    },
+    {
+      "name": "Mekanism: Mekanism Generators",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/MekanismGenerators-1.7.10-8.1.8.259.jar"
+    }
+  ]
+}
+[/code][/spoiler]
+
+[size=200]外部リソースとライブラリ[/size]
+
+[size=150]アプリケーションアイコン[/size]
+[list]
+[*] [url]http://www.rw-designer.com/icon-detail/5548[/url][/*]
+[*] ICNSファイルから変換さ [url]https://iconverticons.com/online/[/url][/*]
+[/list]
+
+[size=200]プロジェクトページ[/size]
+[list]
+[*] 出典： [url]https://github.com/yeoupooh/mc-launcher/[/url][/*]
+[*] ウィキ： [url]https://github.com/yeoupooh/mc-launcher/wiki/[/url][/*]
+[/list]
+
+[size=200] 著作権[/size]
+[list][*] [著作権 (C) 2016 トーマス Min分](LICENSE)[/*][/list]
