@@ -15,10 +15,10 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 ![Launcher tab](/docs/images/screenshot-mc-launcher-launcher-tab.png)
 
 ## Mods Downloader tab
-![Launcher tab](/docs/images/screenshot-mc-launcher-mods-downloader-tab.png)
+![Mods Downloader tab](/docs/images/screenshot-mc-launcher-mods-downloader-tab.png)
 
 ## Settings tab
-![Launcher tab](/docs/images/screenshot-mc-launcher-settings-tab.png)
+![Settings tab](/docs/images/screenshot-mc-launcher-settings-tab.png)
 
 # Downloads
 
