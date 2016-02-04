@@ -144,6 +144,10 @@ Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/
 * http://www.rw-designer.com/icon-detail/5548
 * ICNS file converted from https://iconverticons.com/online/
 
+# Project Page
+* Source: https://github.com/yeoupooh/mc-launcher/
+* Wiki: https://github.com/yeoupooh/mc-launcher/wiki/
+
 # Copyright
-* [Copyright](LICENSE)
+* [Copyright (c) 2016 Thomas Jinwoo Min](LICENSE)
 
