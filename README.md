@@ -5,6 +5,8 @@
 [![Codeship Status for yeoupooh/mc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
 
 # mc-launcher
+
+[![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This allows you to download or manage Minecraft Forge and mods easily. It is written in Groovy for logic and Java swing form in intellij for view.
 
 # Icons
