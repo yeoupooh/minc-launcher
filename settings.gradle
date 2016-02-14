@@ -1,4 +1,5 @@
 rootProject.name = 'mc-launcher'
 include 'mc-launcher-gui'
 include 'mc-launcher-app'
+include 'mc-launcher-fx'
 
