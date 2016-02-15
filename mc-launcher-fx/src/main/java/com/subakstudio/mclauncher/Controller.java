@@ -5,6 +5,7 @@ import com.subakstudio.http.OkHttpClientHelper;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +34,8 @@ import java.util.ResourceBundle;
 @Slf4j
 public class Controller implements Initializable {
 
+    private CookieManager cookieManager;
+    private String[] acceptableUrls;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -50,8 +54,6 @@ public class Controller implements Initializable {
 
     @FXML // fx:id="webView"
     private WebView webView; // Value injected by FXMLLoader
-    private CookieManager cookieManager;
-    private String[] acceptableUrls;
 
     @FXML
     void buttonGoClicked(ActionEvent event) {
@@ -59,13 +61,13 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void buttonGoNextClicked(ActionEvent event) {
-
+    void buttonGoForwardClicked(ActionEvent event) {
+        goForward();
     }
 
     @FXML
-    void buttonGoPrevClicked(ActionEvent event) {
-
+    void buttonGoBackClicked(ActionEvent event) {
+        goBack();
     }
 
     @FXML
@@ -80,7 +82,7 @@ public class Controller implements Initializable {
 
     @FXML
     void textFieldUrlKeyPressed(KeyEvent event) {
-        log.debug("keycode=" + event.getCode());
+//        log.debug("keycode=" + event.getCode());
         if (event.getCode() == KeyCode.ENTER) {
             navigate();
         }
@@ -186,6 +188,22 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void goForward() {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                webView.getEngine().getHistory().go(1);
+            }
+        });
+    }
+
+    private void goBack() {
+        Platform.runLater(new Runnable() {
+            public void run() {
+                webView.getEngine().getHistory().go(-1);
+            }
+        });
     }
 
 }
