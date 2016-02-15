@@ -1,0 +1,10 @@
+{
+  "downloadables": [
+    {
+      "startsWith": "https://dl.dropboxusercontent.com/content_link/"
+    },
+    {
+      "startsWith": "http://en.multip.net/view/down/id/"
+    }
+  ]
+}

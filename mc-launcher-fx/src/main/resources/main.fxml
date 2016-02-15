@@ -128,9 +128,9 @@
                                  <children>
                                     <HBox spacing="5.0">
                                        <children>
-                                          <Button mnemonicParsing="false" text="&lt;" />
-                                          <Button mnemonicParsing="false" text="&gt;" />
-                                          <Button mnemonicParsing="false" text="Refresh" />
+                                          <Button mnemonicParsing="false" onAction="#buttonGoPrevClicked" text="&lt;" />
+                                          <Button mnemonicParsing="false" onAction="#buttonGoNextClicked" text="&gt;" />
+                                          <Button mnemonicParsing="false" onAction="#buttonRefreshClicked" text="Refresh" />
                                           <TextField fx:id="textFieldUrl" onKeyPressed="#textFieldUrlKeyPressed" HBox.hgrow="ALWAYS" />
                                           <Button fx:id="buttonGo" mnemonicParsing="false" onAction="#buttonGoClicked" text="Go" />
                                        </children>
