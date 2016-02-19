@@ -4,6 +4,12 @@
       "startsWith": "https://dl.dropboxusercontent.com/content_link/"
     },
     {
+      "startsWith": "https://dl.dropboxusercontent.com/u/"
+    },
+    {
+      "startsWith": "http://addons-origin.cursecdn.com/files/"
+    },
+    {
       "startsWith": "http://en.multip.net/view/down/id/"
     }
   ]

@@ -1,23 +1,27 @@
 package com.subakstudio.mclauncher;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.subakstudio.http.OkHttpClientHelper;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.web.WebHistory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Window;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
+import org.controlsfx.dialog.ProgressDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,66 +47,153 @@ public class Controller implements Initializable {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="buttonLaunchMinecraft"
-    private Button buttonLaunchMinecraft; // Value injected by FXMLLoader
+    @FXML // fx:id="splitPane"
+    private SplitPane splitPane; // Value injected by FXMLLoader
 
-    @FXML // fx:id="buttonGo"
-    private Button buttonGo; // Value injected by FXMLLoader
+    @FXML // fx:id="paneLauncher"
+    private AnchorPane paneLauncher; // Value injected by FXMLLoader
 
-    @FXML // fx:id="textFieldUrl"
-    private TextField textFieldUrl; // Value injected by FXMLLoader
+    @FXML // fx:id="tabPane"
+    private TabPane tabPane; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tabWeb"
+    private Tab tabWeb; // Value injected by FXMLLoader
+
+    @FXML // fx:id="textFieldWebUrl"
+    private TextField textFieldWebUrl; // Value injected by FXMLLoader
 
     @FXML // fx:id="webView"
     private WebView webView; // Value injected by FXMLLoader
 
+    @FXML // fx:id="textFieldModsUrl"
+    private TextField textFieldModsUrl; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableDownloadableMods"
+    private TableView<DownloadableModRow> tableDownloadableMods; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableColName"
+    private TableColumn<DownloadableModRow, String> tableColName; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableColVersion"
+    private TableColumn<DownloadableModRow, String> tableColVersion; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableColForgeVersion"
+    private TableColumn<DownloadableModRow, String> tableColForgeVersion; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableColFileName"
+    private TableColumn<DownloadableModRow, String> tableColFileName; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableColUrl"
+    private TableColumn<DownloadableModRow, String> tableColUrl; // Value injected by FXMLLoader
+
     @FXML
-    void buttonGoClicked(ActionEvent event) {
-        navigate();
+    void buttonDownloadSelectedModsClicked(ActionEvent event) {
+        downloadSelectedMods();
     }
 
     @FXML
-    void buttonGoForwardClicked(ActionEvent event) {
-        goForward();
+    void buttonUpdateDownloadableModsListClicked(ActionEvent event) {
+
     }
 
     @FXML
-    void buttonGoBackClicked(ActionEvent event) {
+    void buttonWebBackClicked(ActionEvent event) {
         goBack();
     }
 
     @FXML
-    void buttonLaunchMinecraftClicked(ActionEvent event) {
+    void buttonWebForwardClicked(ActionEvent event) {
+        goForward();
+    }
+
+    @FXML
+    void buttonWebGoClicked(ActionEvent event) {
+        navigate();
+    }
+
+    @FXML
+    void buttonWebRefreshClicked(ActionEvent event) {
 
     }
 
     @FXML
-    void buttonRefreshClicked(ActionEvent event) {
-
-    }
-
-    @FXML
-    void textFieldUrlKeyPressed(KeyEvent event) {
+    void textFieldWebUrlKeyPressed(KeyEvent event) {
 //        log.debug("keycode=" + event.getCode());
         if (event.getCode() == KeyCode.ENTER) {
             navigate();
         }
     }
 
-    private void navigate() {
-        log.debug(textFieldUrl.getText());
-        webView.getEngine().load(textFieldUrl.getText());
-    }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        assert buttonLaunchMinecraft != null : "fx:id=\"buttonLaunchMinecraft\" was not injected: check your FXML file 'main2.fxml'.";
-        assert buttonGo != null : "fx:id=\"buttonGo\" was not injected: check your FXML file 'main2.fxml'.";
-        assert textFieldUrl != null : "fx:id=\"textFieldUrl\" was not injected: check your FXML file 'main2.fxml'.";
+        assert log != null : "log is not injected.";
+
+        assert textFieldWebUrl != null : "fx:id=\"textFieldWebUrl\" was not injected: check your FXML file 'main2.fxml'.";
         assert webView != null : "fx:id=\"webView\" was not injected: check your FXML file 'main2.fxml'.";
+        assert textFieldModsUrl != null : "fx:id=\"textFieldModsUrl\" was not injected: check your FXML file 'main2.fxml'.";
+        assert tableDownloadableMods != null : "fx:id=\"tableDownloadableMods\" was not injected: check your FXML file 'main2.fxml'.";
 
+        setupSplitPane();
         setupWebView();
+        setupDownloadableModsTable();
+    }
 
+    private void setupSplitPane() {
+        // Fix size of launcher pane
+        SplitPane.setResizableWithParent(paneLauncher, Boolean.FALSE);
+    }
+
+    private void downloadSelectedMods() {
+        ObservableList<DownloadableModRow> selection = tableDownloadableMods.getSelectionModel().getSelectedItems();
+        for (DownloadableModRow row : selection) {
+            if (row.isUseWebBrowser()) {
+                tabPane.getSelectionModel().select(tabWeb);
+                navigate(row.getUrl());
+            } else {
+                downloadFile(row.getUrl(), row.getFileName());
+            }
+        }
+    }
+
+    private void downloadFile(String url, String fileName) {
+        DownloadFileService service = new DownloadFileService();
+        service.setUrl(url);
+        service.setFileName(fileName);
+        ProgressDialog progDiag = new ProgressDialog(service);
+        progDiag.setTitle("Download File");
+        progDiag.initOwner(getPrimaryStage());
+        progDiag.setHeaderText("Downloading..." + url);
+        progDiag.initModality(Modality.WINDOW_MODAL);
+        service.start();
+    }
+
+    private Window getPrimaryStage() {
+        return webView.getScene().getWindow();
+    }
+
+    private void setupDownloadableModsTable() {
+        tableDownloadableMods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        tableColName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("name"));
+        tableColVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("version"));
+        tableColForgeVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("forgeVersion"));
+        tableColFileName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("fileName"));
+        tableColUrl.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("url"));
+
+        OkHttpClientHelper httpClient = new OkHttpClientHelper();
+        try {
+            String json = httpClient.downloadText(textFieldModsUrl.getText());
+            ObjectMapper om = new ObjectMapper();
+            om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            DownloadableModList list = (DownloadableModList) om.readValue(json, DownloadableModList.class);
+
+            tableDownloadableMods.setItems(FXCollections.observableArrayList(list.getMods()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupWebView() {
@@ -138,22 +229,19 @@ public class Controller implements Initializable {
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }
-//                    if (url.startsWith("https://dl.dropboxusercontent.com/content_link/")
-//                            || url.startsWith("http://en.multip.net/view/down/id/")) {
-//                        Platform.runLater(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                showDownloadConfirmDialog(url);
-//                            }
-//                        });
-//                    }
                 }
             }
-
-//            @Override
-//            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-//            }
         });
+    }
+
+    private void navigate() {
+        log.debug(textFieldWebUrl.getText());
+        webView.getEngine().load(textFieldWebUrl.getText());
+    }
+
+    private void navigate(String url) {
+        textFieldWebUrl.setText(url);
+        navigate();
     }
 
     private void showDownloadConfirmDialog(String url) {
@@ -168,7 +256,7 @@ public class Controller implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    downloadFile(url);
+                    downloadFile(url, FilenameUtils.getName(url));
                 }
             });
         } else {
