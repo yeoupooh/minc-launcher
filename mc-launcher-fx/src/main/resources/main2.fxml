@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<VBox prefHeight="523.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.subakstudio.mclauncher.Controller">
+   <children>
+      <SplitPane fx:id="splitPane" dividerPositions="0.24966442953020135" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
+        <items>
+          <AnchorPane fx:id="paneLauncher" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TabPane layoutX="7.0" layoutY="151.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab text="Launcher">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="Button" />
+                                    <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="50.0" text="Launch Minecraft" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="295.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab fx:id="tabWeb" text="Web">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#buttonWebBackClicked" text="&lt;" />
+                                          <Button mnemonicParsing="false" onAction="#buttonWebForwardClicked" text="&gt;" />
+                                          <Button mnemonicParsing="false" onAction="#buttonWebRefreshClicked" text="Refresh" />
+                                          <TextField fx:id="textFieldWebUrl" onKeyPressed="#textFieldWebUrlKeyPressed" HBox.hgrow="ALWAYS" />
+                                          <Button mnemonicParsing="false" onAction="#buttonWebGoClicked" text="Go" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                       </padding>
+                                    </HBox>
+                                    <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                           </content>
+                        </Tab>
+                      <Tab text="Mods Downloader">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="5.0">
+                                       <children>
+                                          <Label text="Downloadable Mods URL:" />
+                                          <TextField fx:id="textFieldModsUrl" text="https://jsonblob.com/api/jsonBlob/56c6d4aae4b01190df4ff604" HBox.hgrow="ALWAYS" />
+                                          <Button mnemonicParsing="false" onAction="#buttonUpdateDownloadableModsListClicked" text="Update" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                       </padding>
+                                    </HBox>
+                                    <TableView fx:id="tableDownloadableMods" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                                      <columns>
+                                        <TableColumn fx:id="tableColName" prefWidth="200.0" text="Name" />
+                                        <TableColumn fx:id="tableColVersion" minWidth="0.0" prefWidth="100.0" text="Version" />
+                                          <TableColumn fx:id="tableColForgeVersion" prefWidth="100.0" text="Forge Version" />
+                                          <TableColumn fx:id="tableColFileName" prefWidth="150.0" text="File Name" />
+                                          <TableColumn fx:id="tableColUrl" prefWidth="300.0" text="URL" />
+                                      </columns>
+                                    </TableView>
+                                    <HBox spacing="5.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" onAction="#buttonDownloadSelectedModsClicked" text="Download Selected Mods" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </Tab>
+                        <Tab text="Settings">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab text="About">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <HBox alignment="CENTER" spacing="5.0">
+         <children>
+            <Label text="Label" />
+            <Pane HBox.hgrow="ALWAYS" />
+            <ProgressBar prefWidth="200.0" progress="0.0" />
+         </children>
+         <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>
