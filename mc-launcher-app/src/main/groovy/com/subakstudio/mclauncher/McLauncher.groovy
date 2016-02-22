@@ -22,8 +22,8 @@ public class McLauncher {
             settings.save()
         }
 
-//        new McLauncherController(settings)
-        Main.main(null);
+        new McLauncherController(settings)
+//        Main.main(null);
     }
 }
 
