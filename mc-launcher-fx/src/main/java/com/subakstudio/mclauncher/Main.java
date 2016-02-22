@@ -25,6 +25,8 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        SingletonUserConfigFile.getInstance().load();
+        SingletonMcLauncherConfigFile.getInstance().load();
         launch(args);
     }
 

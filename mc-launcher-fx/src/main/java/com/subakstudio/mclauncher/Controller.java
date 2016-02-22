@@ -6,8 +6,8 @@ import com.subakstudio.http.OkHttpClientHelper;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,6 +32,8 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static javafx.collections.FXCollections.*;
+
 /**
  * Created by yeoupooh on 2/14/16.
  */
@@ -40,6 +42,8 @@ public class Controller implements Initializable {
 
     private CookieManager cookieManager;
     private String[] acceptableUrls;
+    private ObservableList<DownloadableModRow> mods = observableArrayList();
+    private ObservableList<ForgeRow> forges = observableArrayList();
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -65,30 +69,79 @@ public class Controller implements Initializable {
     @FXML // fx:id="webView"
     private WebView webView; // Value injected by FXMLLoader
 
-    @FXML // fx:id="textFieldModsUrl"
-    private TextField textFieldModsUrl; // Value injected by FXMLLoader
+    @FXML // fx:id="textFieldModsFilter"
+    private TextField textFieldModsFilter; // Value injected by FXMLLoader
 
     @FXML // fx:id="tableDownloadableMods"
     private TableView<DownloadableModRow> tableDownloadableMods; // Value injected by FXMLLoader
 
-    @FXML // fx:id="tableColName"
-    private TableColumn<DownloadableModRow, String> tableColName; // Value injected by FXMLLoader
+    @FXML // fx:id="tableColModsName"
+    private TableColumn<DownloadableModRow, String> tableColModsName; // Value injected by FXMLLoader
 
-    @FXML // fx:id="tableColVersion"
-    private TableColumn<DownloadableModRow, String> tableColVersion; // Value injected by FXMLLoader
+    @FXML // fx:id="tableColModsVersion"
+    private TableColumn<DownloadableModRow, String> tableColModsVersion; // Value injected by FXMLLoader
 
-    @FXML // fx:id="tableColForgeVersion"
-    private TableColumn<DownloadableModRow, String> tableColForgeVersion; // Value injected by FXMLLoader
+    @FXML // fx:id="tableColModsForgeVersion"
+    private TableColumn<DownloadableModRow, String> tableColModsForgeVersion; // Value injected by FXMLLoader
 
-    @FXML // fx:id="tableColFileName"
-    private TableColumn<DownloadableModRow, String> tableColFileName; // Value injected by FXMLLoader
+    @FXML // fx:id="tableColModsFileName"
+    private TableColumn<DownloadableModRow, String> tableColModsFileName; // Value injected by FXMLLoader
 
-    @FXML // fx:id="tableColUrl"
-    private TableColumn<DownloadableModRow, String> tableColUrl; // Value injected by FXMLLoader
+    @FXML // fx:id="tableColModsUrl"
+    private TableColumn<DownloadableModRow, String> tableColModsUrl; // Value injected by FXMLLoader
+
+    @FXML // fx:id="textFieldModsUrl"
+    private TextField textFieldModsUrl; // Value injected by FXMLLoader
+
+    @FXML
+    private TextField textFieldMcDataFolder;
+
+    @FXML
+    private TextField textFieldMcExecuable;
+
+    @FXML
+    private TableView<ForgeRow> tableViewForges;
+
+    @FXML
+    private TableColumn<ForgeRow, String> tableColForgeVersion;
+
+    @FXML
+    private TableColumn<ForgeRow, String> tableColForgeFileName;
+
+    @FXML
+    private TableColumn<ForgeRow, String> tableColForgeUrl;
+
+
+    @FXML
+    void buttonDownloadSelectedForgesClicked(ActionEvent event) {
+        downloadSelectedForges();
+    }
 
     @FXML
     void buttonDownloadSelectedModsClicked(ActionEvent event) {
         downloadSelectedMods();
+    }
+
+
+    @FXML
+    void buttonInstallSelectedForgeClicked(ActionEvent event) {
+        installSelectedForge();
+    }
+
+    @FXML
+    void buttonMcDataFolderBrowseClicked(ActionEvent event) {
+
+    }
+
+    @FXML
+    void buttonMcExecutableBrowseClicked(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void buttonModsClearFilterClicked(ActionEvent event) {
+        textFieldModsFilter.clear();
     }
 
     @FXML
@@ -135,9 +188,41 @@ public class Controller implements Initializable {
         assert textFieldModsUrl != null : "fx:id=\"textFieldModsUrl\" was not injected: check your FXML file 'main2.fxml'.";
         assert tableDownloadableMods != null : "fx:id=\"tableDownloadableMods\" was not injected: check your FXML file 'main2.fxml'.";
 
+        setupSettings();
         setupSplitPane();
         setupWebView();
         setupDownloadableModsTable();
+        setupForgesTable();
+    }
+
+    private void setupSettings() {
+        // TODO property binding
+        textFieldMcDataFolder.setText(SingletonUserConfigFile.getConfig().getMcDataFolder());
+        textFieldMcExecuable.setText(SingletonUserConfigFile.getConfig().getMcExecutable());
+        textFieldModsUrl.setText(SingletonUserConfigFile.getConfig().getModsUrl());
+    }
+
+    private void setupForgesTable() {
+        tableViewForges.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        tableColForgeVersion.setCellValueFactory(new PropertyValueFactory<ForgeRow, String>("version"));
+        tableColForgeFileName.setCellValueFactory(new PropertyValueFactory<ForgeRow, String>("fileName"));
+        tableColForgeUrl.setCellValueFactory(new PropertyValueFactory<ForgeRow, String>("url"));
+
+        OkHttpClientHelper httpClient = new OkHttpClientHelper();
+        try {
+            String json = httpClient.downloadText(SingletonMcLauncherConfigFile.getConfig().getForgesUrl());
+            ObjectMapper om = new ObjectMapper();
+            om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            ForgeList list = (ForgeList) om.readValue(json, ForgeList.class);
+
+            forges.addAll(list.getForges());
+
+            tableViewForges.setItems(forges);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupSplitPane() {
@@ -176,11 +261,11 @@ public class Controller implements Initializable {
     private void setupDownloadableModsTable() {
         tableDownloadableMods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        tableColName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("name"));
-        tableColVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("version"));
-        tableColForgeVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("forgeVersion"));
-        tableColFileName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("fileName"));
-        tableColUrl.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("url"));
+        tableColModsName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("name"));
+        tableColModsVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("version"));
+        tableColModsForgeVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("forgeVersion"));
+        tableColModsFileName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("fileName"));
+        tableColModsUrl.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("url"));
 
         OkHttpClientHelper httpClient = new OkHttpClientHelper();
         try {
@@ -189,7 +274,33 @@ public class Controller implements Initializable {
             om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             DownloadableModList list = (DownloadableModList) om.readValue(json, DownloadableModList.class);
 
-            tableDownloadableMods.setItems(FXCollections.observableArrayList(list.getMods()));
+            mods.addAll(list.getMods());
+
+            // Set up filtered data
+            FilteredList<DownloadableModRow> filteredMods = new FilteredList<>(mods, p -> true);
+
+            textFieldModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredMods.setPredicate(modRow -> {
+                    // If filter text is empty, display all persons.
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true;
+                    }
+
+                    // Compare first name and last name of every modRow with filter text.
+                    String lowerCaseFilter = newValue.toLowerCase();
+
+                    if (modRow.getFileName() != null && modRow.getName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true; // Filter matches name.
+                    } else if (modRow.getFileName() != null && modRow.getFileName().toLowerCase().contains(lowerCaseFilter)) {
+                        return true; // Filter matches file name.
+                    } else if (modRow.getUrl() != null && modRow.getUrl().toLowerCase().contains(lowerCaseFilter)) {
+                        return true;
+                    }
+                    return false; // Does not match.
+                });
+            });
+
+            tableDownloadableMods.setItems(filteredMods);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -207,27 +318,23 @@ public class Controller implements Initializable {
                 if (newValue instanceof String) {
                     String url = (String) newValue;
                     ObjectMapper mapper = new ObjectMapper();
-                    try {
-                        McLauncherConfig config = (McLauncherConfig) mapper.readValue(getClass().getResourceAsStream("/mclauncher.config.json"), McLauncherConfig.class);
-                        boolean acceptUrl = false;
-                        for (DownloadableUrl dUrl : config.getDownloadableUrls()) {
-                            if (dUrl.getStartsWith() != null) {
-                                if (url.startsWith(dUrl.getStartsWith())) {
-                                    acceptUrl = true;
-                                    break;
-                                }
+                    McLauncherConfig config = SingletonMcLauncherConfigFile.getConfig();
+                    boolean acceptUrl = false;
+                    for (DownloadableUrl dUrl : config.getDownloadableUrls()) {
+                        if (dUrl.getStartsWith() != null) {
+                            if (url.startsWith(dUrl.getStartsWith())) {
+                                acceptUrl = true;
+                                break;
                             }
                         }
-                        if (acceptUrl) {
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showDownloadConfirmDialog(url);
-                                }
-                            });
-                        }
-                    } catch (IOException e) {
-                        log.error(e.getMessage());
+                    }
+                    if (acceptUrl) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                showDownloadConfirmDialog(url);
+                            }
+                        });
                     }
                 }
             }
@@ -292,6 +399,20 @@ public class Controller implements Initializable {
                 webView.getEngine().getHistory().go(-1);
             }
         });
+    }
+
+    private void downloadSelectedForges() {
+        ObservableList<ForgeRow> selection = tableViewForges.getSelectionModel().getSelectedItems();
+        for (ForgeRow row : selection) {
+            downloadFile(row.getUrl(), row.getFileName());
+        }
+    }
+
+    private void installSelectedForge() {
+        ObservableList<ForgeRow> selection = tableViewForges.getSelectionModel().getSelectedItems();
+        if (selection.size() == 1) {
+            // TODO launch forge installer
+        }
     }
 
 }
