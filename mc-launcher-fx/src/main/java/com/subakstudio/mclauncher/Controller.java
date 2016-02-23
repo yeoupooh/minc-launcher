@@ -3,15 +3,19 @@ package com.subakstudio.mclauncher;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.subakstudio.http.OkHttpClientHelper;
+import com.subakstudio.io.FileUtils;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.SetChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,16 +23,20 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Window;
+import javafx.util.Callback;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.dialog.ProgressDialog;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -42,7 +50,8 @@ public class Controller implements Initializable {
 
     private CookieManager cookieManager;
     private String[] acceptableUrls;
-    private ObservableList<DownloadableModRow> mods = observableArrayList();
+    private ModList modList = new ModList();
+    private ObservableList<DownloadableModRow> downloadableMods = observableArrayList();
     private ObservableList<ForgeRow> forges = observableArrayList();
 
     @FXML // ResourceBundle that was given to the FXMLLoader
@@ -57,6 +66,27 @@ public class Controller implements Initializable {
     @FXML // fx:id="paneLauncher"
     private AnchorPane paneLauncher; // Value injected by FXMLLoader
 
+    @FXML // fx:id="textFieldModsFilter"
+    private TextField textFieldModsFilter; // Value injected by FXMLLoader
+
+    @FXML // fx:id="radioButtonModsAll"
+    private RadioButton radioButtonModsAll; // Value injected by FXMLLoader
+
+    @FXML // fx:id="toggleGrooupMods"
+    private ToggleGroup toggleGrooupMods; // Value injected by FXMLLoader
+
+    @FXML // fx:id="radioButtonModsEnabled"
+    private RadioButton radioButtonModsEnabled; // Value injected by FXMLLoader
+
+    @FXML // fx:id="radioButtonModsDisabled"
+    private RadioButton radioButtonModsDisabled; // Value injected by FXMLLoader
+
+    @FXML // fx:id="listViewMods"
+    private ListView<ModRow> listViewMods; // Value injected by FXMLLoader
+
+    @FXML // fx:id="labelEanbledModsCount"
+    private Label labelEanbledModsCount; // Value injected by FXMLLoader
+
     @FXML // fx:id="tabPane"
     private TabPane tabPane; // Value injected by FXMLLoader
 
@@ -69,8 +99,8 @@ public class Controller implements Initializable {
     @FXML // fx:id="webView"
     private WebView webView; // Value injected by FXMLLoader
 
-    @FXML // fx:id="textFieldModsFilter"
-    private TextField textFieldModsFilter; // Value injected by FXMLLoader
+    @FXML // fx:id="textFieldDownloadableModsFilter"
+    private TextField textFieldDownloadableModsFilter; // Value injected by FXMLLoader
 
     @FXML // fx:id="tableDownloadableMods"
     private TableView<DownloadableModRow> tableDownloadableMods; // Value injected by FXMLLoader
@@ -126,6 +156,16 @@ public class Controller implements Initializable {
     @FXML
     void buttonInstallSelectedForgeClicked(ActionEvent event) {
         installSelectedForge();
+    }
+
+    @FXML
+    void buttonLaunchMinecraftClicked(ActionEvent event) {
+        launchMinecraft();
+    }
+
+    @FXML
+    void buttonLauncherRefreshClicked(ActionEvent event) {
+
     }
 
     @FXML
@@ -193,6 +233,166 @@ public class Controller implements Initializable {
         setupWebView();
         setupDownloadableModsTable();
         setupForgesTable();
+        setupModsListView();
+    }
+
+    private void launchMinecraft() {
+        refreshMcDataFolder();
+        ProcessBuilder pb = new ProcessBuilder(SingletonUserConfigFile.getConfig().getMcExecutable());
+        try {
+            Process p = pb.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void refreshMcDataFolder() {
+        for (ModRow row : modList.getModfied()) {
+            log.debug("file=[$mod.file] newChecked=[$mod.newChecked]");
+            if (row.isChecked()) {
+                FileUtils.move(row.getFile(), MinecraftDataFolder.getModsFolder(new File(SingletonUserConfigFile.getConfig().getMcDataFolder())));
+            } else {
+                FileUtils.move(row.getFile(), MinecraftDataFolder.getDisabledModsFolder(new File(SingletonUserConfigFile.getConfig().getMcDataFolder())));
+            }
+        }
+    }
+
+    private void setupModsListView() {
+        listViewMods.setCellFactory(CheckBoxListCell.forListView(new Callback<ModRow, ObservableValue<Boolean>>() {
+            @Override
+            public ObservableValue<Boolean> call(ModRow item) {
+                return item.onProperty();
+            }
+        }));
+
+        // Set up filtered data
+        FilteredList<ModRow> filteredMods = new FilteredList<>(modList.getMods(), p -> true);
+
+        // TODO filter with name
+//        textFieldModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+//            filteredMods.setPredicate(modRow -> {
+//                // If filter text is empty, display all persons.
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//
+//                // Compare first name and last name of every modRow with filter text.
+//                String lowerCaseFilter = newValue.toLowerCase();
+//
+//                if (modRow.getFileName() != null && modRow.getName().toLowerCase().contains(lowerCaseFilter)) {
+//                    return true; // Filter matches name.
+//                } else if (modRow.getFileName() != null && modRow.getFileName().toLowerCase().contains(lowerCaseFilter)) {
+//                    return true; // Filter matches file name.
+//                } else if (modRow.getUrl() != null && modRow.getUrl().toLowerCase().contains(lowerCaseFilter)) {
+//                    return true;
+//                }
+//                return false; // Does not match.
+//            });
+//        });
+
+        toggleGrooupMods.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> ov,
+                                Toggle old_toggle, Toggle new_toggle) {
+                if (toggleGrooupMods.getSelectedToggle() != null) {
+                    System.out.println(toggleGrooupMods.getSelectedToggle());
+                    if (radioButtonModsAll.isSelected()) {
+                        filteredMods.setPredicate(row -> {
+                            return true;
+                        });
+                    } else if (radioButtonModsEnabled.isSelected()) {
+                        filteredMods.setPredicate(row -> {
+                            return row.isChecked();
+                        });
+                    } else if (radioButtonModsDisabled.isSelected()) {
+                        filteredMods.setPredicate(row -> {
+                            return !row.isChecked();
+                        });
+                    } else {
+                        log.error("what?");
+                    }
+                }
+            }
+        });
+
+        listViewMods.setItems(filteredMods);
+
+        modList.getEnabled().addListener(new SetChangeListener<ModRow>() {
+            @Override
+            public void onChanged(Change<? extends ModRow> c) {
+                System.out.println("modified: c=" + c);
+                labelEanbledModsCount.setText("Enabled Mods: " + modList.getEnabled().size());
+            }
+        });
+
+        setMcDataFolder(SingletonUserConfigFile.getConfig().getMcDataFolder());
+    }
+
+    private void setMcDataFolder(String folder) {
+        File dataFolder = new File(folder);
+
+        FileFilter dirFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.getName().equals(".DS_Store")) {
+                    return false;
+                }
+
+                if (pathname.isDirectory()
+                        || pathname.getName().toLowerCase().endsWith(".jar")
+                        || pathname.getName().toLowerCase().endsWith(".zip")) {
+                    return true;
+                }
+
+                return false;
+            }
+        };
+
+        if (dataFolder.exists()) {
+            if (MinecraftDataFolder.getModsFolder(dataFolder).exists()) {
+                File[] modFiles = MinecraftDataFolder.getModsFolder(dataFolder).listFiles(dirFilter);
+                for (File file : modFiles) {
+                    addModRow(file, true);
+                }
+                log.info("mods files are loaded under mods folder.");
+            } else {
+                log.warn("No mods folder.");
+            }
+            if (MinecraftDataFolder.getDisabledModsFolder(dataFolder).exists()) {
+                File[] modFiles = MinecraftDataFolder.getDisabledModsFolder(dataFolder).listFiles(dirFilter);
+                for (File file : modFiles) {
+                    addModRow(file, false);
+                }
+                log.info("mods files are loaded under disabled mods folder.");
+            } else {
+                log.warn("No disabled mods folder.");
+            }
+        }
+
+        // TODO sort list
+//        Collections.sort(mods, new Comparator<ModsTableRow>() {
+//            @Override
+//            public int compare(ModsTableRow o1, ModsTableRow o2) {
+//                String str1 = o1.getFile().getName();
+//                String str2 = o2.getFile().getName();
+//                int res = String.CASE_INSENSITIVE_ORDER.compare(str1, str2);
+//                if (res == 0) {
+//                    res = str1.compareTo(str2);
+//                }
+//                return res;
+//            }
+//        });
+    }
+
+    private void addModRow(File file, boolean checked) {
+        ModRow row = new ModRow();
+        row.setFile(file);
+        row.setOriginChecked(checked);
+        row.setChecked(checked);
+        modList.add(row);
+    }
+
+    private void updateEnabledModsCount() {
+
     }
 
     private void setupSettings() {
@@ -274,10 +474,10 @@ public class Controller implements Initializable {
             om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             DownloadableModList list = (DownloadableModList) om.readValue(json, DownloadableModList.class);
 
-            mods.addAll(list.getMods());
+            downloadableMods.addAll(list.getMods());
 
             // Set up filtered data
-            FilteredList<DownloadableModRow> filteredMods = new FilteredList<>(mods, p -> true);
+            FilteredList<DownloadableModRow> filteredMods = new FilteredList<>(downloadableMods, p -> true);
 
             textFieldModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredMods.setPredicate(modRow -> {
@@ -355,7 +555,7 @@ public class Controller implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Download File");
         alert.setHeaderText("Download a file from " + url);
-        alert.setContentText("Do you want to download this into mods folder?");
+        alert.setContentText("Do you want to download this into downloadableMods folder?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
