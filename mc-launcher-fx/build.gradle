@@ -1,14 +1,20 @@
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'eclipse'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
+mainClassName = 'com.subakstudio.mclauncher.Main'
+def propfilename = "/keystore/mc_launcher.gradle.properties"
+def keystorefile = "/keystore/mc_launcher_keystore.jks"
+
+import org.apache.tools.ant.taskdefs.condition.Os
+apply from: "http://dl.bintray.com/content/shemnon/javafx-gradle/8.1.1/javafx.plugin"
 
 repositories {
     jcenter()
-//    mavenCentral()
+    mavenCentral()
 }
-
-mainClassName = 'com.subakstudio.mclauncher.Main'
 
 project.ext {
     logbackVersion = '1.1.3'
@@ -41,5 +47,97 @@ dependencies {
     // Apache Common IO
     compile 'commons-io:commons-io:2.4'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '8.40.10'
+	compile group: 'org.jfxtras', name: 'jfxtras-all', version: '8.0-r4'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'org.assertj:assertj-core:3.2.0'
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+task loadProperties {
+	def home = System.properties['user.home']
+	def fileProp = home + propfilename;
+	def fileKey = home + keystorefile;
+	Properties props = new Properties()
+	
+	if (!file(fileProp).exists()) {
+		if(!file(home + "/keystore").exists()) {
+			file(home + "/keystore").mkdir()
+		}
+		if(file(fileProp).createNewFile()) {
+			println "File " + fileProp + " Created"
+			if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+				println "*** WINDOWS "
+				println "You should write properties on your own (rPass, storePass & hb_key_url)"
+                props.setProperty("rPass", "")
+				props.setProperty("storePass", "")
+				props.setProperty("hb_key_url", "")
+				props.store(new FileOutputStream(fileProp), null)
+                throw new Exception("Fix file " + fileProp);
+			} else if (Os.isFamily(Os.FAMILY_UNIX)) {
+				println "*** LINUX "
+				props.setProperty("rPass", "$System.env.HB_SIGN_REL_PSWD")
+				props.setProperty("storePass", "$System.env.HB_SIGN_STORE_PSWD")
+				props.setProperty("hb_key_url", "$System.env.HB_KEYSTORE")
+				props.store(new FileOutputStream(fileProp), null)
+			}
+		} else {
+			println "Error creating file!";
+		}
+	}
+	
+	props.load(new FileInputStream(fileProp));
+	project.ext.rPass = props.getProperty('rPass');
+	project.ext.storePass = props.getProperty('storePass');
+	project.ext.key_file_url = props.getProperty('hb_key_url');
+	
+	def f = new File(fileKey);
+	if (!f.exists()) {
+        if(key_file_url == null) {
+            throw new Exception("Wrong key download location in " + propfilename);
+        }
+		println key_file_url;
+		new URL(key_file_url).withInputStream{ i -> f.withOutputStream{ it << i }}
+	}
+}
+
+build.dependsOn loadProperties
+
+javafx {
+	javaRuntime = System.properties['JAVA_HOME']
+	appID 'HitBoard'
+	appName 'HitBoard'
+	mainClass = mainClassName
+	
+	jvmArgs = ['-XX:+AggressiveOpts', '-XX:CompileThreshold=1']
+	systemProperties = ['prism.disableRegionCaching':'true']
+	arguments = ['-l', '--fast']
+
+	// Generate key: keytool -genkey -alias release -keyalg RSA -keystore keystore.jks -keysize 2048
+	releaseKey {
+		alias = 'release'
+		keyPass = getProjectProperty('rPass')
+		keyStore = file("${System.properties['user.home']}"+keystorefile)
+		storePass = getProjectProperty('storePass')
+	}
+	
+	signingMode 'release'
+}
+
+String getProjectProperty(String propertyName) {
+	project.hasProperty(propertyName) ? project.property(propertyName) : null
 }
