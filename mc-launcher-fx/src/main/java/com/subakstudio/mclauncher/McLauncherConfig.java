@@ -9,10 +9,19 @@ import java.util.List;
  * Created by yeoupooh on 2/15/16.
  */
 public class McLauncherConfig {
+    private String version;
     private String modsUrl;
     private String forgesUrl;
     @JsonProperty("downloadables")
     private List<DownloadableUrl> downloadableUrls = new ArrayList<>();
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
     public String getForgesUrl() {
         return forgesUrl;
