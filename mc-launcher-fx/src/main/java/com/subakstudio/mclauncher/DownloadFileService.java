@@ -1,6 +1,7 @@
 package com.subakstudio.mclauncher;
 
 import com.subakstudio.http.OkHttpClientHelper;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
@@ -11,9 +12,14 @@ import java.io.File;
  */
 public class DownloadFileService extends Service {
 
+    private final IDownloadEventHandler eventHandler;
     //    private StringProperty url = new SimpleStringProperty();
     private String url;
     private String fileName;
+
+    public DownloadFileService(IDownloadEventHandler callback) {
+        this.eventHandler = callback;
+    }
 
     public void setUrl(String value) {
 //        url.setValue(value);
@@ -38,7 +44,13 @@ public class DownloadFileService extends Service {
             @Override
             protected Boolean call() throws Exception {
                 OkHttpClientHelper httpClient = new OkHttpClientHelper();
-                httpClient.downloadBinary(_url, new File("test.bin"));
+                httpClient.downloadBinary(_url, new File(_fileName));
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        eventHandler.completed();
+                    }
+                });
                 return true;
             }
         };

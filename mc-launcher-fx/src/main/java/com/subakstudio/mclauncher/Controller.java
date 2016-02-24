@@ -7,7 +7,6 @@ import com.subakstudio.io.FileUtils;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.SetChangeListener;
 import javafx.collections.transformation.FilteredList;
@@ -33,14 +32,12 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import java.net.HttpCookie;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static javafx.collections.FXCollections.*;
+import static com.subakstudio.mclauncher.Constants.MC_LAUNCHER_REPO_FORGES_FOLDER;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * Created by yeoupooh on 2/14/16.
@@ -111,6 +108,9 @@ public class Controller implements Initializable {
     @FXML // fx:id="tableColModsVersion"
     private TableColumn<DownloadableModRow, String> tableColModsVersion; // Value injected by FXMLLoader
 
+    @FXML // fx:id="tableColModsViaWeb"
+    private TableColumn<DownloadableModRow, Boolean> tableColModsViaWeb; // Value injected by FXMLLoader
+
     @FXML // fx:id="tableColModsForgeVersion"
     private TableColumn<DownloadableModRow, String> tableColModsForgeVersion; // Value injected by FXMLLoader
 
@@ -165,7 +165,7 @@ public class Controller implements Initializable {
 
     @FXML
     void buttonLauncherRefreshClicked(ActionEvent event) {
-
+        loadModList();
     }
 
     @FXML
@@ -237,7 +237,7 @@ public class Controller implements Initializable {
     }
 
     private void launchMinecraft() {
-        refreshMcDataFolder();
+        organizeMods();
         ProcessBuilder pb = new ProcessBuilder(SingletonUserConfigFile.getConfig().getMcExecutable());
         try {
             Process p = pb.start();
@@ -246,7 +246,7 @@ public class Controller implements Initializable {
         }
     }
 
-    private void refreshMcDataFolder() {
+    private void organizeMods() {
         for (ModRow row : modList.getModfied()) {
             log.debug("file=[$mod.file] newChecked=[$mod.newChecked]");
             if (row.isChecked()) {
@@ -258,6 +258,7 @@ public class Controller implements Initializable {
     }
 
     private void setupModsListView() {
+        listViewMods.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listViewMods.setCellFactory(CheckBoxListCell.forListView(new Callback<ModRow, ObservableValue<Boolean>>() {
             @Override
             public ObservableValue<Boolean> call(ModRow item) {
@@ -266,29 +267,26 @@ public class Controller implements Initializable {
         }));
 
         // Set up filtered data
-        FilteredList<ModRow> filteredMods = new FilteredList<>(modList.getMods(), p -> true);
+        FilteredList<ModRow> filteredModsByText = new FilteredList<>(modList.getMods(), p -> true);
+        FilteredList<ModRow> filteredModsByStatus = new FilteredList<>(filteredModsByText, p -> true);
 
-        // TODO filter with name
-//        textFieldModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
-//            filteredMods.setPredicate(modRow -> {
-//                // If filter text is empty, display all persons.
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//
-//                // Compare first name and last name of every modRow with filter text.
-//                String lowerCaseFilter = newValue.toLowerCase();
-//
-//                if (modRow.getFileName() != null && modRow.getName().toLowerCase().contains(lowerCaseFilter)) {
-//                    return true; // Filter matches name.
-//                } else if (modRow.getFileName() != null && modRow.getFileName().toLowerCase().contains(lowerCaseFilter)) {
-//                    return true; // Filter matches file name.
-//                } else if (modRow.getUrl() != null && modRow.getUrl().toLowerCase().contains(lowerCaseFilter)) {
-//                    return true;
-//                }
-//                return false; // Does not match.
-//            });
-//        });
+        // filter with name
+        textFieldModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredModsByText.setPredicate(modRow -> {
+                // If filter text is empty, display all persons.
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                // Compare first name and last name of every modRow with filter text.
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (modRow.getFile() != null && modRow.getFile().getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches name.
+                }
+                return false; // Does not match.
+            });
+        });
 
         toggleGrooupMods.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             public void changed(ObservableValue<? extends Toggle> ov,
@@ -296,15 +294,15 @@ public class Controller implements Initializable {
                 if (toggleGrooupMods.getSelectedToggle() != null) {
                     System.out.println(toggleGrooupMods.getSelectedToggle());
                     if (radioButtonModsAll.isSelected()) {
-                        filteredMods.setPredicate(row -> {
+                        filteredModsByStatus.setPredicate(row -> {
                             return true;
                         });
                     } else if (radioButtonModsEnabled.isSelected()) {
-                        filteredMods.setPredicate(row -> {
+                        filteredModsByStatus.setPredicate(row -> {
                             return row.isChecked();
                         });
                     } else if (radioButtonModsDisabled.isSelected()) {
-                        filteredMods.setPredicate(row -> {
+                        filteredModsByStatus.setPredicate(row -> {
                             return !row.isChecked();
                         });
                     } else {
@@ -314,7 +312,7 @@ public class Controller implements Initializable {
             }
         });
 
-        listViewMods.setItems(filteredMods);
+        listViewMods.setItems(filteredModsByStatus);
 
         modList.getEnabled().addListener(new SetChangeListener<ModRow>() {
             @Override
@@ -324,11 +322,13 @@ public class Controller implements Initializable {
             }
         });
 
-        setMcDataFolder(SingletonUserConfigFile.getConfig().getMcDataFolder());
+        loadModList();
     }
 
-    private void setMcDataFolder(String folder) {
-        File dataFolder = new File(folder);
+    private void loadModList() {
+        modList.clear();
+
+        File dataFolder = new File(SingletonUserConfigFile.getConfig().getMcDataFolder());
 
         FileFilter dirFilter = new FileFilter() {
             @Override
@@ -391,10 +391,6 @@ public class Controller implements Initializable {
         modList.add(row);
     }
 
-    private void updateEnabledModsCount() {
-
-    }
-
     private void setupSettings() {
         // TODO property binding
         textFieldMcDataFolder.setText(SingletonUserConfigFile.getConfig().getMcDataFolder());
@@ -437,13 +433,18 @@ public class Controller implements Initializable {
                 tabPane.getSelectionModel().select(tabWeb);
                 navigate(row.getUrl());
             } else {
-                downloadFile(row.getUrl(), row.getFileName());
+                downloadFile(row.getUrl(),
+                        new File(SingletonUserConfigFile.getConfig().getModsFolder(), row.getFileName()).getAbsolutePath(),
+                        () -> {
+                            loadModList();
+                        }
+                );
             }
         }
     }
 
-    private void downloadFile(String url, String fileName) {
-        DownloadFileService service = new DownloadFileService();
+    private void downloadFile(String url, String fileName, IDownloadEventHandler eventHandler) {
+        DownloadFileService service = new DownloadFileService(eventHandler);
         service.setUrl(url);
         service.setFileName(fileName);
         ProgressDialog progDiag = new ProgressDialog(service);
@@ -464,6 +465,7 @@ public class Controller implements Initializable {
         tableColModsName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("name"));
         tableColModsVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("version"));
         tableColModsForgeVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("forgeVersion"));
+        tableColModsViaWeb.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, Boolean>("viaWeb"));
         tableColModsFileName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("fileName"));
         tableColModsUrl.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("url"));
 
@@ -474,12 +476,19 @@ public class Controller implements Initializable {
             om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             DownloadableModList list = (DownloadableModList) om.readValue(json, DownloadableModList.class);
 
+            // Fill file name if not exist
+            for (DownloadableModRow row : list.getMods()) {
+                if (row.getFileName() == null || row.getFileName().isEmpty()) {
+                    row.setFileName(FilenameUtils.getName(row.getUrl()));
+                }
+            }
+
             downloadableMods.addAll(list.getMods());
 
             // Set up filtered data
             FilteredList<DownloadableModRow> filteredMods = new FilteredList<>(downloadableMods, p -> true);
 
-            textFieldModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
+            textFieldDownloadableModsFilter.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredMods.setPredicate(modRow -> {
                     // If filter text is empty, display all persons.
                     if (newValue == null || newValue.isEmpty()) {
@@ -563,25 +572,18 @@ public class Controller implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    downloadFile(url, FilenameUtils.getName(url));
+                    downloadFile(
+                            url,
+                            new File(SingletonUserConfigFile.getConfig().getModsFolder(), FilenameUtils.getName(url)).getAbsolutePath(),
+                            () -> {
+                                System.out.println("download completed from web");
+                                loadModList();
+                            });
                 }
             });
         } else {
             // ... user chose CANCEL or closed the dialog
             log.info("Canceled");
-        }
-    }
-
-    private void downloadFile(String url) {
-        for (HttpCookie cookie : cookieManager.getCookieStore().getCookies()) {
-            log.debug(cookie.toString());
-        }
-
-        OkHttpClientHelper httpClient = new OkHttpClientHelper();
-        try {
-            httpClient.downloadBinary(url, new File("build/tmp/test.bin"));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -604,7 +606,9 @@ public class Controller implements Initializable {
     private void downloadSelectedForges() {
         ObservableList<ForgeRow> selection = tableViewForges.getSelectionModel().getSelectedItems();
         for (ForgeRow row : selection) {
-            downloadFile(row.getUrl(), row.getFileName());
+            downloadFile(row.getUrl(), new File(MC_LAUNCHER_REPO_FORGES_FOLDER, row.getFileName()).getAbsolutePath(), () -> {
+                System.out.println("download forge installer completed.");
+            });
         }
     }
 

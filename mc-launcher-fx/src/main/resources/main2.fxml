@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -22,7 +27,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-<VBox prefHeight="523.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.subakstudio.mclauncher.Controller">
+<VBox prefHeight="517.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.subakstudio.mclauncher.Controller">
     <children>
         <SplitPane fx:id="splitPane" dividerPositions="0.3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
             <items>
@@ -115,7 +120,8 @@
                                                         <TableColumn fx:id="tableColModsName" prefWidth="200.0" text="Name" />
                                                         <TableColumn fx:id="tableColModsVersion" minWidth="0.0" prefWidth="100.0" text="Version" />
                                                         <TableColumn fx:id="tableColModsForgeVersion" prefWidth="100.0" text="Forge Version" />
-                                                        <TableColumn fx:id="tableColModsFileName" prefWidth="150.0" text="File Name" />
+                                          <TableColumn fx:id="tableColModsViaWeb" prefWidth="50.0" text="via Web" />
+                                                        <TableColumn fx:id="tableColModsFileName" prefWidth="170.0" text="File Name" />
                                                         <TableColumn fx:id="tableColModsUrl" prefWidth="300.0" text="URL" />
                                                     </columns>
                                                 </TableView>
@@ -193,7 +199,7 @@
                 </AnchorPane>
             </items>
         </SplitPane>
-        <HBox alignment="CENTER" spacing="5.0">
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="761.0" spacing="5.0">
             <children>
                 <Label text="Label" />
                 <Pane HBox.hgrow="ALWAYS" />

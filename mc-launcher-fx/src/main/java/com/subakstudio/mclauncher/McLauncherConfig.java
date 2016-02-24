@@ -9,6 +9,11 @@ import java.util.List;
  * Created by yeoupooh on 2/15/16.
  */
 public class McLauncherConfig {
+    private String modsUrl;
+    private String forgesUrl;
+    @JsonProperty("downloadables")
+    private List<DownloadableUrl> downloadableUrls = new ArrayList<>();
+
     public String getForgesUrl() {
         return forgesUrl;
     }
@@ -25,7 +30,11 @@ public class McLauncherConfig {
         this.downloadableUrls = downloadableUrls;
     }
 
-    private String forgesUrl;
-    @JsonProperty("downloadables")
-    private List<DownloadableUrl> downloadableUrls = new ArrayList<>();
+    public String getModsUrl() {
+        return modsUrl;
+    }
+
+    public void setModsUrl(String modsUrl) {
+        this.modsUrl = modsUrl;
+    }
 }

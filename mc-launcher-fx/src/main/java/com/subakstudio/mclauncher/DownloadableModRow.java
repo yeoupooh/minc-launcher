@@ -7,6 +7,7 @@ public class DownloadableModRow {
     private String name;
     private String version;
     private String forgeVersion;
+    private boolean viaWeb;
     private String fileName;
     private String url;
     private boolean useWebBrowser;
@@ -19,6 +20,13 @@ public class DownloadableModRow {
         this.name = name;
     }
 
+    public boolean isViaWeb() {
+        return viaWeb;
+    }
+
+    public void setViaWeb(boolean viaWeb) {
+        this.viaWeb = viaWeb;
+    }
 
     public String getVersion() {
         return version;

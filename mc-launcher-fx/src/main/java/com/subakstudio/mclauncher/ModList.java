@@ -51,4 +51,10 @@ public class ModList {
     public ObservableSet<ModRow> getEnabled() {
         return enabled;
     }
+
+    public void clear() {
+        mods.clear();
+        modified.clear();
+        enabled.clear();
+    }
 }

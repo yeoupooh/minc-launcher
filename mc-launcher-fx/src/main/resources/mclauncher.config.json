@@ -1,4 +1,5 @@
 {
+  "modsUrl": "http://jsonblob.com/api/jsonBlob/568bea5fe4b01190df470b79",
   "forgesUrl": "http://jsonblob.com/api/jsonBlob/568beb97e4b01190df470db4",
   "downloadables": [
     {
@@ -12,6 +13,9 @@
     },
     {
       "startsWith": "http://en.multip.net/view/down/id/"
+    },
+    {
+      "startsWith": "http://forum.minecraftuser.jp/download/file.php?id="
     }
   ]
 }
