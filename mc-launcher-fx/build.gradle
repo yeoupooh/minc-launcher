@@ -90,9 +90,9 @@ task loadProperties {
                 throw new Exception("Fix file " + fileProp);
 			} else if (Os.isFamily(Os.FAMILY_UNIX)) {
 				println "*** LINUX "
-				props.setProperty("releasePass", "$System.env.MC_SIGN_REL_PSWD")
+				props.setProperty("releasePass", "$System.env.MC_SIGN_RELEASE_PSWD")
 				props.setProperty("storePass", "$System.env.MC_SIGN_STORE_PSWD")
-				props.setProperty("mc_key_url", "$System.env.MC_KEYSTORE")
+				props.setProperty("mc_key_url", "$System.env.MC_KEYSTORE_LOCATION")
 				props.store(new FileOutputStream(fileProp), null)
 			}
 		} else {
@@ -109,10 +109,11 @@ task loadProperties {
 	if (!f.exists()) {
         if(key_file_url == null) {
             throw new Exception("Wrong key download location in " + propfilename);
-        }
-		println key_file_url;
-		new URL(key_file_url).withInputStream{ i -> f.withOutputStream{ it << i }}
-	}
+        } else {
+		  println key_file_url;
+		  new URL(key_file_url).withInputStream{ i -> f.withOutputStream{ it << i }}
+	   }
+    }
 }
 
 build.dependsOn loadProperties
