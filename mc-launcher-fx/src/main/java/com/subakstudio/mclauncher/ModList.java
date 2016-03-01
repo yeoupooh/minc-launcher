@@ -2,6 +2,7 @@ package com.subakstudio.mclauncher;
 
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import static javafx.collections.FXCollections.observableSet;
 /**
  * Created by yeoupooh on 2/23/16.
  */
+@Slf4j
 public class ModList {
     private ObservableList<ModRow> mods = observableArrayList();
     private ObservableSet<ModRow> modified = observableSet();
@@ -28,7 +30,7 @@ public class ModList {
             enabled.add(row);
         }
         row.onProperty().addListener((obs, wasOn, isNowOn) -> {
-            System.out.println(row.getFile().getName() + " changed on state from " + wasOn + " to " + isNowOn);
+//            log.debug(row.getFile().getName() + " changed on state from " + wasOn + " to " + isNowOn);
             if (row.isOriginChecked() != isNowOn) {
                 modified.add(row);
             } else {

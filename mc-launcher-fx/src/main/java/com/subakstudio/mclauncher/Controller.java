@@ -124,13 +124,20 @@ public class Controller implements Initializable {
     private TextField textFieldModsUrl; // Value injected by FXMLLoader
 
     @FXML
-    private TextField textFieldMcDataFolder;
-
-    @FXML
     private TextField textFieldMcExecuable;
 
     @FXML
+    private TextField textFieldMcDataFolder;
+
+    @FXML // fx:id="tabSettings"
+    private Tab tabSettings; // Value injected by FXMLLoader
+
+    @FXML
     private TableView<ForgeRow> tableViewForges;
+
+
+    @FXML // fx:id="tabAbout"
+    private Tab tabAbout; // Value injected by FXMLLoader
 
     @FXML
     private TableColumn<ForgeRow, String> tableColForgeVersion;
@@ -238,7 +245,19 @@ public class Controller implements Initializable {
 
     private void launchMinecraft() {
         organizeMods();
-        ProcessBuilder pb = new ProcessBuilder(SingletonUserConfigFile.getConfig().getMcExecutable());
+
+        String fileName = SingletonUserConfigFile.getConfig().getMcExecutable();
+        if (fileName == null || !(new File(fileName).exists())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Minecraft executable not configured.");
+            alert.setContentText("Please set minecraft executable on Settings tab.");
+            Optional<ButtonType> result = alert.showAndWait();
+            tabPane.getSelectionModel().select(tabSettings);
+
+            return;
+        }
+        ProcessBuilder pb = new ProcessBuilder(fileName);
         try {
             Process p = pb.start();
         } catch (IOException e) {
@@ -317,7 +336,7 @@ public class Controller implements Initializable {
         modList.getEnabled().addListener(new SetChangeListener<ModRow>() {
             @Override
             public void onChanged(Change<? extends ModRow> c) {
-                System.out.println("modified: c=" + c);
+                log.debug("modified: c=" + c);
                 labelEanbledModsCount.setText("Enabled Mods: " + modList.getEnabled().size());
             }
         });
@@ -572,9 +591,15 @@ public class Controller implements Initializable {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+                    String fileName = FilenameUtils.getName(url);
+                    // TODO hard-coded
+                    // for naver cafe file attachment
+                    if (fileName.endsWith("?type=attachment")) {
+                        fileName = fileName.substring(0, fileName.indexOf("?type=attachment"));
+                    }
                     downloadFile(
                             url,
-                            new File(SingletonUserConfigFile.getConfig().getModsFolder(), FilenameUtils.getName(url)).getAbsolutePath(),
+                            new File(SingletonUserConfigFile.getConfig().getModsFolder(), fileName).getAbsolutePath(),
                             () -> {
                                 System.out.println("download completed from web");
                                 loadModList();
