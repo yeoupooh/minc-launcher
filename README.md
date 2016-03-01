@@ -5,6 +5,8 @@
 [![implementation-groovy-blue](https://img.shields.io/badge/client-groovy-blue.svg)](http://www.groovy-lang.org/)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8)](https://www.codacy.com/app/thomas-min-v1/mc-launcher)
 [![Codeship Status for yeoupooh/mc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
+[![Coverage Status](https://coveralls.io/repos/github/yeoupooh/mc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/mc-launcher?branch=master)
+
 
 # McLauncher
 
