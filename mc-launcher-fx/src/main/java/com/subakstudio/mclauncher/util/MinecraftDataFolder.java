@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.util;
 
 import java.io.File;
 

@@ -1,6 +1,8 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.subakstudio.mclauncher.config.DownloadableUrl;
+import com.subakstudio.mclauncher.config.WebBrowser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ public class McLauncherConfig {
     private String version;
     private String modsUrl;
     private String forgesUrl;
+    private WebBrowser webBrowser;
     @JsonProperty("downloadables")
     private List<DownloadableUrl> downloadableUrls = new ArrayList<>();
 
@@ -29,6 +32,14 @@ public class McLauncherConfig {
 
     public void setForgesUrl(String forgesUrl) {
         this.forgesUrl = forgesUrl;
+    }
+
+    public WebBrowser getWebBrowser() {
+        return webBrowser;
+    }
+
+    public void setWebBrowser(WebBrowser webBrowser) {
+        this.webBrowser = webBrowser;
     }
 
     public List<DownloadableUrl> getDownloadableUrls() {

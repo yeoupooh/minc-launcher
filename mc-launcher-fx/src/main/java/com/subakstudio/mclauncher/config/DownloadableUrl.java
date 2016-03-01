@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.config;
 
 /**
  * Created by yeoupooh on 2/15/16.

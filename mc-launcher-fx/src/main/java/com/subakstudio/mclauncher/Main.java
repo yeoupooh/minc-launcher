@@ -1,5 +1,7 @@
 package com.subakstudio.mclauncher;
 
+import com.subakstudio.mclauncher.config.SingletonMcLauncherConfigFile;
+import com.subakstudio.mclauncher.config.SingletonUserConfigFile;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

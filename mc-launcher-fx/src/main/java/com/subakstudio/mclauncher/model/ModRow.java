@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.model;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

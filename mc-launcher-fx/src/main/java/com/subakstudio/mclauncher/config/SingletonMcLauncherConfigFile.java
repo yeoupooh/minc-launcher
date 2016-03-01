@@ -1,6 +1,7 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.subakstudio.mclauncher.Constants;
 
 import java.io.IOException;
 

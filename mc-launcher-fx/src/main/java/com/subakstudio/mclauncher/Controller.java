@@ -4,6 +4,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.subakstudio.http.OkHttpClientHelper;
 import com.subakstudio.io.FileUtils;
+import com.subakstudio.mclauncher.config.*;
+import com.subakstudio.mclauncher.model.*;
+import com.subakstudio.mclauncher.util.MinecraftDataFolder;
+
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,10 +21,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Window;
@@ -29,6 +38,7 @@ import org.controlsfx.dialog.ProgressDialog;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -37,6 +47,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static com.subakstudio.mclauncher.Constants.MC_LAUNCHER_REPO_FORGES_FOLDER;
+import static com.subakstudio.util.PlatformUtils.openFileBrowser;
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
@@ -62,6 +73,9 @@ public class Controller implements Initializable {
 
     @FXML // fx:id="paneLauncher"
     private AnchorPane paneLauncher; // Value injected by FXMLLoader
+
+    @FXML // fx:id="checkBoxToggleEnabledAllMods"
+    private CheckBox checkBoxToggleEnabledAllMods; // Value injected by FXMLLoader
 
     @FXML // fx:id="textFieldModsFilter"
     private TextField textFieldModsFilter; // Value injected by FXMLLoader
@@ -92,6 +106,9 @@ public class Controller implements Initializable {
 
     @FXML // fx:id="textFieldWebUrl"
     private TextField textFieldWebUrl; // Value injected by FXMLLoader
+
+    @FXML // fx:id="hboxBookmark"
+    private HBox hboxBookmark; // Value injected by FXMLLoader
 
     @FXML // fx:id="webView"
     private WebView webView; // Value injected by FXMLLoader
@@ -135,7 +152,6 @@ public class Controller implements Initializable {
     @FXML
     private TableView<ForgeRow> tableViewForges;
 
-
     @FXML // fx:id="tabAbout"
     private Tab tabAbout; // Value injected by FXMLLoader
 
@@ -148,6 +164,19 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<ForgeRow, String> tableColForgeUrl;
 
+    @FXML // fx:id="labelMcLauncherVersion"
+    private Label labelMcLauncherVersion; // Value injected by FXMLLoader
+
+    @FXML // fx:id="hyperLinkMcLauncherSite"
+    private Hyperlink hyperLinkMcLauncherSite; // Value injected by FXMLLoader
+
+    @FXML
+    void buttonDeleteSelectedModsClicked(ActionEvent event) {
+        for (ModRow row : listViewMods.getSelectionModel().getSelectedItems()) {
+            row.getFile().delete();
+        }
+        loadModList();
+    }
 
     @FXML
     void buttonDownloadSelectedForgesClicked(ActionEvent event) {
@@ -172,6 +201,7 @@ public class Controller implements Initializable {
 
     @FXML
     void buttonLauncherRefreshClicked(ActionEvent event) {
+        organizeMods();
         loadModList();
     }
 
@@ -191,9 +221,28 @@ public class Controller implements Initializable {
         textFieldModsFilter.clear();
     }
 
+
+    @FXML
+    void buttonOpenDisabledModsFolderClicked(ActionEvent event) {
+        try {
+            openFileBrowser(SingletonUserConfigFile.getConfig().getDisabledModsFolder());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void buttonOpenEnabledModsFolderClicked(ActionEvent event) {
+        try {
+            openFileBrowser(SingletonUserConfigFile.getConfig().getModsFolder());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void buttonUpdateDownloadableModsListClicked(ActionEvent event) {
-
+        updateDownloadableMods();
     }
 
     @FXML
@@ -213,7 +262,24 @@ public class Controller implements Initializable {
 
     @FXML
     void buttonWebRefreshClicked(ActionEvent event) {
+        webView.getEngine().reload();
+    }
 
+    @FXML
+    void checkBoxToggleEnabledAllModsClicked(ActionEvent event) {
+        modList.setAll(checkBoxToggleEnabledAllMods.isSelected());
+    }
+
+    @FXML
+    void hyperLinkMcLauncherSiteClicked(ActionEvent event) {
+        navigate(hyperLinkMcLauncherSite.getText());
+        tabPane.getSelectionModel().select(tabWeb);
+    }
+
+
+    @FXML
+    void hyperLinkMinecraftForumClicked(ActionEvent event) {
+        navigate();
     }
 
     @FXML
@@ -223,7 +289,6 @@ public class Controller implements Initializable {
             navigate();
         }
     }
-
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     @Override
@@ -241,6 +306,22 @@ public class Controller implements Initializable {
         setupDownloadableModsTable();
         setupForgesTable();
         setupModsListView();
+        setupBookmarks();
+    }
+
+    private void setupBookmarks() {
+        for (Bookmark bookmark : SingletonMcLauncherConfigFile.getConfig().getWebBrowser().getBookmarks()) {
+            Hyperlink hl = new Hyperlink();
+            hl.setText(bookmark.getName());
+            hl.setOnAction((event) -> {
+                navigate(bookmark.getUrl());
+            });
+            FontAwesomeIconView faIcon = new FontAwesomeIconView();
+            faIcon.setGlyphName("GLOBE");
+            faIcon.setSize("1.5em");
+            hl.setGraphic(faIcon);
+            hboxBookmark.getChildren().add(hl);
+        }
     }
 
     private void launchMinecraft() {
@@ -448,7 +529,7 @@ public class Controller implements Initializable {
     private void downloadSelectedMods() {
         ObservableList<DownloadableModRow> selection = tableDownloadableMods.getSelectionModel().getSelectedItems();
         for (DownloadableModRow row : selection) {
-            if (row.isUseWebBrowser()) {
+            if (row.isViaWeb()) {
                 tabPane.getSelectionModel().select(tabWeb);
                 navigate(row.getUrl());
             } else {
@@ -485,9 +566,14 @@ public class Controller implements Initializable {
         tableColModsVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("version"));
         tableColModsForgeVersion.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("forgeVersion"));
         tableColModsViaWeb.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, Boolean>("viaWeb"));
+        tableColModsViaWeb.setCellFactory(CheckBoxTableCell.forTableColumn(tableColModsViaWeb));
         tableColModsFileName.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("fileName"));
         tableColModsUrl.setCellValueFactory(new PropertyValueFactory<DownloadableModRow, String>("url"));
 
+        updateDownloadableMods();
+    }
+
+    private void updateDownloadableMods() {
         OkHttpClientHelper httpClient = new OkHttpClientHelper();
         try {
             String json = httpClient.downloadText(textFieldModsUrl.getText());
@@ -500,8 +586,10 @@ public class Controller implements Initializable {
                 if (row.getFileName() == null || row.getFileName().isEmpty()) {
                     row.setFileName(FilenameUtils.getName(row.getUrl()));
                 }
+                log.debug(row.toString());
             }
 
+            downloadableMods.clear();
             downloadableMods.addAll(list.getMods());
 
             // Set up filtered data
@@ -567,6 +655,8 @@ public class Controller implements Initializable {
                 }
             }
         });
+
+        navigate(SingletonMcLauncherConfigFile.getConfig().getWebBrowser().getInitialUrl());
     }
 
     private void navigate() {

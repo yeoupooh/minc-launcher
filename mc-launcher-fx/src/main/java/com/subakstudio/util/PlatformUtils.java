@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static com.subakstudio.util.PlatformUtils.OS.*;
 
@@ -31,11 +32,11 @@ public class PlatformUtils {
         return Unknown;
     }
 
-    public static void openFileBrowser(File file) throws FileNotFoundException {
+    public static void openFileBrowser(File file) throws IOException {
         openFileBrowser(file.getAbsolutePath());
     }
 
-    public static void openFileBrowser(String path) throws FileNotFoundException {
+    public static void openFileBrowser(String path) throws IOException {
         log.debug("open file browser at " + path);
 
         if (!new File(path).exists()) {
@@ -58,10 +59,16 @@ public class PlatformUtils {
                 break;
 
             default:
-                //
+                throw new IOException("Unknown OS");
         }
 
-//        log.debug("output=$output");
+        log.debug("pb=" + pb.command());
+
+        // For Debug
+//        pb.redirectError(ProcessBuilder.Redirect.appendTo(new File("error.log")));
+//        pb.redirectOutput(ProcessBuilder.Redirect.appendTo(new File("output.log")));
+
+        pb.start();
     }
 
 }

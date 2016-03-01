@@ -1,16 +1,20 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.model;
+
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableBooleanValue;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by yeoupooh on 2/19/16.
  */
+@Slf4j
 public class DownloadableModRow {
     private String name;
     private String version;
     private String forgeVersion;
-    private boolean viaWeb;
+    private SimpleBooleanProperty viaWeb = new SimpleBooleanProperty();
     private String fileName;
     private String url;
-    private boolean useWebBrowser;
 
     public String getName() {
         return name;
@@ -21,11 +25,15 @@ public class DownloadableModRow {
     }
 
     public boolean isViaWeb() {
-        return viaWeb;
+        return viaWeb.get();
     }
 
     public void setViaWeb(boolean viaWeb) {
-        this.viaWeb = viaWeb;
+        this.viaWeb.set(viaWeb);
+    }
+
+    public SimpleBooleanProperty viaWebProperty() {
+        return viaWeb;
     }
 
     public String getVersion() {
@@ -60,13 +68,9 @@ public class DownloadableModRow {
         this.url = url;
     }
 
-    public boolean isUseWebBrowser() {
-        return useWebBrowser;
+    @Override
+    public String toString() {
+        return String.format("%s{name=[%s],viaWeb=[%s],url=[%s]}", getClass().getSimpleName(), name, viaWeb, url);
     }
-
-    public void setUseWebBrowser(boolean useWebBrowser) {
-        this.useWebBrowser = useWebBrowser;
-    }
-
 }
 

@@ -1,7 +1,8 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.subakstudio.mclauncher.Constants;
 import com.subakstudio.mclauncher.util.MinecraftUtils;
 import lombok.extern.slf4j.Slf4j;
 

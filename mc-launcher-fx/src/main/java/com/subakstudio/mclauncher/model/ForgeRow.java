@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.model;
 
 /**
  * Created by yeoupooh on 2/22/16.

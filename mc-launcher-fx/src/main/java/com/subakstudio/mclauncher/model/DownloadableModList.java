@@ -1,4 +1,4 @@
-package com.subakstudio.mclauncher;
+package com.subakstudio.mclauncher.model;
 
 import java.util.ArrayList;
 import java.util.List;
