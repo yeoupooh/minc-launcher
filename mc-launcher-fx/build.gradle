@@ -82,17 +82,17 @@ task loadProperties {
 			println "File " + fileProp + " Created"
 			if (Os.isFamily(Os.FAMILY_WINDOWS)) {
 				println "*** WINDOWS "
-				println "You should write properties on your own (rPass, storePass & hb_key_url)"
-                props.setProperty("rPass", "")
+				println "You should write properties on your own (releasePass, storePass & mc_key_url)"
+                props.setProperty("releasePass", "")
 				props.setProperty("storePass", "")
-				props.setProperty("hb_key_url", "")
+				props.setProperty("mc_key_url", "")
 				props.store(new FileOutputStream(fileProp), null)
                 throw new Exception("Fix file " + fileProp);
 			} else if (Os.isFamily(Os.FAMILY_UNIX)) {
 				println "*** LINUX "
-				props.setProperty("rPass", "$System.env.HB_SIGN_REL_PSWD")
-				props.setProperty("storePass", "$System.env.HB_SIGN_STORE_PSWD")
-				props.setProperty("hb_key_url", "$System.env.HB_KEYSTORE")
+				props.setProperty("releasePass", "$System.env.MC_SIGN_REL_PSWD")
+				props.setProperty("storePass", "$System.env.MC_SIGN_STORE_PSWD")
+				props.setProperty("mc_key_url", "$System.env.MC_KEYSTORE")
 				props.store(new FileOutputStream(fileProp), null)
 			}
 		} else {
@@ -101,9 +101,9 @@ task loadProperties {
 	}
 	
 	props.load(new FileInputStream(fileProp));
-	project.ext.rPass = props.getProperty('rPass');
+	project.ext.releasePass = props.getProperty('releasePass');
 	project.ext.storePass = props.getProperty('storePass');
-	project.ext.key_file_url = props.getProperty('hb_key_url');
+	project.ext.key_file_url = props.getProperty('mc_key_url');
 	
 	def f = new File(fileKey);
 	if (!f.exists()) {
@@ -119,8 +119,8 @@ build.dependsOn loadProperties
 
 javafx {
 	javaRuntime = System.properties['JAVA_HOME']
-	appID 'HitBoard'
-	appName 'HitBoard'
+	appID 'MC-Launcher'
+	appName 'MC-Launcher'
 	mainClass = mainClassName
 	
 	jvmArgs = ['-XX:+AggressiveOpts', '-XX:CompileThreshold=1']
@@ -130,11 +130,10 @@ javafx {
 	// Generate key: keytool -genkey -alias release -keyalg RSA -keystore keystore.jks -keysize 2048
 	releaseKey {
 		alias = 'release'
-		keyPass = getProjectProperty('rPass')
+		keyPass = getProjectProperty('releasePass')
 		keyStore = file("${System.properties['user.home']}"+keystorefile)
 		storePass = getProjectProperty('storePass')
 	}
-	
 	signingMode 'release'
 }
 
