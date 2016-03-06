@@ -7,8 +7,7 @@ import com.subakstudio.io.FileUtils;
 import com.subakstudio.mclauncher.config.*;
 import com.subakstudio.mclauncher.model.*;
 import com.subakstudio.mclauncher.util.MinecraftDataFolder;
-
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import com.subakstudio.util.PlatformUtils;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -16,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.SetChangeListener;
 import javafx.collections.transformation.FilteredList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,8 +27,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.web.WebView;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Window;
 import javafx.util.Callback;
@@ -38,17 +39,23 @@ import org.controlsfx.dialog.ProgressDialog;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.subakstudio.mclauncher.Constants.MC_LAUNCHER_REPO_FORGES_FOLDER;
 import static com.subakstudio.util.PlatformUtils.openFileBrowser;
 import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.concurrent.Worker.*;
+import static javafx.concurrent.Worker.State.READY;
+import static javafx.concurrent.Worker.State.SUCCEEDED;
 
 /**
  * Created by yeoupooh on 2/14/16.
@@ -112,6 +119,15 @@ public class Controller implements Initializable {
 
     @FXML // fx:id="webView"
     private WebView webView; // Value injected by FXMLLoader
+
+    @FXML // fx:id="labelWebStatus"
+    private Label labelWebStatus; // Value injected by FXMLLoader
+
+    @FXML // fx:id="progressBarWeb"
+    private ProgressBar progressBarWeb; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tabModsDownloader"
+    private Tab tabModsDownloader; // Value injected by FXMLLoader
 
     @FXML // fx:id="textFieldDownloadableModsFilter"
     private TextField textFieldDownloadableModsFilter; // Value injected by FXMLLoader
@@ -207,14 +223,13 @@ public class Controller implements Initializable {
 
     @FXML
     void buttonMcDataFolderBrowseClicked(ActionEvent event) {
-
+        chooseMcDataFolder();
     }
 
     @FXML
     void buttonMcExecutableBrowseClicked(ActionEvent event) {
-
+        chooseMcExectuable();
     }
-
 
     @FXML
     void buttonModsClearFilterClicked(ActionEvent event) {
@@ -309,6 +324,45 @@ public class Controller implements Initializable {
         setupBookmarks();
     }
 
+    private void chooseMcDataFolder() {
+        DirectoryChooser dialog = new DirectoryChooser();
+        dialog.setTitle("Choose Minecraft Data Folder");
+        if (SingletonUserConfigFile.getConfig().getMcDataFolder() != null) {
+            dialog.setInitialDirectory(new File(SingletonUserConfigFile.getConfig().getMcDataFolder()));
+        }
+        File folder = dialog.showDialog(this.getPrimaryStage());
+        if (folder != null) {
+            SingletonUserConfigFile.getConfig().setMcDataFolder(folder.getAbsolutePath());
+            SingletonUserConfigFile.getInstance().save();
+            textFieldMcDataFolder.setText(folder.getAbsolutePath());
+            loadModList();
+        }
+    }
+
+    private void chooseMcExectuable() {
+        FileChooser dialog = new FileChooser();
+        dialog.setTitle("Choose Minecraft Executable");
+        if (PlatformUtils.getOs() == PlatformUtils.OS.Windows) {
+            dialog.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Executables", "*.exe"),
+                    new FileChooser.ExtensionFilter("All files", "*.*")
+            );
+        } else {
+            dialog.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("All files", "*")
+            );
+        }
+        if (SingletonUserConfigFile.getConfig().getMcExecutable() != null) {
+            dialog.setInitialDirectory(new File(SingletonUserConfigFile.getConfig().getMcExecutable()).getParentFile());
+        }
+        File file = dialog.showOpenDialog(this.getPrimaryStage());
+        if (file != null) {
+            SingletonUserConfigFile.getConfig().setMcExecutable(file.getAbsolutePath());
+            SingletonUserConfigFile.getInstance().save();
+            textFieldMcExecuable.setText(file.getAbsolutePath());
+        }
+    }
+
     private void setupBookmarks() {
         for (Bookmark bookmark : SingletonMcLauncherConfigFile.getConfig().getWebBrowser().getBookmarks()) {
             Hyperlink hl = new Hyperlink();
@@ -332,10 +386,9 @@ public class Controller implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Minecraft executable not configured.");
-            alert.setContentText("Please set minecraft executable on Settings tab.");
+            alert.setContentText("Please set Minecraft executable on Settings tab.");
             Optional<ButtonType> result = alert.showAndWait();
             tabPane.getSelectionModel().select(tabSettings);
-
             return;
         }
         ProcessBuilder pb = new ProcessBuilder(fileName);
@@ -512,6 +565,14 @@ public class Controller implements Initializable {
             om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             ForgeList list = (ForgeList) om.readValue(json, ForgeList.class);
 
+            // Fill file name if not exist
+            for (ForgeRow row : list.getForges()) {
+                if (row.getFileName() == null || row.getFileName().isEmpty()) {
+                    row.setFileName(FilenameUtils.getName(row.getUrl()));
+                }
+                log.debug(row.toString());
+            }
+
             forges.addAll(list.getForges());
 
             tableViewForges.setItems(forges);
@@ -624,8 +685,36 @@ public class Controller implements Initializable {
     }
 
     private void setupWebView() {
+        // Setup cookie manager
         cookieManager = new java.net.CookieManager();
         CookieHandler.setDefault(cookieManager);
+
+        // Bind progress bar
+        progressBarWeb.progressProperty().bind(webView.getEngine().getLoadWorker().progressProperty());
+
+        // State listener
+        webView.getEngine().getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+            @Override
+            public void changed(ObservableValue<? extends Worker.State> value,
+                                State oldState, State newState) {
+                switch (newState){
+                    case READY:
+                        labelWebStatus.setText("Ready.");
+                        break;
+                    case RUNNING:
+                        labelWebStatus.setText("Loading...");
+                        break;
+                    case CANCELLED:
+                        labelWebStatus.setText("Cancelled.");
+                        break;
+                    case SUCCEEDED:
+                        labelWebStatus.setText("Loaded.");
+                        break;
+                }
+            }
+        });
+
+        // Capture Downloadable URL
         webView.getEngine().locationProperty().addListener(new ChangeListener<String>() {
 
             @Override
@@ -639,6 +728,13 @@ public class Controller implements Initializable {
                     for (DownloadableUrl dUrl : config.getDownloadableUrls()) {
                         if (dUrl.getStartsWith() != null) {
                             if (url.startsWith(dUrl.getStartsWith())) {
+                                acceptUrl = true;
+                                break;
+                            }
+                        } else if (dUrl.getMatch() != null) {
+                            Pattern p = Pattern.compile(dUrl.getMatch());
+                            Matcher m = p.matcher(url);
+                            if (m.find()) {
                                 acceptUrl = true;
                                 break;
                             }
@@ -687,13 +783,20 @@ public class Controller implements Initializable {
                     if (fileName.endsWith("?type=attachment")) {
                         fileName = fileName.substring(0, fileName.indexOf("?type=attachment"));
                     }
-                    downloadFile(
-                            url,
-                            new File(SingletonUserConfigFile.getConfig().getModsFolder(), fileName).getAbsolutePath(),
-                            () -> {
-                                System.out.println("download completed from web");
-                                loadModList();
-                            });
+                    try {
+                        fileName = URLDecoder.decode(fileName, "utf-8");
+                        fileName = fileName.replaceAll("/", "_");
+                        fileName = fileName.replaceAll("\\\\", "_");
+                        downloadFile(
+                                url,
+                                new File(SingletonUserConfigFile.getConfig().getModsFolder(), fileName).getAbsolutePath(),
+                                () -> {
+                                    System.out.println("download completed from web");
+                                    loadModList();
+                                });
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } else {
@@ -730,7 +833,13 @@ public class Controller implements Initializable {
     private void installSelectedForge() {
         ObservableList<ForgeRow> selection = tableViewForges.getSelectionModel().getSelectedItems();
         if (selection.size() == 1) {
-            // TODO launch forge installer
+            ProcessBuilder pb = new ProcessBuilder();
+            pb.command("java", "-jar", new File(MC_LAUNCHER_REPO_FORGES_FOLDER, selection.get(0).getFileName()).getAbsolutePath());
+            try {
+                Process p = pb.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

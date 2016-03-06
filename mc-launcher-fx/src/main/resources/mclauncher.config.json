@@ -38,7 +38,7 @@
       "startsWith": "http://cafeattach.naver.net/"
     },
     {
-      "startsWith": "http://www.mediafire.com/download/"
+      "match": "http://download[\\w]*.mediafire.com/[\\w]*/[\\w]*/([\\w.\\-+%]*)"
     }
   ]
 }

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- NOTE: This should be added manully after saved from SceneBuilder -->
+<!-- NOTE: This should be added manually after saved from SceneBuilder -->
 <!-- Imports for FontAwesomeFX -->
+
 <?scenebuilder-classpath-element ../../../build/install/mc-launcher-fx/lib/fontawesomefx-8.9.jar?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
 <?import de.jensd.fx.glyphs.*?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import de.jensd.fx.glyphs.weathericons.*?>
 <?import de.jensd.fx.glyphs.materialicons.*?>
 <?import de.jensd.fx.glyphs.materialdesignicons.*?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -33,7 +38,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-<VBox prefHeight="517.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.subakstudio.mclauncher.Controller">
+<VBox prefHeight="517.0" prefWidth="1049.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.subakstudio.mclauncher.Controller">
     <children>
         <SplitPane fx:id="splitPane" dividerPositions="0.3" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
             <items>
@@ -143,6 +148,16 @@
                                                     </padding>
                                                 </HBox>
                                                 <WebView fx:id="webView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                      <HBox alignment="CENTER" prefHeight="30.0" prefWidth="761.0" spacing="5.0">
+                                          <children>
+                                              <Label fx:id="labelWebStatus" text="Ready." />
+                                              <Pane HBox.hgrow="ALWAYS" />
+                                              <ProgressBar fx:id="progressBarWeb" prefWidth="200.0" progress="0.0" />
+                                          </children>
+                                          <padding>
+                                              <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                          </padding>
+                                      </HBox>
                                             </children>
                                         </VBox>
                                     </content>
@@ -319,15 +334,5 @@
                 </AnchorPane>
             </items>
         </SplitPane>
-        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="761.0" spacing="5.0">
-            <children>
-                <Label text="Label" />
-                <Pane HBox.hgrow="ALWAYS" />
-                <ProgressBar prefWidth="200.0" progress="0.0" />
-            </children>
-            <padding>
-                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-            </padding>
-        </HBox>
     </children>
 </VBox>
