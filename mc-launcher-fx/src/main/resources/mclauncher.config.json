@@ -35,10 +35,10 @@
       "startsWith": "http://forum.minecraftuser.jp/download/file.php?id="
     },
     {
-      "startsWith": "http://cafeattach.naver.net/"
+      "match": "http://download[\\w]*.mediafire.com/[\\w]*/[\\w]*/([\\w.\\-+%]*)"
     },
     {
-      "match": "http://download[\\w]*.mediafire.com/[\\w]*/[\\w]*/([\\w.\\-+%]*)"
+      "match": "http://[\\w]*.naver.net/[\\w]*/[\\w_]*/[\\w_]*/([\\w-_.]*)\\?type=attachment"
     }
   ]
 }

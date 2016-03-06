@@ -1,23 +1,27 @@
 package com.subakstudio.http;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.CookieManager;
 
 /**
  * Created by Thomas on 2/4/2016.
  */
 @Slf4j
 public class OkHttpClientHelper {
+
+    private final CookieManager cookieManager;
+
+    public OkHttpClientHelper(CookieManager cookieManager) {
+        this.cookieManager = cookieManager;
+    }
 
     public void downloadBinary(String url, File file) throws IOException {
         log.info(String.format("request...%s to %s", url, file));
@@ -27,7 +31,9 @@ public class OkHttpClientHelper {
 
         publishProgress(0);
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .cookieJar(new JavaNetCookieJar(cookieManager))
+                .build();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -58,7 +64,9 @@ public class OkHttpClientHelper {
     }
 
     public String downloadText(String url) throws IOException {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .cookieJar(new JavaNetCookieJar(cookieManager))
+                .build();
         Request request = new Request.Builder()
                 .url(url)
                 .build();

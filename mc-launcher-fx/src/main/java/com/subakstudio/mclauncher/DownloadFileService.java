@@ -6,6 +6,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 import java.io.File;
+import java.net.CookieManager;
 
 /**
  * Created by yeoupooh on 2/19/16.
@@ -13,37 +14,36 @@ import java.io.File;
 public class DownloadFileService extends Service {
 
     private final IDownloadEventHandler eventHandler;
-    //    private StringProperty url = new SimpleStringProperty();
     private String url;
     private String fileName;
+    private CookieManager cookieManager;
 
     public DownloadFileService(IDownloadEventHandler callback) {
         this.eventHandler = callback;
     }
 
     public void setUrl(String value) {
-//        url.setValue(value);
         url = value;
     }
 
     public final String getUrl() {
-//        return url.get();
         return url;
     }
 
-//    public final StringProperty urlProperty() {
-//        return url;
-//    }
+    public void setCookieManager(CookieManager cookieManager) {
+        this.cookieManager = cookieManager;
+    }
 
     @Override
     protected Task createTask() {
         final String _url = getUrl();
         final String _fileName = getFileName();
+        final CookieManager _cookieManager = getCookieManager();
 
         return new Task<Boolean>() {
             @Override
             protected Boolean call() throws Exception {
-                OkHttpClientHelper httpClient = new OkHttpClientHelper();
+                OkHttpClientHelper httpClient = new OkHttpClientHelper(_cookieManager);
                 httpClient.downloadBinary(_url, new File(_fileName));
                 Platform.runLater(new Runnable() {
                     @Override
@@ -54,6 +54,11 @@ public class DownloadFileService extends Service {
                 return true;
             }
         };
+    }
+
+    private CookieManager getCookieManager() {
+        return cookieManager;
+
     }
 
     public void setFileName(String fileName) {

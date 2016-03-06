@@ -41,10 +41,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.net.*;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -558,7 +555,7 @@ public class Controller implements Initializable {
         tableColForgeFileName.setCellValueFactory(new PropertyValueFactory<ForgeRow, String>("fileName"));
         tableColForgeUrl.setCellValueFactory(new PropertyValueFactory<ForgeRow, String>("url"));
 
-        OkHttpClientHelper httpClient = new OkHttpClientHelper();
+        OkHttpClientHelper httpClient = new OkHttpClientHelper(cookieManager);
         try {
             String json = httpClient.downloadText(SingletonMcLauncherConfigFile.getConfig().getForgesUrl());
             ObjectMapper om = new ObjectMapper();
@@ -608,6 +605,7 @@ public class Controller implements Initializable {
         DownloadFileService service = new DownloadFileService(eventHandler);
         service.setUrl(url);
         service.setFileName(fileName);
+        service.setCookieManager(cookieManager);
         ProgressDialog progDiag = new ProgressDialog(service);
         progDiag.setTitle("Download File");
         progDiag.initOwner(getPrimaryStage());
@@ -635,7 +633,7 @@ public class Controller implements Initializable {
     }
 
     private void updateDownloadableMods() {
-        OkHttpClientHelper httpClient = new OkHttpClientHelper();
+        OkHttpClientHelper httpClient = new OkHttpClientHelper(cookieManager);
         try {
             String json = httpClient.downloadText(textFieldModsUrl.getText());
             ObjectMapper om = new ObjectMapper();
@@ -687,6 +685,7 @@ public class Controller implements Initializable {
     private void setupWebView() {
         // Setup cookie manager
         cookieManager = new java.net.CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         CookieHandler.setDefault(cookieManager);
 
         // Bind progress bar
@@ -697,7 +696,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Worker.State> value,
                                 State oldState, State newState) {
-                switch (newState){
+                switch (newState) {
                     case READY:
                         labelWebStatus.setText("Ready.");
                         break;
@@ -725,9 +724,11 @@ public class Controller implements Initializable {
                     ObjectMapper mapper = new ObjectMapper();
                     McLauncherConfig config = SingletonMcLauncherConfigFile.getConfig();
                     boolean acceptUrl = false;
+                    String fileName = null;
                     for (DownloadableUrl dUrl : config.getDownloadableUrls()) {
                         if (dUrl.getStartsWith() != null) {
                             if (url.startsWith(dUrl.getStartsWith())) {
+                                fileName = FilenameUtils.getName(url);
                                 acceptUrl = true;
                                 break;
                             }
@@ -735,16 +736,18 @@ public class Controller implements Initializable {
                             Pattern p = Pattern.compile(dUrl.getMatch());
                             Matcher m = p.matcher(url);
                             if (m.find()) {
+                                fileName = m.group(1);
                                 acceptUrl = true;
                                 break;
                             }
                         }
                     }
                     if (acceptUrl) {
+                        final String finalFileName = fileName;
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                showDownloadConfirmDialog(url);
+                                showDownloadConfirmDialog(url, finalFileName);
                             }
                         });
                     }
@@ -765,7 +768,22 @@ public class Controller implements Initializable {
         navigate();
     }
 
-    private void showDownloadConfirmDialog(String url) {
+    private void showDownloadConfirmDialog(String url, String fileName) {
+        // Fix file name
+        if (fileName == null) {
+            fileName = FilenameUtils.getName(url);
+        }
+
+        try {
+            fileName = URLDecoder.decode(fileName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getMessage());
+        }
+        fileName = fileName.replaceAll("/", "_");
+        fileName = fileName.replaceAll("\\\\", "_");
+
+        log.debug(String.format("download: %s to %s", url, fileName));
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Download File");
         alert.setHeaderText("Download a file from " + url);
@@ -774,29 +792,17 @@ public class Controller implements Initializable {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             log.info("Downloading..." + url);
+            final String finalFileName = fileName;
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    String fileName = FilenameUtils.getName(url);
-                    // TODO hard-coded
-                    // for naver cafe file attachment
-                    if (fileName.endsWith("?type=attachment")) {
-                        fileName = fileName.substring(0, fileName.indexOf("?type=attachment"));
-                    }
-                    try {
-                        fileName = URLDecoder.decode(fileName, "utf-8");
-                        fileName = fileName.replaceAll("/", "_");
-                        fileName = fileName.replaceAll("\\\\", "_");
-                        downloadFile(
-                                url,
-                                new File(SingletonUserConfigFile.getConfig().getModsFolder(), fileName).getAbsolutePath(),
-                                () -> {
-                                    System.out.println("download completed from web");
-                                    loadModList();
-                                });
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    downloadFile(
+                            url,
+                            new File(SingletonUserConfigFile.getConfig().getModsFolder(), finalFileName).getAbsolutePath(),
+                            () -> {
+                                System.out.println("download completed from web");
+                                loadModList();
+                            });
                 }
             });
         } else {
