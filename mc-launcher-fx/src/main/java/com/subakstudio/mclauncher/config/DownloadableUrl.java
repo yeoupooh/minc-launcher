@@ -5,6 +5,7 @@ package com.subakstudio.mclauncher.config;
  */
 public class DownloadableUrl {
     private String startsWith;
+    private String endsWith;
     private String match;
 
     public String getMatch() {
@@ -21,5 +22,13 @@ public class DownloadableUrl {
 
     public void setStartsWith(String startsWith) {
         this.startsWith = startsWith;
+    }
+
+    public String getEndsWith() {
+        return endsWith;
+    }
+
+    public void setEndsWith(String endsWith) {
+        this.endsWith = endsWith;
     }
 }

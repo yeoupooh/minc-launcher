@@ -740,6 +740,12 @@ public class Controller implements Initializable {
                                 acceptUrl = true;
                                 break;
                             }
+                        } else if (dUrl.getEndsWith() != null) {
+                            if (url.endsWith(dUrl.getEndsWith())) {
+                                fileName = FilenameUtils.getName(url);
+                                acceptUrl = true;
+                                break;
+                            }
                         }
                     }
                     if (acceptUrl) {

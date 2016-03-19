@@ -39,6 +39,12 @@
     },
     {
       "match": "http://[\\w]*.naver.net/[\\w]*/[\\w_]*/[\\w_]*/([\\w-_.]*)\\?type=attachment"
+    },
+    {
+      "endsWith": ".jar"
+    },
+    {
+      "endsWith": ".zip"
     }
   ]
 }
