@@ -26,8 +26,7 @@ public class MinecraftUtils {
         }
 
         if (!mcDataFolder.exists()) {
-            log.warn("No mc data folder found: $mcDataFolder.absolutePath");
-            return null;
+            log.warn("No mc data folder found: " + mcDataFolder.getAbsolutePath());
         }
 
         return mcDataFolder.getAbsolutePath();

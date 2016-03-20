@@ -478,6 +478,7 @@ public class Controller implements Initializable {
     private void loadModList() {
         modList.clear();
 
+        log.debug("mcDataFolder:" + SingletonUserConfigFile.getConfig().getMcDataFolder());
         File dataFolder = new File(SingletonUserConfigFile.getConfig().getMcDataFolder());
 
         FileFilter dirFilter = new FileFilter() {

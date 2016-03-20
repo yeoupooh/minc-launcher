@@ -51,6 +51,12 @@ public class SingletonUserConfigFile {
             e.printStackTrace();
         }
 
+        // Set default data folder if it doesn't exist
+        if (config.getMcDataFolder() == null) {
+            config.setMcDataFolder(MinecraftUtils.findMcDataFolder());
+            save();
+        }
+
         if (config.getFormat() == null || !config.getFormat().equals(UserConfig.FORMAT_2_0)) {
             log.info("Updating config file to " + UserConfig.FORMAT_2_0);
             // Update format, mods url
