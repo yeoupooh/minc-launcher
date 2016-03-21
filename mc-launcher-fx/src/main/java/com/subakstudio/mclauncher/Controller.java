@@ -8,7 +8,9 @@ import com.subakstudio.mclauncher.config.*;
 import com.subakstudio.mclauncher.model.*;
 import com.subakstudio.mclauncher.util.MinecraftDataFolder;
 import com.subakstudio.util.PlatformUtils;
+import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -182,6 +184,7 @@ public class Controller implements Initializable {
 
     @FXML // fx:id="hyperLinkMcLauncherSite"
     private Hyperlink hyperLinkMcLauncherSite; // Value injected by FXMLLoader
+    private Application application;
 
     @FXML
     void buttonDeleteSelectedModsClicked(ActionEvent event) {
@@ -189,6 +192,11 @@ public class Controller implements Initializable {
             row.getFile().delete();
         }
         loadModList();
+    }
+
+    @FXML
+    void buttonDonateClicked(ActionEvent event) {
+        donate();
     }
 
     @FXML
@@ -856,4 +864,11 @@ public class Controller implements Initializable {
         }
     }
 
+    private void donate() {
+        application.getHostServices().showDocument("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=U6N4XDK3TB8NJ&lc=KR&item_name=Donate%20to%20McLauncher%20Developer&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted");
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+    }
 }

@@ -26,9 +26,11 @@ public class Main extends Application {
         fxmlLoader.setLocation(getClass().getProtectionDomain().getCodeSource().getLocation());
         fxmlLoader.setResources(ResourceBundle.getBundle("strings"));
         Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("main2.fxml").openStream());
-        primaryStage.setTitle("McLauncher 2.0 alpha");
+        primaryStage.setTitle(String.format("McLauncher %s", Constants.VERSION));
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/5548-256x256x8.png")));
         primaryStage.setScene(new Scene(root, 1000, 600));
+        Controller controller = fxmlLoader.getController();
+        controller.setApplication(this);
         primaryStage.show();
     }
 
