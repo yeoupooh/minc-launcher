@@ -1,6 +1,6 @@
 package com.subakstudio.http;
 
-import lombok.extern.java.Log;
+import com.sun.webkit.network.CookieManager;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okio.BufferedSink;
@@ -9,7 +9,12 @@ import okio.Okio;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.CookieManager;
+import java.net.CookieHandler;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Thomas on 2/4/2016.
@@ -17,7 +22,7 @@ import java.net.CookieManager;
 @Slf4j
 public class OkHttpClientHelper {
 
-    private final CookieManager cookieManager;
+    private CookieManager cookieManager;
 
     public OkHttpClientHelper(CookieManager cookieManager) {
         this.cookieManager = cookieManager;
@@ -64,6 +69,9 @@ public class OkHttpClientHelper {
     }
 
     public String downloadText(String url) throws IOException {
+//        Map<String, List<String>> headers = CookieUtils.createHeader();
+//        log.debug("headers: " + CookieHandler.getDefault().get(URI.create(url), headers).toString());
+//            CookieHandler.getDefault().put(uri, headers);
         OkHttpClient client = new OkHttpClient.Builder()
                 .cookieJar(new JavaNetCookieJar(cookieManager))
                 .build();

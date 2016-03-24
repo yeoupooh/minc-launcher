@@ -2,13 +2,15 @@ package com.subakstudio.mclauncher;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.subakstudio.http.CookieUtils;
 import com.subakstudio.http.OkHttpClientHelper;
 import com.subakstudio.io.FileUtils;
 import com.subakstudio.mclauncher.config.*;
 import com.subakstudio.mclauncher.model.*;
 import com.subakstudio.mclauncher.util.MinecraftDataFolder;
+import com.subakstudio.mclauncher.util.ResStrings;
 import com.subakstudio.util.PlatformUtils;
-import com.sun.deploy.uitoolkit.impl.fx.HostServicesFactory;
+import com.sun.webkit.network.CookieManager;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -43,18 +45,18 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.*;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.net.CookieHandler;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.subakstudio.mclauncher.Constants.MC_LAUNCHER_REPO_FORGES_FOLDER;
 import static com.subakstudio.util.PlatformUtils.openFileBrowser;
 import static javafx.collections.FXCollections.observableArrayList;
-import static javafx.concurrent.Worker.*;
-import static javafx.concurrent.Worker.State.READY;
-import static javafx.concurrent.Worker.State.SUCCEEDED;
+import static javafx.concurrent.Worker.State;
 
 /**
  * Created by yeoupooh on 2/14/16.
@@ -389,15 +391,17 @@ public class Controller implements Initializable {
         String fileName = SingletonUserConfigFile.getConfig().getMcExecutable();
         if (fileName == null || !(new File(fileName).exists())) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Minecraft executable not configured.");
-            alert.setContentText("Please set Minecraft executable on Settings tab.");
+            alert.setTitle(ResStrings.get("label.error"));
+            alert.setHeaderText(ResStrings.get("msg.minecraft.executable.not.set.header"));
+            alert.setContentText(ResStrings.get("msg.minecraft.executable.not.set.content"));
             Optional<ButtonType> result = alert.showAndWait();
             tabPane.getSelectionModel().select(tabSettings);
             return;
         }
+
         ProcessBuilder pb = new ProcessBuilder(fileName);
         try {
+            log.debug("executing " + fileName);
             Process p = pb.start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -476,7 +480,7 @@ public class Controller implements Initializable {
             @Override
             public void onChanged(Change<? extends ModRow> c) {
                 log.debug("modified: c=" + c);
-                labelEanbledModsCount.setText("Enabled Mods: " + modList.getEnabled().size());
+                labelEanbledModsCount.setText(ResStrings.get("label.enabled.mods") + ": " + modList.getEnabled().size());
             }
         });
 
@@ -693,8 +697,7 @@ public class Controller implements Initializable {
 
     private void setupWebView() {
         // Setup cookie manager
-        cookieManager = new java.net.CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        cookieManager = new CookieManager();
         CookieHandler.setDefault(cookieManager);
 
         // Bind progress bar
@@ -774,8 +777,16 @@ public class Controller implements Initializable {
     }
 
     private void navigate() {
-        log.debug(textFieldWebUrl.getText());
-        webView.getEngine().load(textFieldWebUrl.getText());
+        String url = textFieldWebUrl.getText();
+        log.debug(url);
+//        try {
+//            Map<String, List<String>> headers = CookieUtils.createHeader();
+//            log.debug("headers: " + CookieHandler.getDefault().get(URI.create(url), headers).toString());
+//            CookieHandler.getDefault().put(uri, headers);
+        webView.getEngine().load(url);
+//        } catch (IOException e) {
+//            log.error(e.getMessage());
+//        }
     }
 
     private void navigate(String url) {
@@ -800,9 +811,9 @@ public class Controller implements Initializable {
         log.debug(String.format("download: %s to %s", url, fileName));
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Download File");
-        alert.setHeaderText("Download a file from " + url);
-        alert.setContentText("Do you want to download this into downloadableMods folder?");
+        alert.setTitle(ResStrings.get("label.download.file"));
+        alert.setHeaderText(ResStrings.get("mag.download.file.from") + ": " + url);
+        alert.setContentText(ResStrings.get("msg.download.file.prompt"));
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {

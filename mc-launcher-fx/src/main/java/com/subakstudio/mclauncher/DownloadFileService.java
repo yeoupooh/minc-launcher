@@ -1,12 +1,12 @@
 package com.subakstudio.mclauncher;
 
 import com.subakstudio.http.OkHttpClientHelper;
+import com.sun.webkit.network.CookieManager;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 import java.io.File;
-import java.net.CookieManager;
 
 /**
  * Created by yeoupooh on 2/19/16.
@@ -16,7 +16,7 @@ public class DownloadFileService extends Service {
     private final IDownloadEventHandler eventHandler;
     private String url;
     private String fileName;
-    private CookieManager cookieManager;
+    private com.sun.webkit.network.CookieManager cookieManager;
 
     public DownloadFileService(IDownloadEventHandler callback) {
         this.eventHandler = callback;
@@ -30,7 +30,7 @@ public class DownloadFileService extends Service {
         return url;
     }
 
-    public void setCookieManager(CookieManager cookieManager) {
+    public void setCookieManager(com.sun.webkit.network.CookieManager cookieManager) {
         this.cookieManager = cookieManager;
     }
 
@@ -38,7 +38,7 @@ public class DownloadFileService extends Service {
     protected Task createTask() {
         final String _url = getUrl();
         final String _fileName = getFileName();
-        final CookieManager _cookieManager = getCookieManager();
+        final com.sun.webkit.network.CookieManager _cookieManager = getCookieManager();
 
         return new Task<Boolean>() {
             @Override
@@ -56,7 +56,7 @@ public class DownloadFileService extends Service {
         };
     }
 
-    private CookieManager getCookieManager() {
+    private com.sun.webkit.network.CookieManager getCookieManager() {
         return cookieManager;
 
     }
@@ -68,4 +68,5 @@ public class DownloadFileService extends Service {
     public String getFileName() {
         return fileName;
     }
+
 }
