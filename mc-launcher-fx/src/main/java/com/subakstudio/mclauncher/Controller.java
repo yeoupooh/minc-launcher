@@ -69,6 +69,7 @@ public class Controller implements Initializable {
     private ModList modList = new ModList();
     private ObservableList<DownloadableModRow> downloadableMods = observableArrayList();
     private ObservableList<ForgeRow> forges = observableArrayList();
+    private Application application;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -85,9 +86,6 @@ public class Controller implements Initializable {
     @FXML // fx:id="checkBoxToggleEnabledAllMods"
     private CheckBox checkBoxToggleEnabledAllMods; // Value injected by FXMLLoader
 
-    @FXML // fx:id="textFieldModsFilter"
-    private TextField textFieldModsFilter; // Value injected by FXMLLoader
-
     @FXML // fx:id="radioButtonModsAll"
     private RadioButton radioButtonModsAll; // Value injected by FXMLLoader
 
@@ -100,11 +98,11 @@ public class Controller implements Initializable {
     @FXML // fx:id="radioButtonModsDisabled"
     private RadioButton radioButtonModsDisabled; // Value injected by FXMLLoader
 
+    @FXML // fx:id="textFieldModsFilter"
+    private TextField textFieldModsFilter; // Value injected by FXMLLoader
+
     @FXML // fx:id="listViewMods"
     private ListView<ModRow> listViewMods; // Value injected by FXMLLoader
-
-    @FXML // fx:id="labelEanbledModsCount"
-    private Label labelEanbledModsCount; // Value injected by FXMLLoader
 
     @FXML // fx:id="tabPane"
     private TabPane tabPane; // Value injected by FXMLLoader
@@ -142,11 +140,11 @@ public class Controller implements Initializable {
     @FXML // fx:id="tableColModsVersion"
     private TableColumn<DownloadableModRow, String> tableColModsVersion; // Value injected by FXMLLoader
 
-    @FXML // fx:id="tableColModsViaWeb"
-    private TableColumn<DownloadableModRow, Boolean> tableColModsViaWeb; // Value injected by FXMLLoader
-
     @FXML // fx:id="tableColModsForgeVersion"
     private TableColumn<DownloadableModRow, String> tableColModsForgeVersion; // Value injected by FXMLLoader
+
+    @FXML // fx:id="tableColModsViaWeb"
+    private TableColumn<DownloadableModRow, Boolean> tableColModsViaWeb; // Value injected by FXMLLoader
 
     @FXML // fx:id="tableColModsFileName"
     private TableColumn<DownloadableModRow, String> tableColModsFileName; // Value injected by FXMLLoader
@@ -158,19 +156,7 @@ public class Controller implements Initializable {
     private TextField textFieldModsUrl; // Value injected by FXMLLoader
 
     @FXML
-    private TextField textFieldMcExecuable;
-
-    @FXML
-    private TextField textFieldMcDataFolder;
-
-    @FXML // fx:id="tabSettings"
-    private Tab tabSettings; // Value injected by FXMLLoader
-
-    @FXML
     private TableView<ForgeRow> tableViewForges;
-
-    @FXML // fx:id="tabAbout"
-    private Tab tabAbout; // Value injected by FXMLLoader
 
     @FXML
     private TableColumn<ForgeRow, String> tableColForgeVersion;
@@ -181,12 +167,26 @@ public class Controller implements Initializable {
     @FXML
     private TableColumn<ForgeRow, String> tableColForgeUrl;
 
+    @FXML // fx:id="tabSettings"
+    private Tab tabSettings; // Value injected by FXMLLoader
+
+    @FXML
+    private TextField textFieldMcDataFolder;
+
+    @FXML
+    private TextField textFieldMcExecuable;
+
+    @FXML // fx:id="tabAbout"
+    private Tab tabAbout; // Value injected by FXMLLoader
+
     @FXML // fx:id="labelMcLauncherVersion"
     private Label labelMcLauncherVersion; // Value injected by FXMLLoader
 
     @FXML // fx:id="hyperLinkMcLauncherSite"
     private Hyperlink hyperLinkMcLauncherSite; // Value injected by FXMLLoader
-    private Application application;
+
+    @FXML // fx:id="labelEanbledModsCount"
+    private Label labelEanbledModsCount; // Value injected by FXMLLoader
 
     @FXML
     void buttonDeleteSelectedModsClicked(ActionEvent event) {
@@ -322,6 +322,7 @@ public class Controller implements Initializable {
         assert textFieldModsUrl != null : "fx:id=\"textFieldModsUrl\" was not injected: check your FXML file 'main2.fxml'.";
         assert tableDownloadableMods != null : "fx:id=\"tableDownloadableMods\" was not injected: check your FXML file 'main2.fxml'.";
 
+        setupAbout();
         setupSettings();
         setupSplitPane();
         setupWebView();
@@ -329,6 +330,10 @@ public class Controller implements Initializable {
         setupForgesTable();
         setupModsListView();
         setupBookmarks();
+    }
+
+    private void setupAbout() {
+        labelMcLauncherVersion.setText(Constants.VERSION);
     }
 
     private void chooseMcDataFolder() {
