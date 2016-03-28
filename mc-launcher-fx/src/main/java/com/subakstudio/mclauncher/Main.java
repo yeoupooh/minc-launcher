@@ -3,6 +3,7 @@ package com.subakstudio.mclauncher;
 import com.subakstudio.mclauncher.config.SingletonMcLauncherConfigFile;
 import com.subakstudio.mclauncher.config.SingletonUserConfigFile;
 import com.subakstudio.mclauncher.util.MinecraftDataFolder;
+import com.subakstudio.mclauncher.util.ResStrings;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,7 +27,7 @@ public class Main extends Application {
         fxmlLoader.setLocation(getClass().getProtectionDomain().getCodeSource().getLocation());
         fxmlLoader.setResources(ResourceBundle.getBundle("strings"));
         Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("main2.fxml").openStream());
-        primaryStage.setTitle(String.format("McLauncher %s", Constants.VERSION));
+        primaryStage.setTitle(String.format("%s %s", ResStrings.get("app.name"), Constants.VERSION));
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/5548-256x256x8.png")));
         primaryStage.setScene(new Scene(root, 1000, 600));
         Controller controller = fxmlLoader.getController();
