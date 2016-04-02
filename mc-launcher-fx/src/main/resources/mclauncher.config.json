@@ -2,8 +2,12 @@
   "modsUrl": "http://jsonblob.com/api/jsonBlob/56cdd768e4b01190df511c46",
   "forgesUrl": "http://jsonblob.com/api/jsonBlob/568beb97e4b01190df470db4",
   "webBrowser": {
-    "initialUrl": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods",
+    "initialUrl": "http://yeoupooh.blog.me/220670151275",
     "bookmarks": [
+      {
+        "name": "Home",
+        "url": "http://yeoupooh.blog.me/220670151275"
+      },
       {
         "name": "Minecraft Forum",
         "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods"
