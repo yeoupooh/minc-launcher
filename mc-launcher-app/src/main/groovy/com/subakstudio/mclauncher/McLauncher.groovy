@@ -23,6 +23,7 @@ public class McLauncher {
         }
 
         new McLauncherController(settings)
+//        Main.main(null);
     }
 }
 

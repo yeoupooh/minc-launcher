@@ -3,9 +3,20 @@ language: java
 jdk:
   - oraclejdk8
 
+# To build javafx
+# https://github.com/travis-ci/travis-ci/issues/3259
+## http://blog.travis-ci.com/2015-10-14-opening-up-ubuntu-trusty-beta/
+sudo: required
+dist: trusty
+
 script:
   - ./gradlew check distTar distZip
 
 # Skip gradle assemble
 # Refer to http://stackoverflow.com/questions/26566564/override-default-travis-ci-script-for-java-gradle-project
 install: /bin/true
+
+# Slack Notification
+notifications:
+  slack:
+    secure: wvH3XF25B/CsJlL0zJwEbDOszB9vGt1EYfp8YPjF27z/k/tETYdIr8+8d6KQGDwYrbVkswcoeUtFjPcKHl6onugd/6/WfiS/6akmCWB8aOXmURO4GlaGDb+mbuiPwJy34h0wsyDvLHGgM0NQx4YWSAvKYzXHfOxQ3se3Tr34MDMeF4AdjXyxS8NZzYrY0xJR9XCK9+tE8yMnRybZGToWlVt9ue68rzUDzNKLh0QZqxw1Hj5jDnYl0RB+7XpAnGctHY0zt1D0CSf0RfnyqTejlcpPYy6DttghK31FJD0gkx+8NmQv7msmETYHCAtv0lifgH+trJOHyYcjqQkSdphWZiC2nIs2YWIa7Qf1+lqp3XyqrWqUYYQR3ea0XJpuuCx36k7M9u7gzGO6Vr537UxQLhyBR2gyzuBA9GpgAQWhwtBghMWd6WVLdt9EtTec9rCho/iABOdvPXTT8pEhjhmMx1Q3wFZg4ErCK1u2ZySX7Mb7SlIFUmJ8nL0BX1wvLT0PyRuUj0YPKWwX9QJAaBPJBHWhkhllqRMcxD3Ack4hJ4jXBV1HbH2EjQ0Hb/9BPwvoyi3mWvyqYh2bvq/MibzrNIas8sZgb7bN+O3Y1/m0TH5nG4RYmSm4w7gBoeFShaB9/KOYJvyxNUHE1U/oRcVWmAhAd4VYWmzhqLUPnWvXFa4=

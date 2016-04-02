@@ -7,16 +7,11 @@ buildscript {
 
 plugins {
     id "java"
-    id "groovy"
     id "application"
 
     // MacAppBundle
     // https://plugins.gradle.org/plugin/com.github.cr0.macappbundle
     id "com.github.cr0.macappbundle" version "3.1.0"
-
-    // Jre Bundle
-    // https://plugins.gradle.org/plugin/net.alchim31.getdown
-//    id "net.alchim31.getdown" version "0.4.1"
 
     // Launch4j plugin
     // https://plugins.gradle.org/plugin/edu.sc.seis.launch4j
@@ -24,45 +19,55 @@ plugins {
 }
 
 group 'subakstudio'
-version '1.4'
+version '2.0-SNAPSHOT'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+//    mavenCentral()
+}
 
 def appDisplayName = 'McLauncher'
 def appPackageName = 'com.subakstudio.mclauncher'
+mainClassName = 'com.subakstudio.mclauncher.Main'
 
-mainClassName = "com.subakstudio.mclauncher.McLauncher"
-
-jar {
-    baseName 'mc-launcher'
+project.ext {
+    logbackVersion = '1.1.3'
+    jacksonVersion = '2.7.1'
+    okhttpVersion = '3.2.0'
 }
 
 dependencies {
-    compile project(':mc-launcher-gui')
-//    compile project(':mc-launcher-fx')
-
-    // Intellij Form
-    compile 'com.intellij:forms_rt:7.0.3'
-
-    // Using sfl4j allows us to replace different loggers later, if desired
+    // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.13'
 
     // sfl4j is just a facade for loggers. To actually get logging to work, you need to
     // tie it in with some actual implementation, e.g., logback
-    def logbackVersion = '1.1.3'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
     compile group: 'ch.qos.logback', name: 'logback-core', version: logbackVersion
 
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    // Easy Logging
+    compile 'org.projectlombok:lombok:1.16.6'
 
     // OkHttp for Http Client
-    compile 'com.squareup.okhttp:okhttp:2.7.0'
+//    compile 'com.squareup.okhttp:okhttp:2.7.0'
+    compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:${okhttpVersion}"
 
-    // Filename util
+    // Jackson for JSON
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+
+    // JavaFX components
+    compile 'org.controlsfx:controlsfx:8.40.10'
+
+    // Apache Common IO
     compile 'commons-io:commons-io:2.4'
 
-    // Launch4J
-//    compile 'gradle.plugin.edu.sc.seis.gradle:launch4j:1.6.1'
+    // FontAwesomeFX
+    compile 'de.jensd:fontawesomefx:8.9'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
@@ -165,14 +170,6 @@ macAppBundle {
 
 //    archiveName = "Foo App ${pluginVersion}"
 }
-
-//getdown {
-////    urlbase = "http://mysite.com/myapp/"
-//    mainClassName = mainClassName
-////    tmplGetdownTxt = tmplGetdownTxt + '\nallow_offline = true'
-////    platforms = [Platform.LINUX_I586, Platform.LINUX_X64, Platform.WINDOWS_I586]
-//    platforms = [Platform.WINDOWS_I586]
-//}
 
 task copyMacosxDistsToReleasesDir(type: Copy) {
     destinationDir file(thisReleaseDir)

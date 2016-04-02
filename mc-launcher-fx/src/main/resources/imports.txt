@@ -1,0 +1,9 @@
+<!-- NOTE: This should be added manully after saved from SceneBuilder -->
+<!-- Imports for FontAwesomeFX -->
+<?scenebuilder-classpath-element ../../../build/install/mc-launcher-fx/lib/fontawesomefx-8.9.jar?>
+<?import de.jensd.fx.glyphs.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import de.jensd.fx.glyphs.weathericons.*?>
+<?import de.jensd.fx.glyphs.materialicons.*?>
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+

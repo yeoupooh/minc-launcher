@@ -1,0 +1,54 @@
+{
+  "modsUrl": "http://jsonblob.com/api/jsonBlob/56cdd768e4b01190df511c46",
+  "forgesUrl": "http://jsonblob.com/api/jsonBlob/568beb97e4b01190df470db4",
+  "webBrowser": {
+    "initialUrl": "http://yeoupooh.blog.me/220670151275",
+    "bookmarks": [
+      {
+        "name": "Home",
+        "url": "http://yeoupooh.blog.me/220670151275"
+      },
+      {
+        "name": "Minecraft Forum",
+        "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods"
+      },
+      {
+        "name": "Minecraft Forum (Korea)",
+        "url": "http://cafe.naver.com/minecraftgame"
+      },
+      {
+        "name": "Minecraft Forum (Japan)",
+        "url": "http://forum.minecraftuser.jp/viewforum.php?f=13"
+      }
+    ]
+  },
+  "downloadables": [
+    {
+      "startsWith": "https://dl.dropboxusercontent.com/content_link/"
+    },
+    {
+      "startsWith": "https://dl.dropboxusercontent.com/u/"
+    },
+    {
+      "startsWith": "http://addons-origin.cursecdn.com/files/"
+    },
+    {
+      "startsWith": "http://en.multip.net/view/down/id/"
+    },
+    {
+      "startsWith": "http://forum.minecraftuser.jp/download/file.php?id="
+    },
+    {
+      "match": "http://download[\\w]*.mediafire.com/[\\w]*/[\\w]*/([\\w.\\-\\+%]*)"
+    },
+    {
+      "match": "http://[\\w]*.naver.net/[\\w]*/[\\w_]*/[\\w_]*/([\\w\\-\\+_.]*)\\?type=attachment"
+    },
+    {
+      "endsWith": ".jar"
+    },
+    {
+      "endsWith": ".zip"
+    }
+  ]
+}
