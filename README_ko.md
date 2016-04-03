@@ -34,9 +34,15 @@
 
 # 다운로드
 
-* [맥런처 2.0 (윈도우용) + 64bit 자바실행환경](http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre)
-* [맥런처 2.0 (윈도우용)](http://adf.ly/1VRbiC)
-* [맥런처 2.0 (맥OSX용)](http://adf.ly/1VRbsy)
+## 맥런처FX 2.0 
+* [64bit 윈도우용 맥런처FX 2.0 + 자바 실행 환경](http://adf.ly/1Z2GMq)
+* [64bit 윈도우용 맥런처FX 2.0](http://adf.ly/1Z2GRl)
+* [맥OS용 맥런처FX 2.0](http://adf.ly/1Z2G41)
+
+## 맥런처 1.4
+* [64bit 윈도우용 맥런처 1.4 + 자바 실행 환경](http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre)
+* [64bit 윈도우용 맥런처 1.4](http://adf.ly/1VRbiC)
+* [맥OS용 맥런처 1.4](http://adf.ly/1VRbsy)
 
 # 설치방법
 

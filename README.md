@@ -25,6 +25,12 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 
 # Downloads
 
+## McLauncherFX 2.0 
+* [McLauncherFX 2.0 for Windows x64 with JRE](http://adf.ly/1Z2GMq)
+* [McLauncherFX 2.0 for Windows x64 without JRE](http://adf.ly/1Z2GRl)
+* [McLauncherFX 2.0 for MacOSX without JRE](http://adf.ly/1Z2G41)
+
+## McLauncher 1.4
 * [McLauncher 1.4 for Windows with 64bit JRE](http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre)
 * [McLauncher 1.4 for Windows without JRE](http://adf.ly/1VRbiC)
 * [McLauncher 1.4 for MacOSX without JRE](http://adf.ly/1VRbsy)

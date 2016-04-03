@@ -24,9 +24,15 @@
 
 # ダウンロード
 
-* [64ビット版のJREとWindows用のMcLauncher 1.4](http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre)
-* [JREな ​​しのWindows用McLauncher 1.4](http://adf.ly/1VRbiC)
-* [JREな ​​しMacOSXのためのMcLauncher 1.4](http://adf.ly/1VRbsy)
+## McLauncherFX 2.0
+* [JREを使用してWindows x64のためのMcLauncherFX 2.0]（http://adf.ly/1Z2GMq）
+* [JREないWindows x64のためのMcLauncherFX 2.0]（http://adf.ly/1Z2GRl）
+* [JREなしMacOSXのためのMcLauncherFX 2.0]（http://adf.ly/1Z2G41）
+
+## McLauncher 1.4
+* [64ビットJREを使用してWindows用のMcLauncher 1.4]（http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre）
+* [JREなしのWindows用McLauncher 1.4]（http://adf.ly/1VRbiC）
+* [JREなしMacOSXのためのMcLauncher 1.4]（http://adf.ly/1VRbsy）
 
 #  インストール
 
