@@ -81,8 +81,12 @@ task distWinX64WithJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
     destinationDir file(distsDir)
     archiveName "$thisReleaseName-win-x64-jre.zip"
 
-    into("jre") {
-        from(properties.getProperty('jre.dir'))
+    if (properties.getProperty('jre.dir') != null) {
+        into("jre") {
+            from(properties.getProperty('jre.dir'))
+        }
+    } else {
+        println("skip copying jre")
     }
     into("lib") {
         from("$buildDir/launch4j/lib")

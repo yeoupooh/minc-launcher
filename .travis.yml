@@ -10,7 +10,7 @@ sudo: required
 dist: trusty
 
 script:
-  - ./gradlew check distTar distZip
+  - ./gradlew clean test distZip
 
 # Skip gradle assemble
 # Refer to http://stackoverflow.com/questions/26566564/override-default-travis-ci-script-for-java-gradle-project
