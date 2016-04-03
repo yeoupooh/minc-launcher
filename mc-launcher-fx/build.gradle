@@ -94,17 +94,17 @@ def thisReleaseDir = "$releasesDir/$project.version"
 def thisReleaseName = project.name + "-" + project.version
 def distsDir = "$buildDir/distributions"
 
-task unzipJre(type: Copy) {
+task copyJre(type: Copy) {
     destinationDir = file(project.buildDir)
-    def jreZipFile = properties.getProperty('jre.zip.file')
-    if (jreZipFile != null) {
-        from(zipTree(jreZipFile)) {
+    def jreDir = properties.getProperty('jre.dir')
+    if (jreDir != null) {
+        from(fileTree(jreDir)) {
             include "**/**"
         }
     }
 }
 
-task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'unzipJre'], type: Zip) {
+task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'copyJre'], type: Zip) {
     destinationDir file(distsDir)
     archiveName "$thisReleaseName-win64-jre.zip"
 
@@ -178,3 +178,10 @@ task copyMacosxDistsToReleasesDir(type: Copy) {
     duplicatesStrategy 'exclude'
 }
 
+def distMcLauncherGroup = 'dist-mclauncher'
+
+copyJre.group =  distMcLauncherGroup
+distWin64WithJRE.group = distMcLauncherGroup
+distWin64WithoutJRE.group  = distMcLauncherGroup
+copyWin64DistsToReleasesDir.group = distMcLauncherGroup
+copyMacosxDistsToReleasesDir.group = distMcLauncherGroup
