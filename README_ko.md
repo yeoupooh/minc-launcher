@@ -17,32 +17,28 @@
 
 # 스크린샷
 
-## 메인화면
-![메인화면](/docs/images/screenshot-mc-launcher-launcher-tab.png)
+* 런처탭은 왼쪽편에 항상 표시됩니다.
 
-## 웹 탭
-![웹 탭]()
+## 웹 브라우저 탭
+![웹 브라우저 탭](/docs/images/mclauncherfx-2.0-webbrowser-tab.png)
 
 ## 모드 다운로더 탭
-![모드 다운로더 탭](/docs/images/screenshot-mc-launcher-mods-downloader-tab.png)
+![Mods Downloader tab](/docs/images/mclauncherfx-2.0-mods-tab.png)
+
+## 포지 탭
+![Settings tab](/docs/images/mclauncherfx-2.0-forges-tab.png)
 
 ## 설정 탭
-![설정 탭](/docs/images/screenshot-mc-launcher-settings-tab.png)
+![Settings tab](/docs/images/mclauncherfx-2.0-settings-tab.png)
 
-## 대햐여 탭
-![대하여 탭]()
+## 대하여 탭
+![Settings tab](/docs/images/mclauncherfx-2.0-about-tab.png)
 
 # 다운로드
 
-## 맥런처FX 2.0 
 * [64bit 윈도우용 맥런처FX 2.0 + 자바 실행 환경](http://adf.ly/1Z2GMq)
 * [64bit 윈도우용 맥런처FX 2.0](http://adf.ly/1Z2GRl)
 * [맥OS용 맥런처FX 2.0](http://adf.ly/1Z2G41)
-
-## 맥런처 1.4
-* [64bit 윈도우용 맥런처 1.4 + 자바 실행 환경](http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre)
-* [64bit 윈도우용 맥런처 1.4](http://adf.ly/1VRbiC)
-* [맥OS용 맥런처 1.4](http://adf.ly/1VRbsy)
 
 # 설치방법
 

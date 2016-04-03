@@ -17,26 +17,26 @@
 
 # スクリーンショット
 
-## ランチャータブ
-![Launcher tab](/docs/images/screenshot-mc-launcher-launcher-tab.png)
+## ウェブブラウザのタブ
+![ウェブブラウザのタブ](/docs/images/mclauncherfx-2.0-webbrowser-tab.png)
 
 ## モッズのダウンローダタブ
-![Mods Downloader tab](/docs/images/screenshot-mc-launcher-mods-downloader-tab.png)
+![モッズのダウンローダタブ](/docs/images/mclauncherfx-2.0-mods-tab.png)
+
+## タブを偽造
+![タブを偽造](/docs/images/mclauncherfx-2.0-forges-tab.png)
 
 ## 設定タブ
-![Settings tab](/docs/images/screenshot-mc-launcher-settings-tab.png)
+![設定タブ](/docs/images/mclauncherfx-2.0-settings-tab.png)
+
+## 約タブ
+![約タブ](/docs/images/mclauncherfx-2.0-about-tab.png)
 
 # ダウンロード
 
-## McLauncherFX 2.0
 * [JREを使用してWindows x64のためのMcLauncherFX 2.0]（http://adf.ly/1Z2GMq）
 * [JREないWindows x64のためのMcLauncherFX 2.0]（http://adf.ly/1Z2GRl）
 * [JREなしMacOSXのためのMcLauncherFX 2.0]（http://adf.ly/1Z2G41）
-
-## McLauncher 1.4
-* [64ビットJREを使用してWindows用のMcLauncher 1.4]（http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre）
-* [JREなしのWindows用McLauncher 1.4]（http://adf.ly/1VRbiC）
-* [JREなしMacOSXのためのMcLauncher 1.4]（http://adf.ly/1VRbsy）
 
 #  インストール
 

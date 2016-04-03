@@ -17,26 +17,31 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 
 # Screenshots
 
-## Launcher tab
-![Launcher tab](/docs/images/screenshot-mc-launcher-launcher-tab.png)
+* Launcher tab is always placed in left side
+
+## Web Browser tab
+![Web Browser tab](/docs/images/mclauncherfx-2.0-webbrowser-tab.png)
 
 ## Mods Downloader tab
-![Mods Downloader tab](/docs/images/screenshot-mc-launcher-mods-downloader-tab.png)
+![Mods Downloader tab](/docs/images/mclauncherfx-2.0-mods-tab.png)
 
 ## Settings tab
-![Settings tab](/docs/images/screenshot-mc-launcher-settings-tab.png)
+![Settings tab](/docs/images/mclauncherfx-2.0-settings-tab.png)
+
+## Forges tab
+![Settings tab](/docs/images/mclauncherfx-2.0-forges-tab.png)
+
+## Settings tab
+![Settings tab](/docs/images/mclauncherfx-2.0-settings-tab.png)
+
+## About tab
+![Settings tab](/docs/images/mclauncherfx-2.0-about-tab.png)
 
 # Downloads
 
-## McLauncherFX 2.0 
 * [McLauncherFX 2.0 for Windows x64 with JRE](http://adf.ly/1Z2GMq)
 * [McLauncherFX 2.0 for Windows x64 without JRE](http://adf.ly/1Z2GRl)
 * [McLauncherFX 2.0 for MacOSX without JRE](http://adf.ly/1Z2G41)
-
-## McLauncher 1.4
-* [McLauncher 1.4 for Windows with 64bit JRE](http://adf.ly/12104053/mclauncher-14-for-windows-with-64bit-jre)
-* [McLauncher 1.4 for Windows without JRE](http://adf.ly/1VRbiC)
-* [McLauncher 1.4 for MacOSX without JRE](http://adf.ly/1VRbsy)
 
 # Install
 
