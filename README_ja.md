@@ -7,6 +7,10 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8)](https://www.codacy.com/app/thomas-min-v1/mc-launcher)
 [![Codeship Status for yeoupooh/mc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
 
+
+[한국어](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
+
+
 # McLauncher
 
 これは、あなたが簡単にMinecraftのフォージや改造をダウンロードしたり、管理することができます。 これは、ビューのためのIntelliJでロジックとJavaのスイングフォームのGroovyで書かれています。
