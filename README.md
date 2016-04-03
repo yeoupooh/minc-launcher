@@ -8,7 +8,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/yeoupooh/mc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/mc-launcher?branch=master)
 
 
-[한국어](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
+[Korean](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [Japanese](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
 
 
 # McLauncher
