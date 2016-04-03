@@ -26,9 +26,9 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getProtectionDomain().getCodeSource().getLocation());
         fxmlLoader.setResources(ResourceBundle.getBundle("strings"));
-        Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("main2.fxml").openStream());
+        Parent root = fxmlLoader.load(getClass().getClassLoader().getResource("main.fxml").openStream());
         primaryStage.setTitle(String.format("%s %s", ResStrings.get("app.name"), Constants.VERSION));
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/5548-256x256x8.png")));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/1216180887826559566jean_victor_balin_icon_cube_red.svg.hi.png")));
         primaryStage.setScene(new Scene(root, 1000, 600));
         Controller controller = fxmlLoader.getController();
         controller.setApplication(this);

@@ -1,12 +1,4 @@
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-}
-
 plugins {
-    id "java"
     id "application"
 
     // MacAppBundle
@@ -18,24 +10,16 @@ plugins {
     id "edu.sc.seis.launch4j" version "1.6.1"
 }
 
-group 'subakstudio'
-version '2.0'
-
-sourceCompatibility = 1.8
-
-repositories {
-    jcenter()
-//    mavenCentral()
-}
-
-def appDisplayName = 'McLauncher'
-def appPackageName = 'com.subakstudio.mclauncher'
 mainClassName = 'com.subakstudio.mclauncher.Main'
 
 project.ext {
     logbackVersion = '1.1.3'
     jacksonVersion = '2.7.1'
     okhttpVersion = '3.2.0'
+    appDisplayName = 'McLauncherFX'
+    appPackageName = 'com.subakstudio.mclauncher'
+    // png file from http://www.clker.com/clipart-23525.html
+    iconFileName = '1216180887826559566jean_victor_balin_icon_cube_red.svg.hi.png'
 }
 
 dependencies {
@@ -51,7 +35,6 @@ dependencies {
     compile 'org.projectlombok:lombok:1.16.6'
 
     // OkHttp for Http Client
-//    compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
     compile "com.squareup.okhttp3:okhttp-urlconnection:${okhttpVersion}"
 
@@ -77,8 +60,8 @@ launch4j {
     bundledJrePath = 'jre'
     bundledJre64Bit = true
     jreRuntimeBits = '64'
-    // NOTE: Icon from http://www.rw-designer.com/icon-detail/5548
-    icon = '../../../resources/TNT.ico'
+    // Converted from https://iconverticons.com/online/
+    icon = '../../../resources/${iconFileName}.ico'
 }
 
 Properties properties = new Properties()
@@ -136,7 +119,7 @@ task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
     }
 }
 
-task copyWin64DistsToReleasesDir(type: Copy) {
+task deployWin64DistsToReleasesDir(type: Copy) {
     destinationDir file(thisReleaseDir)
     from distsDir
     include "*-win64*.zip"
@@ -145,43 +128,45 @@ task copyWin64DistsToReleasesDir(type: Copy) {
 
 macAppBundle {
     appName = appDisplayName
-//    appCategory = "public.app-category.utilities"
+    // Application category
+    // https://developer.apple.com/library/ios/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/uid/TP40009250-SW8
+    appCategory = "public.app-category.games"
+
     // Converted from https://iconverticons.com/online/
-    icon = "../resources/5548-256x256x8.icns"
-//    agent = true
+    icon = "${buildDir}/resources/main/${iconFileName}.icns"
 
-//    version = "0.1.3-alpha+SNAPSHOT.123456789"
-//    shortVersion = "0.1.3a (nightly)"
-
+    agent = false
+    version = project.version
+    shortVersion = project.version
     mainClassName = project.mainClassName
-
-//    bundleJRE = false
+    bundleJRE = false
     bundleExecutable = appDisplayName
     bundleIdentifier = appPackageName
-    bundleCopyright = "Copyright 2015 Subak Studio"
+    bundleCopyright = "Copyright 2015-2016 Subak Studio"
 
-//    bundleExtras.put("NSHighResolutionCapable", "true")
-
-//    javaProperties.put("file.encoding", "utf-8")
-//    javaXProperties.add("mx2048M")
-//    javaXProperties.add("startOnFirstThread")
-
-//    javaClassPath.add("/Users/\$CURRENT_USER/.config/fooapp/plugins/*")
-
-//    archiveName = "Foo App ${pluginVersion}"
+    bundleExtras.put("NSHighResolutionCapable", "true")
+    javaProperties.put("file.encoding", "utf-8")
+    javaXProperties.add("mx2048M")
+    // NOTE: below option only for SWT based application
+    //    javaXProperties.add("startOnFirstThread")
 }
 
-task copyMacosxDistsToReleasesDir(type: Copy) {
+task distMacosx(dependsOn: ['createDmg']) {
+}
+
+task deployMacosxDistsToReleasesDir(type: Copy, dependsOn: ['distMacosx']) {
+    println "destinationDir=${file(thisReleaseDir)}"
     destinationDir file(thisReleaseDir)
     from distsDir
     include "*.dmg"
     duplicatesStrategy 'exclude'
 }
 
+// Group distribution tasks
 def distMcLauncherGroup = 'dist-mclauncher'
-
-copyJre.group =  distMcLauncherGroup
+copyJre.group = distMcLauncherGroup
 distWin64WithJRE.group = distMcLauncherGroup
-distWin64WithoutJRE.group  = distMcLauncherGroup
-copyWin64DistsToReleasesDir.group = distMcLauncherGroup
-copyMacosxDistsToReleasesDir.group = distMcLauncherGroup
+distWin64WithoutJRE.group = distMcLauncherGroup
+deployWin64DistsToReleasesDir.group = distMcLauncherGroup
+distMacosx.group = distMcLauncherGroup
+deployMacosxDistsToReleasesDir.group = distMcLauncherGroup

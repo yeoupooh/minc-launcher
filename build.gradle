@@ -1,2 +1,17 @@
 group 'subakstudio'
 version '1.0-SNAPSHOT'
+
+subprojects {
+    group 'subakstudio'
+    version '2.0'
+
+    apply plugin: 'java'
+
+    buildscript {
+        sourceCompatibility = 1.8
+
+        repositories {
+            jcenter()
+        }
+    }
+}

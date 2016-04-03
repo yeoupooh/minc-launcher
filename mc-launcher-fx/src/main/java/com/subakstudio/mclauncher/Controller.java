@@ -317,10 +317,10 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         assert log != null : "log is not injected.";
 
-        assert textFieldWebUrl != null : "fx:id=\"textFieldWebUrl\" was not injected: check your FXML file 'main2.fxml'.";
-        assert webView != null : "fx:id=\"webView\" was not injected: check your FXML file 'main2.fxml'.";
-        assert textFieldModsUrl != null : "fx:id=\"textFieldModsUrl\" was not injected: check your FXML file 'main2.fxml'.";
-        assert tableDownloadableMods != null : "fx:id=\"tableDownloadableMods\" was not injected: check your FXML file 'main2.fxml'.";
+        assert textFieldWebUrl != null : "fx:id=\"textFieldWebUrl\" was not injected: check your FXML file 'main.fxml'.";
+        assert webView != null : "fx:id=\"webView\" was not injected: check your FXML file 'main.fxml'.";
+        assert textFieldModsUrl != null : "fx:id=\"textFieldModsUrl\" was not injected: check your FXML file 'main.fxml'.";
+        assert tableDownloadableMods != null : "fx:id=\"tableDownloadableMods\" was not injected: check your FXML file 'main.fxml'.";
 
         setupAbout();
         setupSettings();

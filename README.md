@@ -147,7 +147,8 @@ Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/
 # External resources and libraries
 
 ## Application icon
-* http://www.rw-designer.com/icon-detail/5548
+* McLauncher: http://www.rw-designer.com/icon-detail/5548
+* McLauncherFX: http://www.clker.com/clipart-23525.html
 * ICNS file converted from https://iconverticons.com/online/
 
 # Project Page
