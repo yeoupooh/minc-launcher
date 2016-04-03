@@ -61,7 +61,7 @@ launch4j {
     bundledJre64Bit = true
     jreRuntimeBits = '64'
     // Converted from https://iconverticons.com/online/
-    icon = '../../../resources/${iconFileName}.ico'
+    icon = "${buildDir}/resources/main/${iconFileName}.ico"
 }
 
 Properties properties = new Properties()
@@ -77,22 +77,12 @@ def thisReleaseDir = "$releasesDir/$project.version"
 def thisReleaseName = project.name + "-" + project.version
 def distsDir = "$buildDir/distributions"
 
-task copyJre(type: Copy) {
-    destinationDir = file(project.buildDir)
-    def jreDir = properties.getProperty('jre.dir')
-    if (jreDir != null) {
-        from(fileTree(jreDir)) {
-            include "**/**"
-        }
-    }
-}
-
-task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'copyJre'], type: Zip) {
+task distWinX64WithJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
     destinationDir file(distsDir)
-    archiveName "$thisReleaseName-win64-jre.zip"
+    archiveName "$thisReleaseName-win-x64-jre.zip"
 
     into("jre") {
-        from("$buildDir/jre")
+        from(properties.getProperty('jre.dir'))
     }
     into("lib") {
         from("$buildDir/launch4j/lib")
@@ -105,9 +95,9 @@ task distWin64WithJRE(dependsOn: ['distZip', 'launch4j', 'copyJre'], type: Zip) 
     }
 }
 
-task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
+task distWinX64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
     destinationDir file(distsDir)
-    archiveName "$thisReleaseName-win64.zip"
+    archiveName "$thisReleaseName-win-x64.zip"
     into("lib") {
         from("$buildDir/launch4j/lib")
     }
@@ -119,10 +109,10 @@ task distWin64WithoutJRE(dependsOn: ['distZip', 'launch4j'], type: Zip) {
     }
 }
 
-task deployWin64DistsToReleasesDir(type: Copy) {
+task deployWinX64DistsToReleasesDir(type: Copy, dependsOn: ['clean', 'distWinX64WithJRE', 'distWinX64WithoutJRE']) {
     destinationDir file(thisReleaseDir)
     from distsDir
-    include "*-win64*.zip"
+    include "*-win-x64*.zip"
     duplicatesStrategy 'exclude'
 }
 
@@ -164,9 +154,8 @@ task deployMacosxDistsToReleasesDir(type: Copy, dependsOn: ['distMacosx']) {
 
 // Group distribution tasks
 def distMcLauncherGroup = 'dist-mclauncher'
-copyJre.group = distMcLauncherGroup
-distWin64WithJRE.group = distMcLauncherGroup
-distWin64WithoutJRE.group = distMcLauncherGroup
-deployWin64DistsToReleasesDir.group = distMcLauncherGroup
+distWinX64WithJRE.group = distMcLauncherGroup
+distWinX64WithoutJRE.group = distMcLauncherGroup
+deployWinX64DistsToReleasesDir.group = distMcLauncherGroup
 distMacosx.group = distMcLauncherGroup
 deployMacosxDistsToReleasesDir.group = distMcLauncherGroup
