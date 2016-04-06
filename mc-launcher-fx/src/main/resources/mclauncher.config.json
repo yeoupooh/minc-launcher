@@ -24,7 +24,7 @@
   },
   "downloadables": [
     {
-      "startsWith": "https://dl.dropboxusercontent.com/content_link/"
+      "match": "https://www.dropbox.com/s/[\\w]*/([\\w_.-]*)\\?dl=1"
     },
     {
       "startsWith": "https://dl.dropboxusercontent.com/u/"
