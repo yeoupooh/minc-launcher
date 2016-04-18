@@ -11,7 +11,7 @@
 [한국어](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
 
 
-# 맥런처 (McLauncher)
+# 밍크런처 (MinC Launcher, 이전 이름: 맥런처, 맥런처FX)
 
 이 프로그램은 마인크래프트 모드와 포지 설치를 쉽게 도와주는 유틸리티입니다.
 

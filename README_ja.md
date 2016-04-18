@@ -11,7 +11,7 @@
 [한국어](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
 
 
-# McLauncher
+# MinC Launcher (old name: McLauncher, McLauncherFX)
 
 これは、あなたが簡単にMinecraftのフォージや改造をダウンロードしたり、管理することができます。 これは、ビューのためのIntelliJでロジックとJavaのスイングフォームのGroovyで書かれています。
 

@@ -11,7 +11,7 @@
 [Korean](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [Japanese](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
 
 
-# McLauncher
+# MinC Launcher (old name: McLauncher, McLauncherFX)
 
 This allows you to download or manage Minecraft Forge and mods easily. It is written in Groovy for logic and Java swing form in intellij for view.
 
@@ -135,7 +135,7 @@ Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/
 ```
 
 # Forge List JSON format
-* Currently it is not allowed you to change in this app. 
+* Currently it is not allowed you to change in this app.
 * Sample: http://bit.ly/1NqXEPv
 ```
 {
@@ -171,4 +171,3 @@ Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/
 
 # Copyright
 * [Copyright (c) 2016 Thomas Jinwoo Min](LICENSE)
-
