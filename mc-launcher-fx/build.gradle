@@ -58,6 +58,10 @@ dependencies {
     compile 'de.jensd:fontawesomefx:8.9'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    // TestFX
+    testCompile "org.testfx:testfx-core:4.0.+"
+    testCompile "org.testfx:testfx-junit:4.0.+"
 }
 
 launch4j {
