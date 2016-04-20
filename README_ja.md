@@ -1,4 +1,4 @@
-(注意：この文書は、機械で翻訳されています。だから、あなたが読むこと、これが不快な可能性がありますのでご了承下さい。あなたが英語を読むことができる場合は、https://github.com/yeoupooh/mc-launcher/blob/master/README.mdで元の文書をお読みください。)
+(注意：この文書は、機械で翻訳されています。だから、あなたが読むこと、これが不快な可能性がありますのでご了承下さい。あなたが英語を読むことができる場合は、https://github.com/yeoupooh/minc-launcher/blob/master/README.mdで元の文書をお読みください。)
 
 [![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/yeoupooh/mc-launcher.svg)](https://travis-ci.org/yeoupooh/mc-launcher)
@@ -9,7 +9,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/yeoupooh/minc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/minc-launcher?branch=master)
 
 
-[한국어](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
+[한국어](https://github.com/yeoupooh/minc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/minc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/minc-launcher/blob/master/README_ja.md)
 
 
 # MinC Launcher (old name: McLauncher, McLauncherFX)
@@ -91,7 +91,7 @@
 * 現在は韓国語、英語のみサポートされています
 * あなたの翻訳を貢献したい場合は、手順の下に従ってください
 1. フォークgitリポジトリ。
-2. mc-launcher/mc-launcher-gui/src/main/resources/の下にstrings_.propertiesを追加します。
+2. minc-launcher/mc-launcher-gui/src/main/resources/の下にstrings_.propertiesを追加します。
 3. あなたをコミットし、リポジトリにプッシュ。
 4. プル要求を送信します。
 5. マージと次のリリースを待ちます。
@@ -161,8 +161,8 @@
 * ICNSファイルから変換さhttps://iconverticons.com/online/
 
 # プロジェクトページ
-* 出典： https://github.com/yeoupooh/mc-launcher/
-* ウィキ： https://github.com/yeoupooh/mc-launcher/wiki/
+* 出典： https://github.com/yeoupooh/minc-launcher/
+* ウィキ： https://github.com/yeoupooh/minc-launcher/wiki/
 
 #  著作権
 * [著作権 (C) 2016 トーマスJinwoo分](LICENSE)

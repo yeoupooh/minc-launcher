@@ -1,5 +1,5 @@
 [![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Documentation Status](https://readthedocs.org/projects/mc-launcher/badge/?version=latest)](http://mc-launcher.readthedocs.org/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/minc-launcher/badge/?version=latest)](http://mc-launcher.readthedocs.org/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.org/yeoupooh/mc-launcher.svg)](https://travis-ci.org/yeoupooh/mc-launcher)
 [![license-GPLv2](https://img.shields.io/badge/license-GPLv2-blue.svg)](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![implementation-groovy-blue](https://img.shields.io/badge/client-groovy-blue.svg)](http://www.groovy-lang.org/)
@@ -8,7 +8,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/yeoupooh/minc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/minc-launcher?branch=master)
 
 
-[한국어](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
+[한국어](https://github.com/yeoupooh/minc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/minc-launcher/blob/master/README.md) | [日本語](https://github.com/yeoupooh/minc-launcher/blob/master/README_ja.md)
 
 
 # 밍크런처 (MinC Launcher, 이전 이름: 맥런처, 맥런처FX)
@@ -158,8 +158,8 @@
 * ICNS 파일은 https://iconverticons.com/online/ 에 변환했습니다.
 
 # 프로젝트 페이지
-* 소스: https://github.com/yeoupooh/mc-launcher/
-* 위키: https://github.com/yeoupooh/mc-launcher/wiki/
+* 소스: https://github.com/yeoupooh/minc-launcher/
+* 위키: https://github.com/yeoupooh/minc-launcher/wiki/
 
 # 저작권
 * [Copyright (c) 2016 Thomas Jinwoo Min](LICENSE)

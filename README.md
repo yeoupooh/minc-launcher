@@ -1,5 +1,5 @@
 [![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Documentation Status](https://readthedocs.org/projects/mc-launcher/badge/?version=latest)](http://mc-launcher.readthedocs.org/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/minc-launcher/badge/?version=latest)](http://mc-launcher.readthedocs.org/en/latest/?badge=latest)
 [![Build Status](https://travis-ci.org/yeoupooh/mc-launcher.svg)](https://travis-ci.org/yeoupooh/mc-launcher)
 [![license-GPLv2](https://img.shields.io/badge/license-GPLv2-blue.svg)](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![implementation-groovy-blue](https://img.shields.io/badge/client-groovy-blue.svg)](http://www.groovy-lang.org/)
@@ -8,7 +8,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/yeoupooh/minc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/minc-launcher?branch=master)
 
 
-[Korean](https://github.com/yeoupooh/mc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/mc-launcher/blob/master/README.md) | [Japanese](https://github.com/yeoupooh/mc-launcher/blob/master/README_ja.md)
+[Korean](https://github.com/yeoupooh/minc-launcher/blob/master/README_ko.md) | [English](https://github.com/yeoupooh/minc-launcher/blob/master/README.md) | [Japanese](https://github.com/yeoupooh/minc-launcher/blob/master/README_ja.md)
 
 
 # MinC Launcher (old name: McLauncher, McLauncherFX)
@@ -95,7 +95,7 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 * Currently it support only English, Korean.
 * If you want to contribute your translation, please follow below steps
 1. Fork git repository.
-2. Add your strings_<your lang>.properties under mc-launcher/mc-launcher-gui/src/main/resources/.
+2. Add your strings_<your lang>.properties under minc-launcher/mc-launcher-gui/src/main/resources/.
 3. Commit yours and push to your repository.
 4. Send pull request.
 5. Wait for merge and next release.
@@ -166,8 +166,8 @@ Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/
 * ICNS file converted from https://iconverticons.com/online/
 
 # Project Page
-* Source: https://github.com/yeoupooh/mc-launcher/
-* Wiki: https://github.com/yeoupooh/mc-launcher/wiki/
+* Source: https://github.com/yeoupooh/minc-launcher/
+* Wiki: https://github.com/yeoupooh/minc-launcher/wiki/
 
 # Copyright
 * [Copyright (c) 2016 Thomas Jinwoo Min](LICENSE)
