@@ -12,6 +12,9 @@ dist: trusty
 script:
   - ./gradlew clean test distZip
 
+after_success:
+  - ./gradlew cobertura coveralls
+
 # Skip gradle assemble
 # Refer to http://stackoverflow.com/questions/26566564/override-default-travis-ci-script-for-java-gradle-project
 install: /bin/true
