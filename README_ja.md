@@ -1,11 +1,11 @@
 (注意：この文書は、機械で翻訳されています。だから、あなたが読むこと、これが不快な可能性がありますのでご了承下さい。あなたが英語を読むことができる場合は、https://github.com/yeoupooh/minc-launcher/blob/master/README.mdで元の文書をお読みください。)
 
-[![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/yeoupooh/mc-launcher.svg)](https://travis-ci.org/yeoupooh/mc-launcher)
+[![Join the chat at https://gitter.im/yeoupooh/minc-launcher](https://badges.gitter.im/yeoupooh/minc-launcher.svg)](https://gitter.im/yeoupooh/minc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/yeoupooh/minc-launcher.svg)](https://travis-ci.org/yeoupooh/minc-launcher)
 [![license-GPLv2](https://img.shields.io/badge/license-GPLv2-blue.svg)](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![implementation-groovy-blue](https://img.shields.io/badge/client-groovy-blue.svg)](http://www.groovy-lang.org/)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8)](https://www.codacy.com/app/thomas-min-v1/mc-launcher)
-[![Codeship Status for yeoupooh/mc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8)](https://www.codacy.com/app/thomas-min-v1/minc-launcher)
+[![Codeship Status for yeoupooh/minc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
 [![Coverage Status](https://coveralls.io/repos/github/yeoupooh/minc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/minc-launcher?branch=master)
 
 
@@ -91,14 +91,14 @@
 * 現在は韓国語、英語のみサポートされています
 * あなたの翻訳を貢献したい場合は、手順の下に従ってください
 1. フォークgitリポジトリ。
-2. minc-launcher/mc-launcher-gui/src/main/resources/の下にstrings_.propertiesを追加します。
+2. minc-launcher/minc-launcher-gui/src/main/resources/の下にstrings_.propertiesを追加します。
 3. あなたをコミットし、リポジトリにプッシュ。
 4. プル要求を送信します。
 5. マージと次のリリースを待ちます。
 
 
 # あなたのフィードバックを歓迎します
-フォーラムでくださいコメントや  [![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
+フォーラムでくださいコメントや  [![Join the chat at https://gitter.im/yeoupooh/minc-launcher](https://badges.gitter.im/yeoupooh/minc-launcher.svg)](https://gitter.im/yeoupooh/minc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
 
 # ハックス
 

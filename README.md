@@ -1,10 +1,10 @@
-[![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Documentation Status](https://readthedocs.org/projects/minc-launcher/badge/?version=latest)](http://mc-launcher.readthedocs.org/en/latest/?badge=latest)
-[![Build Status](https://travis-ci.org/yeoupooh/mc-launcher.svg)](https://travis-ci.org/yeoupooh/mc-launcher)
+[![Join the chat at https://gitter.im/yeoupooh/minc-launcher](https://badges.gitter.im/yeoupooh/minc-launcher.svg)](https://gitter.im/yeoupooh/minc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Documentation Status](https://readthedocs.org/projects/minc-launcher/badge/?version=latest)](http://minc-launcher.readthedocs.org/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/yeoupooh/minc-launcher.svg)](https://travis-ci.org/yeoupooh/minc-launcher)
 [![license-GPLv2](https://img.shields.io/badge/license-GPLv2-blue.svg)](http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![implementation-groovy-blue](https://img.shields.io/badge/client-groovy-blue.svg)](http://www.groovy-lang.org/)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8)](https://www.codacy.com/app/thomas-min-v1/mc-launcher)
-[![Codeship Status for yeoupooh/mc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/524f850425644312b6181a44b5374df8)](https://www.codacy.com/app/thomas-min-v1/minc-launcher)
+[![Codeship Status for yeoupooh/minc-launcher](https://codeship.com/projects/327094a0-9e42-0133-4bc7-36bf3814fed7/status?branch=master)](https://codeship.com/projects/127717)
 [![Coverage Status](https://coveralls.io/repos/github/yeoupooh/minc-launcher/badge.svg?branch=master)](https://coveralls.io/github/yeoupooh/minc-launcher?branch=master)
 
 
@@ -44,7 +44,7 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 * [McLauncherFX 2.0 for MacOSX without JRE](http://adf.ly/1Z2G41)
 
 # Install
-
+minc-launcher
 ## On Windows
 1. Download Windows version
 2. Unzip mc-launcher-app-*.zip file.
@@ -102,7 +102,7 @@ This allows you to download or manage Minecraft Forge and mods easily. It is wri
 
 
 # Welcome your feedback
-Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/mc-launcher](https://badges.gitter.im/yeoupooh/mc-launcher.svg)](https://gitter.im/yeoupooh/mc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
+Please comments in the forums or [![Join the chat at https://gitter.im/yeoupooh/minc-launcher](https://badges.gitter.im/yeoupooh/minc-launcher.svg)](https://gitter.im/yeoupooh/minc-launcher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge).
 
 # Hacks
 
