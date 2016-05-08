@@ -67,6 +67,9 @@ public class SingletonUserConfigFile {
     }
 
     public void save() {
+        if (!Constants.MC_LAUNCHER_REPO_FOLDER.exists()) {
+            Constants.MC_LAUNCHER_REPO_FOLDER.mkdirs();
+        }
         ObjectMapper om = new ObjectMapper();
         try {
             om.enable(SerializationFeature.INDENT_OUTPUT);
