@@ -1,6 +1,6 @@
 {
-  "modsUrl": "http://jsonblob.com/api/jsonBlob/56cdd768e4b01190df511c46",
-  "forgesUrl": "http://jsonblob.com/api/jsonBlob/568beb97e4b01190df470db4",
+  "modsUrl": "https://rawgit.com/yeoupooh/minc-launcher/master/mc-launcher-fx/src/main/resources/minc-launcher-mods.json",
+  "forgesUrl": "https://rawgit.com/yeoupooh/minc-launcher/master/mc-launcher-fx/src/main/resources/minc-launcher-forges.json",
   "webBrowser": {
     "initialUrl": "http://yeoupooh.blog.me/220670151275",
     "bookmarks": [
