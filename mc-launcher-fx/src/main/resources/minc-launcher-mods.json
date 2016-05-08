@@ -1,0 +1,274 @@
+{
+  "format": "1.2",
+  "title": "McLauncher's Public Mods List",
+  "version": "7",
+  "updated": "2016-02-17 10:56:00",
+  "mods": [
+    {
+      "name": "Pixelmon Mod",
+      "version": "3.3.8",
+      "forgeVersion": "1.7.10, 1.8, 1.8,9",
+      "viaWeb": true,
+      "homepage": "https://pixelmonmod.com/",
+      "url": "https://pixelmonmod.com/downloads.php"
+    },
+    {
+      "name": "RWBY Craft Mod",
+      "version": "1.5",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/wip-mods/2512992-rwby-craft-3d-weapons-that-are-also-a-gun",
+      "viaWeb": true,
+      "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/wip-mods/2512992-rwby-craft-3d-weapons-that-are-also-a-gun"
+    },
+    {
+      "name": "Furniture Mod",
+      "version": "3.4.8",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "https://mrcrayfish.com/mods?id=cfm",
+      "viaWeb": true,
+      "url": "https://mrcrayfish.com/mods?id=cfm"
+    },
+    {
+      "name": "Root's Korean IME patch",
+      "version": "b78_1710f",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://blog.naver.com/won983212",
+      "viaWeb": true,
+      "url": "http://blog.naver.com/won983212"
+    },
+    {
+      "name": "Touhou Items Mod",
+      "version": "2.91",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1287201-touhou-items-mod-version-2-91-mar-3-2016-check-the",
+      "viaWeb": true,
+      "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1287201-touhou-items-mod-version-2-91-mar-3-2016-check-the"
+    },
+    {
+      "name": "Monster Hunter Frontier Craft",
+      "version": "0.2.501A",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1291781-monster-hunter-frontier-craft-0-2-501a-barroth",
+      "viaWeb": true,
+      "fileName": "mhfc-0.2.501a_1.7.10.jar",
+      "url": "http://adfoc.us/32309257188343"
+    },
+    {
+      "name": "Custom Mob Spawner",
+      "version": "3.3.0",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://minecraft.curseforge.com/projects/custom-mob-spawner",
+      "url": "http://addons-origin.cursecdn.com/files/2232/970/CustomMobSpawner%203.3.0.zip"
+    },
+    {
+      "name": "Mo' Creatures Mod (requires Custom Mob Spawner)",
+      "version": "6.3.1",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://mocreatures.org/home",
+      "depends": "Custom Mob Spawner",
+      "servers": [
+        {
+          "host": "play.mocreatures.org"
+        }
+      ],
+      "fileName": "DrZharks MoCreatures Mod v6.3.1.zip",
+      "url": "http://www.mineloads.com/rC?download_token=20bee0546bc88d20af7b50c973f7832b582a90a6320335b2d55948bb931b8672"
+    },
+    {
+      "name": "Stefinus 3D Guns Mod",
+      "version": "0.5.2",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/wip-mods/2361243-new-stefinus-3d-guns-mod",
+      "url": "http://addons-origin.cursecdn.com/files/2238/792/Stefinus%20Guns-0.5.2.jar"
+    },
+    {
+      "name": "Caveworld",
+      "version": "2.1.1",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://kegare.github.io/caveworld/",
+      "url": "https://dl.dropboxusercontent.com/u/51943112/caveworld/Caveworld_1.7.10-v2.1.1.jar"
+    },
+    {
+      "name": "Fat Cat Mod",
+      "version": "1.0.2",
+      "forgeVersion": "1.8",
+      "homepage": "https://github.com/shu3/FatCatMOD",
+      "url": "https://bitbucket.org/shu3/fatcatmod_release/downloads/fatcat-1.0.2.jar"
+    },
+    {
+      "name": "ExRollerCoaster Mod",
+      "version": "1.10",
+      "forgeVersion": "1.7.10",
+      "fileName": "ExRollerCoaster-Mod-1.7.10.zip",
+      "homepage": "http://forum.minecraftuser.jp/viewtopic.php?uid=98630&f=13&t=28387&start=0#p247474",
+      "youtube": "https://www.youtube.com/watch?v=VooN8FPPvbE",
+      "url": "http://dl2.file-minecraft.com/index.php?act=download&id=1445478382&hash=2147483647"
+    },
+    {
+      "name": "Botania Mod",
+      "version": "R1.8-248",
+      "forgeVersion": "1.7.10",
+      "depends": "Baubles Mod",
+      "url": "http://botaniamod.net/files/Botania%20r1.8-248.jar"
+    },
+    {
+      "name": "Baubles Mod",
+      "version": "1.0.1.10",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1294623-baubles-1-1-3-0-updated-2016-1-1",
+      "url": "https://dl.dropboxusercontent.com/u/47135879/Baubles-1.7.10-1.0.1.10.jar"
+    },
+    {
+      "name": "Draconic Evolution Mod",
+      "version": "0.9.5-beta",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://www.tolkiencraft.com/draconic-evolution/",
+      "url": "http://addons-origin.cursecdn.com/files/2271/371/Draconic-Evolution-1.7.10-1.0.2-Snapshot_9.jar"
+    },
+    {
+      "name": "The Twilight Foreset",
+      "version": "2.3.7",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1276258-the-twilight-forest-v2-3-5-wrecking-block",
+      "url": "http://addons-origin.cursecdn.com/files/2238/492/twilightforest-1.7.10-2.3.7.jar"
+    },
+    {
+      "name": "JourneyMap Mod",
+      "version": "5.1.3",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://journeymap.info/Home",
+      "url": "http://addons-origin.cursecdn.com/files/2269/314/journeymap-1.7.10-5.1.3-unlimited.jar"
+    },
+    {
+      "name": "Carpenter's Blocks",
+      "version": "3.3.8_dev_r8",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://www.carpentersblocks.com/",
+      "url": "https://dl.dropboxusercontent.com/s/es4mukxwc8acgxc/Carpenter%27s%20Blocks%20v3.3.8_dev_r8%20-%20MC%201.7.10.jar"
+    },
+    {
+      "name": "Fastcraft",
+      "version": "1.21",
+      "forgeVersion": "1.7.10",
+      "requiredVersion": "1.7.10",
+      "homepage": "http://forum.industrial-craft.net/index.php?page=Thread&threadID=10820",
+      "url": "http://files.player.to/fastcraft-1.21.jar"
+    },
+    {
+      "name": "One Punch Man Mod",
+      "version": "0.1.5",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/wip-mods/2569295-one-block-man-one-punch-man-in-minecraft-0-1-5-2",
+      "url": "http://download1673.mediafire.com/avmq6pyvufng/3bm24w1wfmucj1u/One+Punch+Man+0.1.5.1.7.10.zip"
+    },
+    {
+      "title": {
+        "en": "ComputerCrartEdu Mod",
+        "ko": "??? ???? ?? ??"
+      },
+      "name": "ComputerCrartEdu Mod",
+      "version": "1.74",
+      "forgeVersion": "1.7.10",
+      "url": "http://computercraftedu.com/downloads/ComputerCraftPlusComputerCraftEdu1.74.jar"
+    },
+    {
+      "title": {
+        "en": "Throwable Torch Mod",
+        "ko": "?? ? ?? ?? ??"
+      },
+      "name": "Throwable Torch Mod",
+      "version": "1.3",
+      "forgeVersion": "1.7.10",
+      "url": "http://addons-origin.cursecdn.com/files/2270/450/ThrowableTorchMod-1.7.10-1.3.jar"
+    },
+    {
+      "name": "Mekanism: Main",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/Mekanism-1.7.10-8.1.8.259.jar"
+    },
+    {
+      "name": "Mekanism: Mekanism Generators",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/MekanismGenerators-1.7.10-8.1.8.259.jar"
+    },
+    {
+      "name": "Mekanism: Mekanism Tools",
+      "version": "8.1.8.259",
+      "forgeVersion": "1.7.10",
+      "homepage": "http://aidancbrady.com/mekanism/",
+      "url": "http://aidancbrady.com/wp-content/uploads/mekanism/259/MekanismTools-1.7.10-8.1.8.259.jar"
+    },
+    {
+      "name": "Thaumcraft",
+      "version": "4.2.3.5",
+      "forgeVersion": "1.7.10",
+      "homepage:": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1292130-thaumcraft-5-1-3-updated-2016-1-13",
+      "url": "https://dl.dropboxusercontent.com/u/47135879/Thaumcraft-1.7.10-4.2.3.5.jar"
+    },
+    {
+      "name": "Thaumcraft",
+      "version": "5.0.3",
+      "forgeVersion": "1.8",
+      "homepage:": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1292130-thaumcraft-5-1-3-updated-2016-1-13",
+      "url": "https://dl.dropboxusercontent.com/u/47135879/Thaumcraft-1.8-5.0.3.jar"
+    },
+    {
+      "name": "Thaumcraft",
+      "version": "5.1.3",
+      "forgeVersion": "1.8.9",
+      "homepage:": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1292130-thaumcraft-5-1-3-updated-2016-1-13",
+      "url": "https://dl.dropboxusercontent.com/u/47135879/Thaumcraft-1.8.9-5.1.3.jar"
+    },
+    {
+      "name": "Lucky Block Mod",
+      "version": "5.1.0",
+      "forgeVersion": "1.7.10",
+      "url": "http://www.minecraftascending.com/projects/lucky_block/download/version/files/kTFCmVjS/5-1-0/[1-7-10]_Lucky_Block_v5-1-0.jar"
+    },
+    {
+      "name": "Lucky Block Mod",
+      "version": "6.0.1",
+      "forgeVersion": "1.8",
+      "url": "http://www.minecraftascending.com/projects/lucky_block/download/version/files/kTFCmVjS/6-0-1/LuckyBlock_1-8_v6-0-1.zip"
+    },
+    {
+      "name": "Too Many Items",
+      "version": "2014.9.7",
+      "forgeVersion": "1.8",
+      "url": "http://marglyph.s3.amazonaws.com/TooManyItems2014_09_07_1.8.zip"
+    },
+    {
+      "name": "Too Many Items",
+      "version": "2014.7.15",
+      "forgeVersion": "1.7.10",
+      "url": "http://marglyph.s3.amazonaws.com/TooManyItems2014_07_15_1.7.10_Forge.jar"
+    },
+    {
+      "name": "Pixelmon Mod",
+      "version": "3.4",
+      "forgeVersion": "1.7.10",
+      "url": "http://download2092.mediafire.com/wilszmyp8jwg/g8chsarowc5fpc6/Pixelmon-1.7.10-3.4.0-universal.jar"
+    },
+    {
+      "name": "Pixelmon Mod",
+      "version": "3.5.1",
+      "forgeVersion": "1.7.10",
+      "url": "http://download.nodecdn.net/containers/pixelmon/core/Pixelmon-1.7.10-3.5.1-universal.jar"
+    },
+    {
+      "name": "Custom NPC Mod",
+      "version": "1.7.10d (15-dec-2015)",
+      "url": "http://addons-origin.cursecdn.com/files/2270/968/CustomNPCs_1.7.10d.jar",
+      "forgeVersion": "1.7.10"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "forges": [
+    {
+      "version": "1.9-12.16.0.1845 (Latest)",
+      "fileName": "forge-1.9-12.16.0.1845-1.9-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.9-12.16.0.1845-1.9/forge-1.9-12.16.0.1845-1.9-installer.jar"
+    },
+    {
+      "version": "1.9-12.16.0.1811",
+      "fileName": "forge-1.9-12.16.0.1811-1.9-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.9-12.16.0.1811-1.9/forge-1.9-12.16.0.1811-1.9-installer.jar"
+    },
+    {
+      "version": "1.8.9-11.15.1.1808 (Latest)",
+      "fileName": "forge-1.8.9-11.15.1.1808-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.1.1808/forge-1.8.9-11.15.1.1808-installer.jar"
+    },
+    {
+      "version": "1.8.9-11.15.1.1722 (Recommended)",
+      "fileName": "forge-1.8.9-11.15.1.1722-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.1.1722/forge-1.8.9-11.15.1.1722-installer.jar"
+    },
+    {
+      "version": "1.8.9-11.15.1.1722 (Windows)",
+      "fileName": "forge-1.8.9-11.15.1.1722-installer-win.exe",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.1.1722/forge-1.8.9-11.15.1.1722-installer-win.exe"
+    },
+    {
+      "version": "1.8.9-11.15.0.1692",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8.9-11.15.0.1692/forge-1.8.9-11.15.0.1692-installer.jar"
+    },
+    {
+      "version": "1.8-11.14.4.1563",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.8-11.14.4.1563/forge-1.8-11.14.4.1563-installer.jar"
+    },
+    {
+      "version": "1.7.10-10.13.4.1614 (Latest)",
+      "fileName": "forge-1.7.10-10.13.4.1614-1.7.10-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/forge-1.7.10-10.13.4.1614-1.7.10-installer.jar"
+    },
+    {
+      "version": "1.7.10-10.13.4.1558 (Recommended)",
+      "fileName": "forge-1.7.10-10.13.4.1558-1.7.10-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-installer.jar"
+    }
+  ]
+}
