@@ -1,6 +1,16 @@
 {
   "forges": [
     {
+      "version": "1.12.2-14.23.2.2654 (Latest)",
+      "fileName": "forge-1.12.2-14.23.2.2654-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.2.2654/forge-1.12.2-14.23.2.2654-installer.jar"
+    },
+    {
+      "version": "1.12.2-14.23.2.2611 (Recommended)",
+      "fileName": "forge-1.12.2-14.23.2.2611-installer.jar",
+      "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.2.2611/forge-1.12.2-14.23.2.2611-installer.jar"
+    },
+    {
       "version": "1.9-12.16.0.1845 (Latest)",
       "fileName": "forge-1.9-12.16.0.1845-1.9-installer.jar",
       "url": "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.9-12.16.0.1845-1.9/forge-1.9-12.16.0.1845-1.9-installer.jar"

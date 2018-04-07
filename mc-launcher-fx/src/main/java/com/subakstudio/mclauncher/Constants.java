@@ -7,7 +7,7 @@ import java.io.StringReader;
  * Created by yeoupooh on 2/22/16.
  */
 public class Constants {
-    public static final String VERSION = "2.0";
+    public static final String VERSION = "2.1-dev";
     public static final String CONFIG_JSON_FILE_NAME = "config.json";
     public static final String MC_LAUNCHER_CONFIG_JSON_FILE_NAME = "/mclauncher.config.json";
     public static String USER_HOME = System.getProperty("user.home");
